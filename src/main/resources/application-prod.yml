@@ -17,4 +17,4 @@ spring:
 
 logging:
   level:
-    '[shop.mtcoding.bank]': INFO
+    '[shop.ggamf.ggamf]': INFO
