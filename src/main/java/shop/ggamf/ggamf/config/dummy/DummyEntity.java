@@ -3,6 +3,7 @@ package shop.ggamf.ggamf.config.dummy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import shop.ggamf.ggamf.config.enums.UserEnum;
+import shop.ggamf.ggamf.domain.enter.Enter;
 import shop.ggamf.ggamf.domain.gameCode.GameCode;
 import shop.ggamf.ggamf.domain.room.Room;
 import shop.ggamf.ggamf.domain.user.User;
@@ -46,5 +47,14 @@ public abstract class DummyEntity {
                 .active(true)
                 .build();
         return room;
+    }
+
+    protected Enter newEnter(User user, Room room) {
+        Enter enter = Enter.builder()
+                .user(user)
+                .room(room)
+                .stay(true)
+                .build();
+        return enter;
     }
 }

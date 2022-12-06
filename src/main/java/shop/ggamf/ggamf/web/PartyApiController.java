@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,8 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import shop.ggamf.ggamf.config.auth.LoginUser;
 import shop.ggamf.ggamf.dto.PartyReqDto.CreateRoomReqDto;
+import shop.ggamf.ggamf.dto.PartyReqDto.ExitRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.JoinRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.CreateRoomRespDto;
+import shop.ggamf.ggamf.dto.PartyRespDto.ExitRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.JoinRoomRespDto;
 import shop.ggamf.ggamf.dto.ResponseDto;
 import shop.ggamf.ggamf.service.PartyService;
@@ -50,5 +53,15 @@ public class PartyApiController {
         joinRoomReqDto.setRoomId(roomId);
         JoinRoomRespDto joinRoomRespDto = partyService.파티방참가(joinRoomReqDto);
         return new ResponseEntity<>(new ResponseDto<>("파티방 참가 완료", joinRoomRespDto), HttpStatus.CREATED);
+    }
+
+    // 파티방 나가기 (본인)
+    @PutMapping("/party/exit/{roomId}")
+    public ResponseEntity<?> exitRoom(@RequestBody ExitRoomReqDto exitRoomReqDto, @PathVariable Long roomId,
+            @AuthenticationPrincipal LoginUser loginUser) {
+        exitRoomReqDto.setRoomId(roomId);
+        exitRoomReqDto.setUserId(loginUser.getUser().getId());
+        ExitRoomRespDto exitRoomRespDto = partyService.파티방나가기(exitRoomReqDto);
+        return new ResponseEntity<>(new ResponseDto<>("파티방 나가기 완료", exitRoomRespDto), HttpStatus.OK);
     }
 }

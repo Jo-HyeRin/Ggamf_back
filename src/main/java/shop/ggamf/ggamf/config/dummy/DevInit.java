@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import lombok.RequiredArgsConstructor;
+import shop.ggamf.ggamf.domain.enter.Enter;
+import shop.ggamf.ggamf.domain.enter.EnterRepository;
 import shop.ggamf.ggamf.domain.gameCode.GameCode;
 import shop.ggamf.ggamf.domain.gameCode.GameCodeRepository;
 import shop.ggamf.ggamf.domain.room.Room;
@@ -21,7 +23,7 @@ public class DevInit extends DummyEntity {
     @Bean
     public CommandLineRunner dataSetting(UserRepository userRepository,
             RoomRepository roomRepository,
-            GameCodeRepository gameCodeRepository) {
+            GameCodeRepository gameCodeRepository, EnterRepository enterRepository) {
 
         return (args) -> {
             // User : 유저
@@ -36,6 +38,10 @@ public class DevInit extends DummyEntity {
             Room room1 = roomRepository.save(newRoom("초보만요1", cos, etc));
             Room room2 = roomRepository.save(newRoom("초보만요2", lala, starcraft));
             Room room3 = roomRepository.save(newRoom("초보만요3", lala, battleground));
+            // Enter : 파티방, 참여유저
+            Enter enter1 = enterRepository.save(newEnter(lala, room1));
+            Enter enter2 = enterRepository.save(newEnter(cos, room2));
+            Enter enter3 = enterRepository.save(newEnter(cos, room3));
         };
     }
 }

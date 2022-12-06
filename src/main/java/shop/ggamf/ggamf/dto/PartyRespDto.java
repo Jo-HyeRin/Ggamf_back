@@ -42,4 +42,21 @@ public class PartyRespDto {
             this.roomId = enter.getRoom().getId();
         }
     }
+
+    @Setter
+    @Getter
+    public static class ExitRoomRespDto {
+        private Long id;
+        private Long userId;
+        private Long roomId;
+        private Boolean stay;
+        // 나중에 추천친구목록 보여줘야함
+
+        public ExitRoomRespDto(Enter enter) {
+            this.id = enter.getId();
+            this.userId = enter.getUser().getId();
+            this.roomId = enter.getRoom().getId();
+            this.stay = enter.getStay();
+        }
+    }
 }
