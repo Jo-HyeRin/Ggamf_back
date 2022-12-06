@@ -53,6 +53,7 @@ public class PartyApiControllerTest extends DummyEntity {
     @Autowired
     private EnterRepository enterRepository;
 
+
     @BeforeEach
     public void setUp() {
         // User : 유저
