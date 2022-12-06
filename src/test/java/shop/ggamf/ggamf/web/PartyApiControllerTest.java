@@ -28,6 +28,7 @@ import shop.ggamf.ggamf.domain.user.User;
 import shop.ggamf.ggamf.domain.user.UserRepository;
 import shop.ggamf.ggamf.dto.PartyReqDto.CreateRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.EndRoomReqDto;
+
 import shop.ggamf.ggamf.dto.PartyReqDto.ExitRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.JoinRoomReqDto;
 
@@ -68,6 +69,7 @@ public class PartyApiControllerTest extends DummyEntity {
         GameCode starcraft = gameCodeRepository.save(newGameCode("starcraft"));
         GameCode battleground = gameCodeRepository.save(newGameCode("battleground"));
         // Room : 파티방
+
         Room room1 = roomRepository.save(newRoom("roomname1", ssar, LoL));
         Room room2 = roomRepository.save(newRoom("roomname2", ssar, starcraft));
         Room room3 = roomRepository.save(newRoom("roomname3", cos, battleground));
