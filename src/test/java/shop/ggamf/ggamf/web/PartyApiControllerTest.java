@@ -145,5 +145,4 @@ public class PartyApiControllerTest extends DummyEntity {
         resultActions.andExpect(MockMvcResultMatchers.status().isOk());
         resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.stay").value(false));
     }
-
 }

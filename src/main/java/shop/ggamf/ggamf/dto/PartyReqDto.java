@@ -2,6 +2,7 @@ package shop.ggamf.ggamf.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+
 import shop.ggamf.ggamf.domain.enter.Enter;
 import shop.ggamf.ggamf.domain.gameCode.GameCode;
 import shop.ggamf.ggamf.domain.room.Room;
