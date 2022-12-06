@@ -1,0 +1,15 @@
+SET REFERENTIAL_INTEGRITY FALSE;
+truncate table agree;
+truncate table chat;
+truncate table enter;
+truncate table follow;
+truncate table game_code;
+truncate table reason_code;
+truncate table recommend;
+truncate table report;
+truncate table room;
+truncate table star_rate;
+truncate table state_code;
+truncate table statistics;
+truncate table users;
+SET REFERENTIAL_INTEGRITY TRUE;
