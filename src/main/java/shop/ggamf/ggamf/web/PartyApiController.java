@@ -18,10 +18,12 @@ import shop.ggamf.ggamf.dto.PartyReqDto.CreateRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.EndRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.ExitRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.JoinRoomReqDto;
+import shop.ggamf.ggamf.dto.PartyReqDto.KickUserReqDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.CreateRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.EndRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.ExitRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.JoinRoomRespDto;
+import shop.ggamf.ggamf.dto.PartyRespDto.KickUserRespDto;
 import shop.ggamf.ggamf.dto.ResponseDto;
 import shop.ggamf.ggamf.service.PartyService;
 
@@ -77,5 +79,16 @@ public class PartyApiController {
         endRoomReqDto.setUserId(loginUser.getUser().getId());
         EndRoomRespDto endRoomRespDto = partyService.파티방종료(endRoomReqDto);
         return new ResponseEntity<>(new ResponseDto<>("파티방 종료 완료", endRoomRespDto), HttpStatus.OK);
+    }
+
+    // 파티원 추방(방장)
+    @PutMapping("/party/kick/{roomId}")
+    public ResponseEntity<?> kickUser(@RequestBody KickUserReqDto kickUserReqDto, @PathVariable Long roomId,
+            @AuthenticationPrincipal LoginUser loginUser) {
+        log.debug("디버그 : 파티원 추방 컨트롤러 호출");
+        kickUserReqDto.setUserId(loginUser.getUser().getId());
+        kickUserReqDto.setRoomId(roomId);
+        KickUserRespDto kickUserRespDto = partyService.파티원추방(kickUserReqDto);
+        return new ResponseEntity<>(new ResponseDto<>("파티원 추방 완료", kickUserRespDto), HttpStatus.OK);
     }
 }

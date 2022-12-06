@@ -60,4 +60,13 @@ public class PartyReqDto {
         private Long userId;
         private Long roomId;
     }
+
+    @Setter
+    @Getter
+    public static class KickUserReqDto {
+        private Long userId;
+        private Long roomId;
+        private Long kickUserId; // 추방대상유저
+
+    }
 }

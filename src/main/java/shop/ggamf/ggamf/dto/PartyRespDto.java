@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.Setter;
 import shop.ggamf.ggamf.domain.enter.Enter;
 import shop.ggamf.ggamf.domain.room.Room;
-import shop.ggamf.ggamf.dto.PartyRespDto.EndRoomRespDto.EnterDto;
 
 public class PartyRespDto {
 
@@ -106,6 +105,22 @@ public class PartyRespDto {
                 this.roomId = enter.getRoom().getId();
                 this.stay = enter.getStay();
             }
+        }
+    }
+
+    @Setter
+    @Getter
+    public static class KickUserRespDto {
+        private Long id;
+        private Long kickUserId;
+        private Long roomId;
+        private Boolean stay;
+
+        public KickUserRespDto(Enter enter) {
+            this.id = enter.getId();
+            this.kickUserId = enter.getUser().getId();
+            this.roomId = enter.getRoom().getId();
+            this.stay = enter.getStay();
         }
     }
 }
