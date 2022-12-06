@@ -61,6 +61,7 @@ public class PartyApiController {
     @PutMapping("/party/exit/{roomId}")
     public ResponseEntity<?> exitRoom(@RequestBody ExitRoomReqDto exitRoomReqDto, @PathVariable Long roomId,
             @AuthenticationPrincipal LoginUser loginUser) {
+        log.debug("디버그 : 파티방 나가기 컨트롤러 호출");
         exitRoomReqDto.setRoomId(roomId);
         exitRoomReqDto.setUserId(loginUser.getUser().getId());
         ExitRoomRespDto exitRoomRespDto = partyService.파티방나가기(exitRoomReqDto);
@@ -71,6 +72,7 @@ public class PartyApiController {
     @PutMapping("/party/end/{roomId}")
     public ResponseEntity<?> endRoom(@RequestBody EndRoomReqDto endRoomReqDto, @PathVariable Long roomId,
             @AuthenticationPrincipal LoginUser loginUser) {
+        log.debug("디버그 : 파티방 종료 컨트롤러 호출");
         endRoomReqDto.setRoomId(roomId);
         endRoomReqDto.setUserId(loginUser.getUser().getId());
         EndRoomRespDto endRoomRespDto = partyService.파티방종료(endRoomReqDto);

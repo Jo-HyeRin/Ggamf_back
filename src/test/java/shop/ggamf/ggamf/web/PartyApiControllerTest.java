@@ -27,6 +27,7 @@ import shop.ggamf.ggamf.domain.room.RoomRepository;
 import shop.ggamf.ggamf.domain.user.User;
 import shop.ggamf.ggamf.domain.user.UserRepository;
 import shop.ggamf.ggamf.dto.PartyReqDto.CreateRoomReqDto;
+import shop.ggamf.ggamf.dto.PartyReqDto.EndRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.ExitRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.JoinRoomReqDto;
 
@@ -59,21 +60,24 @@ public class PartyApiControllerTest extends DummyEntity {
         User ssar = userRepository.save(newUser("ssar"));
         User cos = userRepository.save(newUser("cos"));
         User lala = userRepository.save(newUser("lala"));
+        User dada = userRepository.save(newUser("dada"));
+        User kaka = userRepository.save(newUser("kaka"));
         // GameCode : 게임코드
         GameCode etc = gameCodeRepository.save(newGameCode("etc"));
         GameCode LoL = gameCodeRepository.save(newGameCode("LoL"));
         GameCode starcraft = gameCodeRepository.save(newGameCode("starcraft"));
         GameCode battleground = gameCodeRepository.save(newGameCode("battleground"));
         // Room : 파티방
-        Room room1 = roomRepository.save(newRoom("roomname1", cos, LoL));
-        Room room2 = roomRepository.save(newRoom("roomname2", lala, starcraft));
-        Room room3 = roomRepository.save(newRoom("roomname3", lala, battleground));
-        Room room4 = roomRepository.save(newRoom("roomname4", ssar, etc));
+        Room room1 = roomRepository.save(newRoom("roomname1", ssar, LoL));
+        Room room2 = roomRepository.save(newRoom("roomname2", ssar, starcraft));
+        Room room3 = roomRepository.save(newRoom("roomname3", cos, battleground));
+        Room room4 = roomRepository.save(newRoom("roomname4", lala, etc));
         // Enter : 방 참여 정보
-        Enter enter1 = enterRepository.save(newEnter(ssar, room1));
+        Enter enter1 = enterRepository.save(newEnter(lala, room1));
+        Enter enter11 = enterRepository.save(newEnter(dada, room1));
+        Enter enter111 = enterRepository.save(newEnter(kaka, room1));
         Enter enter2 = enterRepository.save(newEnter(cos, room2));
         Enter enter3 = enterRepository.save(newEnter(cos, room3));
-        Enter enter4 = enterRepository.save(newEnter(lala, room4));
     }
 
     @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
@@ -144,5 +148,28 @@ public class PartyApiControllerTest extends DummyEntity {
         // then
         resultActions.andExpect(MockMvcResultMatchers.status().isOk());
         resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.stay").value(false));
+    }
+
+    @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    public void endRoom_test() throws Exception {
+        // given
+        Long roomId = 1L;
+        EndRoomReqDto endRoomReqDto = new EndRoomReqDto();
+        endRoomReqDto.setRoomId(roomId);
+        String requestBody = om.writeValueAsString(endRoomReqDto);
+        System.out.println("테스트 : " + requestBody);
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(MockMvcRequestBuilders.put("/s/api/party/end/" + roomId)
+                        .content(requestBody).contentType(APPLICATION_JSON_UTF8));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+        resultActions.andExpect(MockMvcResultMatchers.status().isOk());
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.room.active").value(false));
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.enters[0].stay").value(false));
     }
 }
