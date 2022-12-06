@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import lombok.Getter;
 import lombok.Setter;
 import shop.ggamf.ggamf.config.enums.UserEnum;
+import shop.ggamf.ggamf.config.enums.UserStateEnum;
 import shop.ggamf.ggamf.domain.user.User;
 
 public class UserRespDto {
@@ -51,10 +52,20 @@ public class UserRespDto {
 
         public UpdateRespDto(User user) {
             this.id = id;
-            this.password = password;
-            this.phone = phone;
-            this.nickname = nickname;
-            this.email = email;
+            this.password = user.getPassword();
+            this.phone = user.getPhone();
+            this.nickname = user.getNickname();
+            this.email = user.getEmail();
+        }
+    }
+
+    @Setter
+    @Getter
+    public static class UpdateStateRespDto {
+        private UserStateEnum state;
+
+        public UpdateStateRespDto(User user) {
+            this.state = state;
         }
     }
 }

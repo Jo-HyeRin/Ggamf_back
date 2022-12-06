@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import shop.ggamf.ggamf.config.auth.LoginUser;
 import shop.ggamf.ggamf.domain.user.User;
 import shop.ggamf.ggamf.domain.user.UserRepository;
 import shop.ggamf.ggamf.dto.UserReqDto.JoinReqDto;
@@ -43,13 +44,52 @@ public class UserService {
     }
 
     @Transactional
-    public void 회원탈퇴 (){
-        // user의 state를 바꾸는게 좋은지..? 아니면 아래처럼 영구삭제할건지 고민..
+    public void 사진수정() {
+        //1. user가 본인인지 체크
+        //2. 사진 수정
+        //3. Dto리턴
+    }
+
+    @Transactional
+    public void 자기소개수정() {
+        //1. user가 본인인지 체크
+        //2. 자기소개 수정
+        //3. Dto리턴
+    }
+
+    @Transactional
+    public void 닉네임수정() {
+        //1. user가 본인인지 체크
+        //2. 닉네임 수정
+        //3. Dto리턴
+    }
+    
+    @Transactional
+    public void 전화번호수정() {
+        //1. user가 본인인지 체크
+        //2. 전화번호 수정
+        //3. Dto리턴
+    }
+    
+    @Transactional
+    public void 이메일수정() {
+        //1. user가 본인인지 체크
+        //2. 이메일 수정
+        //3. Dto리턴
+    }
+
+    @Transactional
+    public void 회원탈퇴() {
+        //1. user가 본인인지 체크
+        //2. user의 state를 '탈퇴' 로 바꾸기
     }
 
 
     @Transactional
-    public void 회원영구삭제 (Long id){
+    public void 회원영구삭제(Long id) {
+        //1. ROLE이 admin이고
+        //2. user의 state가 '탈퇴' 상태이면
+        //3. 회원 영구삭제
         userRepository.deleteById(id);
     }
 }

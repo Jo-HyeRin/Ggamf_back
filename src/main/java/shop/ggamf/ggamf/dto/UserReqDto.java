@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import shop.ggamf.ggamf.config.enums.UserEnum;
+import shop.ggamf.ggamf.config.enums.UserStateEnum;
 import shop.ggamf.ggamf.domain.user.User;
 
 public class UserReqDto {
@@ -61,6 +62,16 @@ public class UserReqDto {
             this.nickname = nickname;
             this.email = email;
             this.intro = intro;
+        }
+    }
+
+    @Setter
+    @Getter
+    public static class UpdateStateReqDto {
+        private UserStateEnum state;
+
+        public UpdateStateReqDto(UserStateEnum state) {
+            this.state = state;
         }
     }
 }
