@@ -13,7 +13,7 @@ import shop.ggamf.ggamf.domain.user.User;
 import shop.ggamf.ggamf.domain.user.UserRepository;
 
 @Service
-public class LoginUserService implements UserDetailsService{
+public class LoginUserService implements UserDetailsService {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
