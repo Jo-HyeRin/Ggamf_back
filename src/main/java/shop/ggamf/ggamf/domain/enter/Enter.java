@@ -41,4 +41,9 @@ public class Enter {
         this.room = room;
         this.stay = stay;
     }
+
+    // 파티방 나가기
+    public void notStayRoom() {
+        stay = false;
+    }
 }

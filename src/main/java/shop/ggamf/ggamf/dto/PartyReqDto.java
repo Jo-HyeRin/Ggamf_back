@@ -45,4 +45,11 @@ public class PartyReqDto {
                     .build();
         }
     }
+
+    @Setter
+    @Getter
+    public static class ExitRoomReqDto {
+        private Long userId;
+        private Long roomId;
+    }
 }
