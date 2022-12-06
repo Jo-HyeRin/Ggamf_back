@@ -56,7 +56,6 @@ public class UserReqDto {
         private String nickname;
         private String email;
         private String intro;
-        
 
         public UpdateReqDto(String password, String phone, String nickname, String email, String intro) {
             this.password = password;
@@ -64,6 +63,6 @@ public class UserReqDto {
             this.nickname = nickname;
             this.email = email;
             this.intro = intro;
-        }        
+        }
     }
 }
