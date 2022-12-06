@@ -55,12 +55,15 @@ public class UserReqDto {
         private String phone;
         private String nickname;
         private String email;
+        private String intro;
+        
 
-        public UpdateReqDto(String password, String phone, String nickname, String email) {
+        public UpdateReqDto(String password, String phone, String nickname, String email, String intro) {
             this.password = password;
             this.phone = phone;
             this.nickname = nickname;
             this.email = email;
-        }
+            this.intro = intro;
+        }        
     }
 }
