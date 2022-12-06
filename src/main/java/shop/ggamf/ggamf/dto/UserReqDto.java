@@ -48,31 +48,68 @@ public class UserReqDto {
         }
     }
 
+    // @Setter
+    // @Getter
+    // public static class UpdateReqDto {
+    //     private String password;
+    //     private String phone;
+    //     private String nickname;
+    //     private String email;
+    //     private String intro;
+
+    //     public UpdateReqDto(String password, String phone, String nickname, String email, String intro) {
+    //         this.password = password;
+    //         this.phone = phone;
+    //         this.nickname = nickname;
+    //         this.email = email;
+    //         this.intro = intro;
+    //     }
+    // }
+
     @Setter
     @Getter
-    public static class UpdateReqDto {
-        private String password;
-        private String phone;
-        private String nickname;
-        private String email;
+    public static class UpdatePhotoReqDto {
+        private String photo;
+    }
+    
+    @Setter
+    @Getter
+    public static class UpdateIntroReqDto {
+        private Long id; //서비스로직
         private String intro;
+    }
 
-        public UpdateReqDto(String password, String phone, String nickname, String email, String intro) {
-            this.password = password;
-            this.phone = phone;
-            this.nickname = nickname;
-            this.email = email;
-            this.intro = intro;
-        }
+    @Setter
+    @Getter
+    public static class UpdateNicknameReqDto {
+        private String nickname;
+    }
+
+    @Setter
+    @Getter
+    public static class UpdatePasswordReqDto {
+        private String password;
+    }
+
+    @Setter
+    @Getter
+    public static class UpdatePhoneReqDto {
+        private String phone;
+    }
+
+    @Setter
+    @Getter
+    public static class UpdateEmailReqDto {
+        private String email;
     }
 
     @Setter
     @Getter
     public static class UpdateStateReqDto {
-        private UserStateEnum state;
+        private Long stateId;
 
-        public UpdateStateReqDto(UserStateEnum state) {
-            this.state = state;
+        public UpdateStateReqDto(Long stateId) {
+            this.stateId = stateId;
         }
     }
 }

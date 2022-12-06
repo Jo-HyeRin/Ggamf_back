@@ -71,4 +71,8 @@ public class User extends AuditingTime {
         this.role = role;
     }
 
+    public void 자기소개수정(String intro) {
+        this.intro = intro;
+    }
+
 }
