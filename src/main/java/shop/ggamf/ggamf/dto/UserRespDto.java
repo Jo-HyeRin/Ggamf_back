@@ -7,7 +7,6 @@ import lombok.Setter;
 import shop.ggamf.ggamf.config.enums.UserEnum;
 import shop.ggamf.ggamf.config.enums.UserStateEnum;
 import shop.ggamf.ggamf.domain.user.User;
-import shop.ggamf.ggamf.dto.UserReqDto.UpdateIntroReqDto;
 
 public class UserRespDto {
     @Setter
@@ -62,6 +61,18 @@ public class UserRespDto {
 
     @Setter
     @Getter
+    public static class UpdatePhotoRespDto {
+        private Long id;
+        private String photo;
+
+        public UpdatePhotoRespDto(User user) {
+            this.id = user.getId();
+            this.photo = user.getPhoto();
+        }
+    }
+
+    @Setter
+    @Getter
     public static class UpdateIntroRespDto {
         private Long id;
         private String intro;
@@ -74,11 +85,61 @@ public class UserRespDto {
 
     @Setter
     @Getter
+    public static class UpdateNicknameRespDto {
+        private Long id;
+        private String nickname;
+
+        public UpdateNicknameRespDto(User user) {
+            this.id = user.getId();
+            this.nickname = user.getNickname();
+        }
+    }
+
+    @Setter
+    @Getter
+    public static class UpdatePasswordRespDto {
+        private Long id;
+        private String password;
+
+        public UpdatePasswordRespDto(User user) {
+            this.id = user.getId();
+            this.password = user.getPassword();
+        }
+    }
+
+    @Setter
+    @Getter
+    public static class UpdatePhoneRespDto {
+        private Long id;
+        private String phone;
+
+        public UpdatePhoneRespDto(User user) {
+            this.id = user.getId();
+            this.phone = user.getPhone();
+        }
+    }
+
+    @Setter
+    @Getter
+    public static class UpdateEmailRespDto {
+        private Long id;
+        private String email;
+
+        public UpdateEmailRespDto(User user) {
+            this.id = user.getId();
+            this.email = user.getEmail();
+        }
+    }
+
+    @Setter
+    @Getter
     public static class UpdateStateRespDto {
-        private Long stateId;
+        private Long id;
+        private UserStateEnum state;
 
         public UpdateStateRespDto(User user) {
-            this.stateId = stateId;
+            this.id = user.getId();
+            this.state = user.getState();
         }
     }
 }

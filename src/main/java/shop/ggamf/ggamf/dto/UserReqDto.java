@@ -69,6 +69,7 @@ public class UserReqDto {
     @Setter
     @Getter
     public static class UpdatePhotoReqDto {
+        private Long id; //서비스로직
         private String photo;
     }
     
@@ -82,34 +83,35 @@ public class UserReqDto {
     @Setter
     @Getter
     public static class UpdateNicknameReqDto {
+        private Long id; //서비스로직
         private String nickname;
     }
 
     @Setter
     @Getter
     public static class UpdatePasswordReqDto {
+        private Long id; //서비스로직
         private String password;
     }
 
     @Setter
     @Getter
     public static class UpdatePhoneReqDto {
+        private Long id; //서비스로직
         private String phone;
     }
 
     @Setter
     @Getter
     public static class UpdateEmailReqDto {
+        private Long id; //서비스로직
         private String email;
     }
 
     @Setter
     @Getter
     public static class UpdateStateReqDto {
-        private Long stateId;
-
-        public UpdateStateReqDto(Long stateId) {
-            this.stateId = stateId;
-        }
+        private Long id; //서비스로직
+        private UserStateEnum state;
     }
 }

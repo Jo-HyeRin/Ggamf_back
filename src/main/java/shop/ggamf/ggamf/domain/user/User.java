@@ -13,6 +13,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import shop.ggamf.ggamf.config.enums.UserEnum;
+import shop.ggamf.ggamf.config.enums.UserStateEnum;
 import shop.ggamf.ggamf.domain.AuditingTime;
 
 @NoArgsConstructor
@@ -48,7 +49,7 @@ public class User extends AuditingTime {
 
     private String intro;
 
-    private Long stateId;
+    private UserStateEnum state;
 
     @Enumerated(EnumType.STRING) // enum 쓸때 어노테이션
     @Column(nullable = false)
@@ -56,7 +57,7 @@ public class User extends AuditingTime {
 
     @Builder
     public User(Long id, String username, String password, String name, String phone, String nickname, String email,
-            Boolean phoneChecked, String photo, String intro, Long stateId, UserEnum role) {
+            Boolean phoneChecked, String photo, String intro, UserStateEnum state, UserEnum role) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -67,12 +68,36 @@ public class User extends AuditingTime {
         this.phoneChecked = phoneChecked;
         this.photo = photo;
         this.intro = intro;
-        this.stateId = stateId;
+        this.state = state;
         this.role = role;
+    }
+
+    public void 사진수정(String photo) {
+        this.photo = photo;
     }
 
     public void 자기소개수정(String intro) {
         this.intro = intro;
+    }
+
+    public void 닉네임수정(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void 비밀번호수정(String password) {
+        this.password = password;
+    }
+
+    public void 전화번호수정(String phone) {
+        this.phone = phone;
+    }
+
+    public void 이메일수정(String email) {
+        this.email = email;
+    }
+
+    public void 회원탈퇴(UserStateEnum state) {
+        this.state = state;
     }
 
 }

@@ -23,7 +23,12 @@ import shop.ggamf.ggamf.dto.UserReqDto.UpdatePhoneReqDto;
 import shop.ggamf.ggamf.dto.UserReqDto.UpdatePhotoReqDto;
 import shop.ggamf.ggamf.dto.UserReqDto.UpdateStateReqDto;
 import shop.ggamf.ggamf.dto.UserRespDto.JoinRespDto;
+import shop.ggamf.ggamf.dto.UserRespDto.UpdateEmailRespDto;
 import shop.ggamf.ggamf.dto.UserRespDto.UpdateIntroRespDto;
+import shop.ggamf.ggamf.dto.UserRespDto.UpdateNicknameRespDto;
+import shop.ggamf.ggamf.dto.UserRespDto.UpdatePasswordRespDto;
+import shop.ggamf.ggamf.dto.UserRespDto.UpdatePhoneRespDto;
+import shop.ggamf.ggamf.dto.UserRespDto.UpdateStateRespDto;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -60,9 +65,11 @@ public class UserService {
     @Transactional
     public void 사진수정(UpdatePhotoReqDto updatePhotoReqDto, Long id) {
         //1. user가 본인인지 체크
-        User userPS = userRepository.findById(id)
-                .orElseThrow(
-                        () -> new CustomApiException("해당 유저가 존재하지 않습니다", HttpStatus.FORBIDDEN));
+        Optional<User> userOP = userRepository.findById(updatePhotoReqDto.getId());
+        if (!userOP.isPresent()) {
+            userRepository.findById(updatePhotoReqDto.getId())
+                    .orElseThrow(() -> (new CustomApiException("해당유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST)));
+        }
         //2. 사진 수정
         //3. Dto리턴
     }
@@ -83,52 +90,77 @@ public class UserService {
     }
 
     @Transactional
-    public void 닉네임수정(UpdateNicknameReqDto updateNicknameReqDto, Long id) {
+    public UpdateNicknameRespDto 닉네임수정(UpdateNicknameReqDto updateNicknameReqDto, Long id) {
         //1. user가 본인인지 체크
-        User userPS = userRepository.findById(id)
-                .orElseThrow(
-                        () -> new CustomApiException("해당 유저가 존재하지 않습니다", HttpStatus.FORBIDDEN));
+        Optional<User> userOP = userRepository.findById(updateNicknameReqDto.getId());
+        if (!userOP.isPresent()) {
+            userRepository.findById(updateNicknameReqDto.getId())
+                    .orElseThrow(() -> (new CustomApiException("해당유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST)));
+        }
         //2. 닉네임 수정
+        User userPS = userOP.get();
+        userPS.닉네임수정(updateNicknameReqDto.getNickname());
         //3. Dto리턴
+        return new UpdateNicknameRespDto(userPS);
     }
     
     @Transactional
-    public void 비밀번호수정(UpdatePasswordReqDto updatePasswordReqDto, Long id) {
+    public UpdatePasswordRespDto 비밀번호수정(UpdatePasswordReqDto updatePasswordReqDto, Long id) {
         //1. user가 본인인지 체크
-        User userPS = userRepository.findById(id)
-                .orElseThrow(
-                        () -> new CustomApiException("해당 유저가 존재하지 않습니다", HttpStatus.FORBIDDEN));
+        Optional<User> userOP = userRepository.findById(updatePasswordReqDto.getId());
+        if (!userOP.isPresent()) {
+            userRepository.findById(updatePasswordReqDto.getId())
+                    .orElseThrow(() -> (new CustomApiException("해당유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST)));
+        }
         //2. 비밀번호 수정
+        User userPS = userOP.get();
+        userPS.비밀번호수정(updatePasswordReqDto.getPassword());
         //3. Dto리턴
+        return new UpdatePasswordRespDto(userPS);
     }
 
     @Transactional
-    public void 전화번호수정(UpdatePhoneReqDto updatePhoneReqDto, Long id) {
+    public UpdatePhoneRespDto 전화번호수정(UpdatePhoneReqDto updatePhoneReqDto, Long id) {
         //1. user가 본인인지 체크
-        User userPS = userRepository.findById(id)
-                .orElseThrow(
-                        () -> new CustomApiException("해당 유저가 존재하지 않습니다", HttpStatus.FORBIDDEN));
+        Optional<User> userOP = userRepository.findById(updatePhoneReqDto.getId());
+        if (!userOP.isPresent()) {
+            userRepository.findById(updatePhoneReqDto.getId())
+                    .orElseThrow(() -> (new CustomApiException("해당유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST)));
+        }
         //2. 전화번호 수정
+        User userPS = userOP.get();
+        userPS.전화번호수정(updatePhoneReqDto.getPhone());
         //3. Dto리턴
+        return new UpdatePhoneRespDto(userPS);
     }
     
     @Transactional
-    public void 이메일수정(UpdateEmailReqDto updateEmailReqDto, Long id) {
+    public UpdateEmailRespDto 이메일수정(UpdateEmailReqDto updateEmailReqDto, Long id) {
         //1. user가 본인인지 체크
-        User userPS = userRepository.findById(id)
-                .orElseThrow(
-                        () -> new CustomApiException("해당 유저가 존재하지 않습니다", HttpStatus.FORBIDDEN));
+        Optional<User> userOP = userRepository.findById(updateEmailReqDto.getId());
+        if (!userOP.isPresent()) {
+            userRepository.findById(updateEmailReqDto.getId())
+                    .orElseThrow(() -> (new CustomApiException("해당유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST)));
+        }
         //2. 이메일 수정
+        User userPS = userOP.get();
+        userPS.이메일수정(updateEmailReqDto.getEmail());
         //3. Dto리턴
+        return new UpdateEmailRespDto(userPS);
     }
 
     @Transactional
-    public void 회원탈퇴(UpdateStateReqDto updateStateReqDto, Long id) {
+    public UpdateStateRespDto 회원탈퇴(UpdateStateReqDto updateStateReqDto, Long id) {
         //1. user가 본인인지 체크
-        User userPS = userRepository.findById(id)
-                .orElseThrow(
-                        () -> new CustomApiException("해당 유저가 존재하지 않습니다", HttpStatus.FORBIDDEN));
+        Optional<User> userOP = userRepository.findById(updateStateReqDto.getId());
+        if (!userOP.isPresent()) {
+            userRepository.findById(updateStateReqDto.getId())
+                    .orElseThrow(() -> (new CustomApiException("해당유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST)));
+        }
         //2. user의 state를 '탈퇴' 로 바꾸기
+        User userPS = userOP.get();
+        userPS.회원탈퇴(updateStateReqDto.getState());
+        return new UpdateStateRespDto(userPS);
     }
 
 

@@ -42,25 +42,23 @@ public class UserApiController {
     //     return new ResponseEntity<>(new ResponseDto<>("회원정보수정성공", updateRespDto), HttpStatus.CREATED);
     // }
 
-    @PutMapping("/user/{id}/updateIntro")
-    public ResponseEntity<?> updateIntro(@PathVariable Long id, @RequestBody UpdateIntroReqDto updateIntroReqDto, 
+    @PutMapping("/user/{userId}/updateIntro")
+    public ResponseEntity<?> updateIntro(@PathVariable Long userId, @RequestBody UpdateIntroReqDto updateIntroReqDto, 
             @AuthenticationPrincipal LoginUser loginUser) {
                 
-        if (id != loginUser.getUser().getId()) {
+        if (userId != loginUser.getUser().getId()) {
             return new ResponseEntity<>(new ResponseDto<>("권한이 없습니다", null), HttpStatus.FORBIDDEN);
         }
         log.debug("디버그 : 컨트롤러userId:" + loginUser.getUser().getId());
-                    updateIntroReqDto.setId(id);
-                    UpdateIntroRespDto updateIntroRespDto = userService.자기소개수정(updateIntroReqDto);
-            return new ResponseEntity<>(new ResponseDto<>("자기소개 수정 성공", updateIntroRespDto), HttpStatus.OK);
-        
-        
+            updateIntroReqDto.setId(userId);
+            UpdateIntroRespDto updateIntroRespDto = userService.자기소개수정(updateIntroReqDto);
+        return new ResponseEntity<>(new ResponseDto<>("자기소개 수정 성공", updateIntroRespDto), HttpStatus.OK);
     }
     
-    @DeleteMapping("/user/{id}/delete")
-    public ResponseEntity<?> delete(@PathVariable Long id) {
-        userService.회원영구삭제(id);
-        return new ResponseEntity<>(new ResponseDto<>("회원삭제성공", null), HttpStatus.CREATED);
+    @DeleteMapping("/user/{userId}/delete")
+    public ResponseEntity<?> delete(@PathVariable Long userId) {
+        userService.회원영구삭제(userId);
+        return new ResponseEntity<>(new ResponseDto<>("회원삭제성공", null), HttpStatus.OK);
     }
 
 }
