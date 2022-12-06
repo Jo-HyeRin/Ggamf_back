@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import shop.ggamf.ggamf.config.auth.LoginUser;
 import shop.ggamf.ggamf.dto.PartyReqDto.CreateRoomReqDto;
+import shop.ggamf.ggamf.dto.PartyReqDto.EndRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.ExitRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.JoinRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.CreateRoomRespDto;
+import shop.ggamf.ggamf.dto.PartyRespDto.EndRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.ExitRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.JoinRoomRespDto;
 import shop.ggamf.ggamf.dto.ResponseDto;
@@ -63,5 +65,15 @@ public class PartyApiController {
         exitRoomReqDto.setUserId(loginUser.getUser().getId());
         ExitRoomRespDto exitRoomRespDto = partyService.파티방나가기(exitRoomReqDto);
         return new ResponseEntity<>(new ResponseDto<>("파티방 나가기 완료", exitRoomRespDto), HttpStatus.OK);
+    }
+
+    // 파티방 종료(방장)
+    @PutMapping("/party/end/{roomId}")
+    public ResponseEntity<?> endRoom(@RequestBody EndRoomReqDto endRoomReqDto, @PathVariable Long roomId,
+            @AuthenticationPrincipal LoginUser loginUser) {
+        endRoomReqDto.setRoomId(roomId);
+        endRoomReqDto.setUserId(loginUser.getUser().getId());
+        EndRoomRespDto endRoomRespDto = partyService.파티방종료(endRoomReqDto);
+        return new ResponseEntity<>(new ResponseDto<>("파티방 종료 완료", endRoomRespDto), HttpStatus.OK);
     }
 }

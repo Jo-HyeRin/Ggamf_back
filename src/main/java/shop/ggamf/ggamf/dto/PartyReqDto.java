@@ -53,4 +53,11 @@ public class PartyReqDto {
         private Long userId;
         private Long roomId;
     }
+
+    @Setter
+    @Getter
+    public static class EndRoomReqDto {
+        private Long userId;
+        private Long roomId;
+    }
 }
