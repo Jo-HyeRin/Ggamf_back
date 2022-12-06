@@ -19,7 +19,7 @@ import shop.ggamf.ggamf.domain.AuditingTime;
 @Getter
 @Table(name = "users")
 @Entity
-public class User extends AuditingTime{
+public class User extends AuditingTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

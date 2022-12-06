@@ -18,12 +18,17 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import shop.ggamf.ggamf.config.dummy.DummyEntity;
+import shop.ggamf.ggamf.domain.enter.Enter;
+import shop.ggamf.ggamf.domain.enter.EnterRepository;
 import shop.ggamf.ggamf.domain.gameCode.GameCode;
 import shop.ggamf.ggamf.domain.gameCode.GameCodeRepository;
+import shop.ggamf.ggamf.domain.room.Room;
 import shop.ggamf.ggamf.domain.room.RoomRepository;
 import shop.ggamf.ggamf.domain.user.User;
 import shop.ggamf.ggamf.domain.user.UserRepository;
 import shop.ggamf.ggamf.dto.PartyReqDto.CreateRoomReqDto;
+import shop.ggamf.ggamf.dto.PartyReqDto.ExitRoomReqDto;
+import shop.ggamf.ggamf.dto.PartyReqDto.JoinRoomReqDto;
 
 @Sql("classpath:db/truncate.sql")
 @ActiveProfiles("test")
@@ -41,9 +46,13 @@ public class PartyApiControllerTest extends DummyEntity {
 
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private GameCodeRepository gameCodeRepository;
+    @Autowired
+    private RoomRepository roomRepository;
+    @Autowired
+    private EnterRepository enterRepository;
+
 
     @BeforeEach
     public void setUp() {
@@ -56,6 +65,16 @@ public class PartyApiControllerTest extends DummyEntity {
         GameCode LoL = gameCodeRepository.save(newGameCode("LoL"));
         GameCode starcraft = gameCodeRepository.save(newGameCode("starcraft"));
         GameCode battleground = gameCodeRepository.save(newGameCode("battleground"));
+        // Room : 파티방
+        Room room1 = roomRepository.save(newRoom("roomname1", cos, LoL));
+        Room room2 = roomRepository.save(newRoom("roomname2", lala, starcraft));
+        Room room3 = roomRepository.save(newRoom("roomname3", lala, battleground));
+        Room room4 = roomRepository.save(newRoom("roomname4", ssar, etc));
+        // Enter : 방 참여 정보
+        Enter enter1 = enterRepository.save(newEnter(ssar, room1));
+        Enter enter2 = enterRepository.save(newEnter(cos, room2));
+        Enter enter3 = enterRepository.save(newEnter(cos, room3));
+        Enter enter4 = enterRepository.save(newEnter(lala, room4));
     }
 
     @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
@@ -83,4 +102,48 @@ public class PartyApiControllerTest extends DummyEntity {
         resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.roomName").value("초보만오세요"));
     }
 
+    @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    public void joinRoom_test() throws Exception {
+        // given
+        Long roomId = 1L;
+        JoinRoomReqDto joinRoomReqDto = new JoinRoomReqDto();
+        joinRoomReqDto.setRoomId(roomId);
+        String requestBody = om.writeValueAsString(joinRoomReqDto);
+        System.out.println("테스트 : " + requestBody);
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(MockMvcRequestBuilders.post("/s/api/party/join/" + roomId)
+                        .content(requestBody)
+                        .contentType(APPLICATION_JSON_UTF8));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+        resultActions.andExpect(MockMvcResultMatchers.status().isCreated());
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.userId").value(1L));
+    }
+
+    @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    public void exitRoom_test() throws Exception {
+        // given
+        Long roomId = 1L;
+        ExitRoomReqDto exitRoomReqDto = new ExitRoomReqDto();
+        exitRoomReqDto.setRoomId(roomId);
+        String requestBody = om.writeValueAsString(exitRoomReqDto);
+        System.out.println("테스트 : " + requestBody);
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(MockMvcRequestBuilders.put("/s/api/party/exit/" + roomId)
+                        .content(requestBody).contentType(APPLICATION_JSON_UTF8));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+        resultActions.andExpect(MockMvcResultMatchers.status().isOk());
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.stay").value(false));
+    }
 }

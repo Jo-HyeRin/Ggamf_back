@@ -10,12 +10,11 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import shop.ggamf.ggamf.domain.user.User;
 
-
 @Getter
 @RequiredArgsConstructor
-public class LoginUser implements UserDetails{
+public class LoginUser implements UserDetails {
     private final User user;
-    
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
@@ -59,5 +58,5 @@ public class LoginUser implements UserDetails{
         // TODO Auto-generated method stub
         return true;
     }
-    
+
 }

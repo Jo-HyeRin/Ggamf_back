@@ -26,7 +26,8 @@ public class UserReqDto {
         // @NotEmpty(message = "유저네임은 필수입니다.")
         private String username;
 
-        //@Pattern(regexp = "^[가-힣]{4,20}", message = "비밀번호는 영문,숫자,특수문자 최소4에서 최대20까지입니다.")
+        // @Pattern(regexp = "^[가-힣]{4,20}", message = "비밀번호는 영문,숫자,특수문자 최소4에서
+        // 최대20까지입니다.")
         private String password;
         private String name;
         private String phone;
