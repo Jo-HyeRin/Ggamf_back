@@ -5,14 +5,15 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.stereotype.Service;
 
 import shop.ggamf.ggamf.domain.user.User;
 import shop.ggamf.ggamf.domain.user.UserRepository;
 
-public class LoginUserService implements UserDetailsService{
+@Service
+public class LoginUserService implements UserDetailsService {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
