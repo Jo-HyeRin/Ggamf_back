@@ -77,7 +77,7 @@ public class PartyApiControllerTest extends DummyEntity {
         Enter enter11 = enterRepository.save(newEnter(dada, room1));
         Enter enter111 = enterRepository.save(newEnter(kaka, room1));
         Enter enter2 = enterRepository.save(newEnter(cos, room2));
-        Enter enter3 = enterRepository.save(newEnter(cos, room3));
+        Enter enter3 = enterRepository.save(newEnter(ssar, room3));
     }
 
     @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
@@ -132,7 +132,7 @@ public class PartyApiControllerTest extends DummyEntity {
     @Test
     public void exitRoom_test() throws Exception {
         // given
-        Long roomId = 1L;
+        Long roomId = 3L;
         ExitRoomReqDto exitRoomReqDto = new ExitRoomReqDto();
         exitRoomReqDto.setRoomId(roomId);
         String requestBody = om.writeValueAsString(exitRoomReqDto);
