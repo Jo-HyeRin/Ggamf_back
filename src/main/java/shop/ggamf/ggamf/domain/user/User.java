@@ -30,7 +30,7 @@ public class User extends AuditingTime{
     @Column(nullable = false)
     private String password;
 
-    @Column(unique = true, nullable = false, length = 20)
+    @Column(nullable = false, length = 20)
     private String name;
 
     @Column(unique = true, nullable = false, length = 20)
@@ -71,5 +71,4 @@ public class User extends AuditingTime{
         this.role = role;
     }
 
-    
 }
