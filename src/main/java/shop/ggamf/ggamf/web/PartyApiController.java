@@ -31,10 +31,11 @@ public class PartyApiController {
     public ResponseEntity<?> createRoom(@RequestBody CreateRoomReqDto createRoomReqDto, @PathVariable Long gameCodeId,
             @AuthenticationPrincipal LoginUser loginUser) {
         log.debug("디버그 : 파티방 생성 컨트롤러 호출");
+        log.debug("디버그 : userId : " + loginUser.getUser().getId());
         createRoomReqDto.setUserId(loginUser.getUser().getId());
         createRoomReqDto.setGameCodeId(gameCodeId);
+        log.debug("디버그 : userId : " + loginUser.getUser().getId());
         CreateRoomRespDto createRoomRespDto = partyService.파티방생성(createRoomReqDto);
         return new ResponseEntity<>(new ResponseDto<>("파티방 생성 완료", createRoomRespDto), HttpStatus.CREATED);
     }
-
 }

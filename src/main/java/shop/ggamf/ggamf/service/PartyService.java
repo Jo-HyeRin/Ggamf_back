@@ -48,5 +48,4 @@ public class PartyService {
         // 응답
         return new CreateRoomRespDto(roomPS);
     }
-
 }
