@@ -19,7 +19,7 @@ import shop.ggamf.ggamf.domain.AuditingTime;
 @Getter
 @Table(name = "users")
 @Entity
-public class User extends AuditingTime{
+public class User extends AuditingTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,7 +30,7 @@ public class User extends AuditingTime{
     @Column(nullable = false)
     private String password;
 
-    @Column(unique = true, nullable = false, length = 20)
+    @Column(nullable = false, length = 20)
     private String name;
 
     @Column(unique = true, nullable = false, length = 20)
@@ -71,5 +71,4 @@ public class User extends AuditingTime{
         this.role = role;
     }
 
-    
 }
