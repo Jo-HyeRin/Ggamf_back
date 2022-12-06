@@ -1,11 +1,13 @@
 package shop.ggamf.ggamf.dto;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import shop.ggamf.ggamf.config.enums.UserEnum;
+import shop.ggamf.ggamf.config.enums.UserStateEnum;
 import shop.ggamf.ggamf.domain.user.User;
 
 public class UserReqDto {
@@ -21,7 +23,7 @@ public class UserReqDto {
     @Setter
     public static class JoinReqDto {
         @Size(min = 2, max = 20)
-        // @NotBlank(message = "유저네임은 필수입니다.")
+        // @NotEmpty(message = "유저네임은 필수입니다.")
         private String username;
 
         // @Pattern(regexp = "^[가-힣]{4,20}", message = "비밀번호는 영문,숫자,특수문자 최소4에서
@@ -46,19 +48,68 @@ public class UserReqDto {
         }
     }
 
+    // @Setter
+    // @Getter
+    // public static class UpdateReqDto {
+    //     private String password;
+    //     private String phone;
+    //     private String nickname;
+    //     private String email;
+    //     private String intro;
+
+    //     public UpdateReqDto(String password, String phone, String nickname, String email, String intro) {
+    //         this.password = password;
+    //         this.phone = phone;
+    //         this.nickname = nickname;
+    //         this.email = email;
+    //         this.intro = intro;
+    //     }
+    // }
+
     @Setter
     @Getter
-    public static class UpdateReqDto {
-        private String password;
-        private String phone;
-        private String nickname;
-        private String email;
+    public static class UpdatePhotoReqDto {
+        private String photo;
+    }
+    
+    @Setter
+    @Getter
+    public static class UpdateIntroReqDto {
+        private Long id; //서비스로직
+        private String intro;
+    }
 
-        public UpdateReqDto(String password, String phone, String nickname, String email) {
-            this.password = password;
-            this.phone = phone;
-            this.nickname = nickname;
-            this.email = email;
+    @Setter
+    @Getter
+    public static class UpdateNicknameReqDto {
+        private String nickname;
+    }
+
+    @Setter
+    @Getter
+    public static class UpdatePasswordReqDto {
+        private String password;
+    }
+
+    @Setter
+    @Getter
+    public static class UpdatePhoneReqDto {
+        private String phone;
+    }
+
+    @Setter
+    @Getter
+    public static class UpdateEmailReqDto {
+        private String email;
+    }
+
+    @Setter
+    @Getter
+    public static class UpdateStateReqDto {
+        private Long stateId;
+
+        public UpdateStateReqDto(Long stateId) {
+            this.stateId = stateId;
         }
     }
 }

@@ -5,7 +5,9 @@ import java.time.format.DateTimeFormatter;
 import lombok.Getter;
 import lombok.Setter;
 import shop.ggamf.ggamf.config.enums.UserEnum;
+import shop.ggamf.ggamf.config.enums.UserStateEnum;
 import shop.ggamf.ggamf.domain.user.User;
+import shop.ggamf.ggamf.dto.UserReqDto.UpdateIntroReqDto;
 
 public class UserRespDto {
     @Setter
@@ -40,21 +42,43 @@ public class UserRespDto {
 
     }
 
+    // @Setter
+    // @Getter
+    // public static class UpdateRespDto {
+    //     private Long id;
+    //     private String password;
+    //     private String phone;
+    //     private String nickname;
+    //     private String email;
+
+    //     public UpdateRespDto(User user) {
+    //         this.id = id;
+    //         this.password = user.getPassword();
+    //         this.phone = user.getPhone();
+    //         this.nickname = user.getNickname();
+    //         this.email = user.getEmail();
+    //     }
+    // }
+
     @Setter
     @Getter
-    public static class UpdateRespDto {
+    public static class UpdateIntroRespDto {
         private Long id;
-        private String password;
-        private String phone;
-        private String nickname;
-        private String email;
+        private String intro;
 
-        public UpdateRespDto(User user) {
-            this.id = id;
-            this.password = password;
-            this.phone = phone;
-            this.nickname = nickname;
-            this.email = email;
+        public UpdateIntroRespDto(User user) {
+            this.id = user.getId();
+            this.intro = user.getIntro();
+        }
+    }
+
+    @Setter
+    @Getter
+    public static class UpdateStateRespDto {
+        private Long stateId;
+
+        public UpdateStateRespDto(User user) {
+            this.stateId = stateId;
         }
     }
 }
