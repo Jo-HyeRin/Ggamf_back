@@ -28,9 +28,9 @@ import shop.ggamf.ggamf.domain.user.User;
 import shop.ggamf.ggamf.domain.user.UserRepository;
 import shop.ggamf.ggamf.dto.PartyReqDto.CreateRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.EndRoomReqDto;
-
 import shop.ggamf.ggamf.dto.PartyReqDto.ExitRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.JoinRoomReqDto;
+import shop.ggamf.ggamf.dto.PartyReqDto.KickUserReqDto;
 
 @Sql("classpath:db/truncate.sql")
 @ActiveProfiles("test")
@@ -69,7 +69,6 @@ public class PartyApiControllerTest extends DummyEntity {
         GameCode starcraft = gameCodeRepository.save(newGameCode("starcraft"));
         GameCode battleground = gameCodeRepository.save(newGameCode("battleground"));
         // Room : 파티방
-
         Room room1 = roomRepository.save(newRoom("roomname1", ssar, LoL));
         Room room2 = roomRepository.save(newRoom("roomname2", ssar, starcraft));
         Room room3 = roomRepository.save(newRoom("roomname3", cos, battleground));
@@ -173,5 +172,30 @@ public class PartyApiControllerTest extends DummyEntity {
         resultActions.andExpect(MockMvcResultMatchers.status().isOk());
         resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.room.active").value(false));
         resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.enters[0].stay").value(false));
+    }
+
+    @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    public void kickUser_test() throws Exception {
+        // given
+        Long roomId = 1L;
+        KickUserReqDto kickUserReqDto = new KickUserReqDto();
+        kickUserReqDto.setRoomId(roomId);
+        kickUserReqDto.setKickUserId(3L);
+        String requestBody = om.writeValueAsString(kickUserReqDto);
+        System.out.println("테스트 : " + requestBody);
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(MockMvcRequestBuilders.put("/s/api/party/kick/" + roomId)
+                        .content(requestBody).contentType(APPLICATION_JSON_UTF8));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+        resultActions.andExpect(MockMvcResultMatchers.status().isOk());
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.kickUsername").value("lala"));
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.kickName").value("유저이름"));
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.stay").value(false));
     }
 }

@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import shop.ggamf.ggamf.config.exception.CustomApiException;
-
 import shop.ggamf.ggamf.domain.enter.Enter;
 import shop.ggamf.ggamf.domain.enter.EnterRepository;
 import shop.ggamf.ggamf.domain.gameCode.GameCode;
@@ -21,14 +20,15 @@ import shop.ggamf.ggamf.domain.room.RoomRepository;
 import shop.ggamf.ggamf.domain.user.User;
 import shop.ggamf.ggamf.domain.user.UserRepository;
 import shop.ggamf.ggamf.dto.PartyReqDto.CreateRoomReqDto;
-
 import shop.ggamf.ggamf.dto.PartyReqDto.EndRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.ExitRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.JoinRoomReqDto;
+import shop.ggamf.ggamf.dto.PartyReqDto.KickUserReqDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.CreateRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.EndRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.ExitRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.JoinRoomRespDto;
+import shop.ggamf.ggamf.dto.PartyRespDto.KickUserRespDto;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -125,5 +125,16 @@ public class PartyService {
 
         // 응답
         return new EndRoomRespDto(roomPS, enterListUpdate);
+    }
+
+    @Transactional
+    public KickUserRespDto 파티원추방(KickUserReqDto kickUserReqDto) {
+        log.debug("디버그 : 파티원 추방 서비스 호출");
+        Enter enterPS = enterRepository
+                .findByRoomIdAndUserId(kickUserReqDto.getRoomId(), kickUserReqDto.getKickUserId())
+                .orElseThrow(
+                        () -> new CustomApiException("해당 파티원은 추방할 수 없습니다", HttpStatus.FORBIDDEN));
+        enterPS.notStayRoom();
+        return new KickUserRespDto(enterPS);
     }
 }
