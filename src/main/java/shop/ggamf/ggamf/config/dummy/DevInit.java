@@ -29,6 +29,8 @@ public class DevInit extends DummyEntity {
             // User : 유저
             User cos = userRepository.save(newUser("cos"));
             User lala = userRepository.save(newUser("lala"));
+            User dada = userRepository.save(newUser("dada"));
+            User kaka = userRepository.save(newUser("kaka"));
             // GameCode : 게임코드
             GameCode etc = gameCodeRepository.save(newGameCode("etc"));
             GameCode LoL = gameCodeRepository.save(newGameCode("LoL"));
@@ -40,6 +42,8 @@ public class DevInit extends DummyEntity {
             Room room3 = roomRepository.save(newRoom("초보만요3", lala, battleground));
             // Enter : 파티방, 참여유저
             Enter enter1 = enterRepository.save(newEnter(lala, room1));
+            Enter enter11 = enterRepository.save(newEnter(dada, room1));
+            Enter enter111 = enterRepository.save(newEnter(kaka, room1));
             Enter enter2 = enterRepository.save(newEnter(cos, room2));
             Enter enter3 = enterRepository.save(newEnter(cos, room3));
         };
