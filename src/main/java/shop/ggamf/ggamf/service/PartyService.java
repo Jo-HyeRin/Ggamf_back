@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import shop.ggamf.ggamf.config.exception.CustomApiException;
+
 import shop.ggamf.ggamf.domain.enter.Enter;
 import shop.ggamf.ggamf.domain.enter.EnterRepository;
 import shop.ggamf.ggamf.domain.gameCode.GameCode;
@@ -21,6 +22,7 @@ import shop.ggamf.ggamf.dto.PartyReqDto.JoinRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.CreateRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.JoinRoomRespDto;
 
+
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
@@ -31,6 +33,7 @@ public class PartyService {
     private final UserRepository userRepository;
     private final GameCodeRepository gameCodeRepository;
     private final EnterRepository enterRepository;
+
 
     @Transactional
     public CreateRoomRespDto 파티방생성(CreateRoomReqDto createRoomReqDto) {

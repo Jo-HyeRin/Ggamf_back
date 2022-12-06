@@ -111,5 +111,4 @@ public class PartyApiControllerTest extends DummyEntity {
         resultActions.andExpect(MockMvcResultMatchers.status().isCreated());
         resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.userId").value(1L));
     }
-
 }
