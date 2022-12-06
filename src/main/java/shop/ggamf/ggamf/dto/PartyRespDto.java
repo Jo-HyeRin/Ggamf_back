@@ -113,12 +113,16 @@ public class PartyRespDto {
     public static class KickUserRespDto {
         private Long id;
         private Long kickUserId;
+        private String kickUsername;
+        private String kickName;
         private Long roomId;
         private Boolean stay;
 
         public KickUserRespDto(Enter enter) {
             this.id = enter.getId();
             this.kickUserId = enter.getUser().getId();
+            this.kickUsername = enter.getUser().getUsername();
+            this.kickName = enter.getUser().getName();
             this.roomId = enter.getRoom().getId();
             this.stay = enter.getStay();
         }
