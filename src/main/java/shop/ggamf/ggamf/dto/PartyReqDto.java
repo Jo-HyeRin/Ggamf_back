@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import shop.ggamf.ggamf.domain.enter.Enter;
+
+import shop.ggamf.ggamf.domain.enter.Enter;
 import shop.ggamf.ggamf.domain.gameCode.GameCode;
 import shop.ggamf.ggamf.domain.room.Room;
 import shop.ggamf.ggamf.domain.user.User;
@@ -52,5 +54,20 @@ public class PartyReqDto {
     public static class ExitRoomReqDto {
         private Long userId;
         private Long roomId;
+    }
+
+    @Setter
+    @Getter
+    public static class EndRoomReqDto {
+        private Long userId;
+        private Long roomId;
+    }
+
+    @Setter
+    @Getter
+    public static class KickUserReqDto {
+        private Long userId;
+        private Long roomId;
+        private Long kickUserId; // 추방대상유저
     }
 }

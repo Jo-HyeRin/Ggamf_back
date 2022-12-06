@@ -55,4 +55,9 @@ public class Room {
         this.user = user;
         this.gameCode = gameCode;
     }
+
+    // 파티방 종료
+    public void endRoom() {
+        active = false;
+    }
 }

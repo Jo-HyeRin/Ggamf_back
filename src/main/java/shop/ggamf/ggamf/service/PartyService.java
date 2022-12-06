@@ -1,5 +1,8 @@
 package shop.ggamf.ggamf.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -8,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import shop.ggamf.ggamf.config.exception.CustomApiException;
-
 import shop.ggamf.ggamf.domain.enter.Enter;
 import shop.ggamf.ggamf.domain.enter.EnterRepository;
 import shop.ggamf.ggamf.domain.gameCode.GameCode;
@@ -18,12 +20,15 @@ import shop.ggamf.ggamf.domain.room.RoomRepository;
 import shop.ggamf.ggamf.domain.user.User;
 import shop.ggamf.ggamf.domain.user.UserRepository;
 import shop.ggamf.ggamf.dto.PartyReqDto.CreateRoomReqDto;
+import shop.ggamf.ggamf.dto.PartyReqDto.EndRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.ExitRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.JoinRoomReqDto;
+import shop.ggamf.ggamf.dto.PartyReqDto.KickUserReqDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.CreateRoomRespDto;
+import shop.ggamf.ggamf.dto.PartyRespDto.EndRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.ExitRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.JoinRoomRespDto;
-
+import shop.ggamf.ggamf.dto.PartyRespDto.KickUserRespDto;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -35,7 +40,6 @@ public class PartyService {
     private final UserRepository userRepository;
     private final GameCodeRepository gameCodeRepository;
     private final EnterRepository enterRepository;
-
 
     @Transactional
     public CreateRoomRespDto 파티방생성(CreateRoomReqDto createRoomReqDto) {
@@ -95,4 +99,42 @@ public class PartyService {
         return new ExitRoomRespDto(enterPS);
     }
 
+    @Transactional
+    public EndRoomRespDto 파티방종료(EndRoomReqDto endRoomReqDto) {
+        log.debug("디버그 : 파티방 종료 서비스 호출");
+        // Room active = false로 변경
+        Room roomPS = roomRepository.findById(endRoomReqDto.getRoomId())
+                .orElseThrow(
+                        () -> new CustomApiException("해당 방을 찾을 수 없습니다", HttpStatus.FORBIDDEN));
+        if (endRoomReqDto.getUserId() != roomPS.getUser().getId()) {
+            throw new CustomApiException("당신은 방장이 아닙니다", HttpStatus.BAD_REQUEST);
+        }
+        if (roomPS.getActive() == false) {
+            throw new CustomApiException("이미 종료된 방입니다", HttpStatus.BAD_REQUEST);
+        }
+        roomPS.endRoom();
+
+        // Enter roomId = endRoomReqDto.getRoomId() 찾아서 stay = false 변경
+        List<Enter> enterListPS = enterRepository.findByRoomId(endRoomReqDto.getRoomId());
+
+        List<Enter> enterList = enterListPS.stream()
+                .map((enter) -> new Enter(enter.getId(), enter.getUser(),
+                        enter.getRoom(), false))
+                .collect(Collectors.toList());
+        List<Enter> enterListUpdate = enterRepository.saveAll(enterList);
+
+        // 응답
+        return new EndRoomRespDto(roomPS, enterListUpdate);
+    }
+
+    @Transactional
+    public KickUserRespDto 파티원추방(KickUserReqDto kickUserReqDto) {
+        log.debug("디버그 : 파티원 추방 서비스 호출");
+        Enter enterPS = enterRepository
+                .findByRoomIdAndUserId(kickUserReqDto.getRoomId(), kickUserReqDto.getKickUserId())
+                .orElseThrow(
+                        () -> new CustomApiException("해당 파티원은 추방할 수 없습니다", HttpStatus.FORBIDDEN));
+        enterPS.notStayRoom();
+        return new KickUserRespDto(enterPS);
+    }
 }
