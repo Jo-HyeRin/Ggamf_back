@@ -2,6 +2,7 @@ package shop.ggamf.ggamf.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import shop.ggamf.ggamf.domain.enter.Enter;
 import shop.ggamf.ggamf.domain.room.Room;
 
 public class PartyRespDto {
@@ -23,6 +24,21 @@ public class PartyRespDto {
             this.gameName = room.getGameName();
             this.roomName = room.getRoomName();
             this.totalPeople = room.getTotalPeople();
+        }
+    }
+
+    @Setter
+    @Getter
+    public static class JoinRoomRespDto {
+        private Long id;
+        private Long userId;
+        private Long roomId;
+        // 나중에 채팅방 보여줘야함
+
+        public JoinRoomRespDto(Enter enter) {
+            this.id = enter.getId();
+            this.userId = enter.getUser().getId();
+            this.roomId = enter.getRoom().getId();
         }
     }
 
