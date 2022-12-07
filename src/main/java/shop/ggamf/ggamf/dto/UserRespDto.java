@@ -1,9 +1,9 @@
 package shop.ggamf.ggamf.dto;
 
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import shop.ggamf.ggamf.config.enums.UserEnum;
 import shop.ggamf.ggamf.config.enums.UserStateEnum;
@@ -44,7 +44,6 @@ public class UserRespDto {
 
     }
 
-
     @Setter
     @Getter
     public static class UpdateRespDto {
@@ -77,5 +76,15 @@ public class UserRespDto {
             this.id = user.getId();
             this.state = user.getState();
         }
+    }
+
+    @Setter
+    @Getter
+    public static class DetailRespDto {
+        private Long id;
+        private String photo;
+        private String nickname;
+        private List<Integer> statics;
+        private float starRate;
     }
 }

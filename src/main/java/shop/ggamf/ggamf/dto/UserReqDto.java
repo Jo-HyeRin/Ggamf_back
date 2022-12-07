@@ -33,7 +33,7 @@ public class UserReqDto {
         private String phone;
         private String nickname;
         private String email;
-        // private UserEnum role;
+        private Boolean agree;
 
         public User toEntity() {
             return User.builder()
@@ -43,6 +43,7 @@ public class UserReqDto {
                     .phone(phone)
                     .nickname(nickname)
                     .email(email)
+                    .agree(true)
                     .state(UserStateEnum.NORMAL)
                     .role(UserEnum.USER)
                     .build();
