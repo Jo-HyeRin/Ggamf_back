@@ -156,4 +156,22 @@ public class PartyRespDto {
             }
         }
     }
+
+    @Setter
+    @Getter
+    public static class DetailRoomRespDto {
+        private Long roomId;
+        private String roomName;
+        private String userNickName;
+        private String gameName;
+        // 채팅내용
+
+        public DetailRoomRespDto(Room room) {
+            this.roomId = room.getId();
+            this.roomName = room.getRoomName();
+            this.userNickName = room.getUser().getNickname();
+            this.gameName = room.getGameName();
+        }
+    }
+
 }
