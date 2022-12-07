@@ -173,4 +173,33 @@ public class PartyRespDto {
             this.gameName = room.getGameName();
         }
     }
+
+    @Setter
+    @Getter
+    public static class RoomListRespDto { // 전체 파티방 목록 보기
+
+        List<RoomDto> rooms;
+
+        public RoomListRespDto(List<Room> rooms) {
+            this.rooms = rooms.stream().map((room) -> new RoomDto(room)).collect(Collectors.toList());
+        }
+
+        @Setter
+        @Getter
+        public class RoomDto {
+            private Long id;
+            private String roomName;
+            private String nickName;
+            private String gameName;
+            private Boolean active;
+
+            public RoomDto(Room room) {
+                this.id = room.getId();
+                this.roomName = room.getRoomName();
+                this.nickName = room.getUser().getNickname();
+                this.gameName = room.getGameCode().getGameName();
+                this.active = room.getActive();
+            }
+        }
+    }
 }
