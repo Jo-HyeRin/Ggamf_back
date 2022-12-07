@@ -203,7 +203,6 @@ public class PartyRespDto {
         }
     }
 
-<<<<<<< HEAD
     @Setter
     @Getter
     public static class RoomListByIdRespDto { // 내가 참여중인 방
@@ -232,6 +231,5 @@ public class PartyRespDto {
             }
         }
     }
-=======
->>>>>>> 41c90bf350e68da7df95cb2379c0f8714cf94cb4
+
 }
