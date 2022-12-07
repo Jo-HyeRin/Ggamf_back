@@ -215,4 +215,20 @@ public class PartyApiControllerTest extends DummyEntity {
         resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.rooms.[0].roomName").value("roomname1"));
     }
 
+    @Test
+    public void detailRoom_test() throws Exception {
+        // given
+        Long roomId = 1L;
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(MockMvcRequestBuilders.get("/s/api/party/" + roomId));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+        resultActions.andExpect(MockMvcResultMatchers.status().isOk());
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.roomName").value("roomname1"));
+    }
+
 }
