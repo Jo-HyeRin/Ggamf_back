@@ -40,6 +40,7 @@ public class DevInit extends DummyEntity {
             Room room1 = roomRepository.save(newRoom("초보만요1", cos, etc));
             Room room2 = roomRepository.save(newRoom("초보만요2", lala, starcraft));
             Room room3 = roomRepository.save(newRoom("초보만요3", lala, battleground));
+            Room room4 = roomRepository.save(newRoom("초보만요4", cos, LoL));
             // Enter : 파티방, 참여유저
             Enter enter1 = enterRepository.save(newEnter(lala, room1));
             Enter enter11 = enterRepository.save(newEnter(dada, room1));

@@ -25,10 +25,14 @@ import shop.ggamf.ggamf.dto.PartyReqDto.ExitRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.JoinRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.KickUserReqDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.CreateRoomRespDto;
+import shop.ggamf.ggamf.dto.PartyRespDto.DetailRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.EndRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.ExitRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.JoinRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.KickUserRespDto;
+import shop.ggamf.ggamf.dto.PartyRespDto.RoomListByIdRespDto;
+import shop.ggamf.ggamf.dto.PartyRespDto.RoomListByMyIdRespDto;
+import shop.ggamf.ggamf.dto.PartyRespDto.RoomListRespDto;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -137,4 +141,28 @@ public class PartyService {
         enterPS.notStayRoom();
         return new KickUserRespDto(enterPS);
     }
+
+    public RoomListByMyIdRespDto 나의모집파티목록(Long userId) {
+        List<Room> roomListPS = roomRepository.findByUserId(userId);
+        return new RoomListByMyIdRespDto(roomListPS);
+    }
+
+    public DetailRoomRespDto 파티방상세보기(Long roomId) {
+        Room roomPS = roomRepository.findById(roomId)
+                .orElseThrow(
+                        () -> new CustomApiException("해당 파티방을 찾을 수 없습니다", HttpStatus.FORBIDDEN));
+        return new DetailRoomRespDto(roomPS);
+    }
+
+    public RoomListRespDto 전체파티방목록보기() {
+        List<Room> roomListPS = roomRepository.findByActive();
+        return new RoomListRespDto(roomListPS);
+    }
+
+    public RoomListByIdRespDto 참가중인파티방목록보기(Long userId) {
+        // Enter.userId == loginUser.id
+        List<Enter> enterListPS = enterRepository.findByUserId(userId);
+        return new RoomListByIdRespDto(enterListPS);
+    }
+
 }

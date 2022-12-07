@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -20,10 +21,14 @@ import shop.ggamf.ggamf.dto.PartyReqDto.ExitRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.JoinRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.KickUserReqDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.CreateRoomRespDto;
+import shop.ggamf.ggamf.dto.PartyRespDto.DetailRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.EndRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.ExitRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.JoinRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.KickUserRespDto;
+import shop.ggamf.ggamf.dto.PartyRespDto.RoomListByIdRespDto;
+import shop.ggamf.ggamf.dto.PartyRespDto.RoomListByMyIdRespDto;
+import shop.ggamf.ggamf.dto.PartyRespDto.RoomListRespDto;
 import shop.ggamf.ggamf.dto.ResponseDto;
 import shop.ggamf.ggamf.service.PartyService;
 
@@ -91,4 +96,34 @@ public class PartyApiController {
         KickUserRespDto kickUserRespDto = partyService.파티원추방(kickUserReqDto);
         return new ResponseEntity<>(new ResponseDto<>("파티원 추방 완료", kickUserRespDto), HttpStatus.OK);
     }
+
+    // 나의 모집 파티 목록
+    @GetMapping("/party/myrooms")
+    public ResponseEntity<?> findByMyIdRoom(@AuthenticationPrincipal LoginUser loginUser) {
+        RoomListByMyIdRespDto roomListByMyIdRespDto = partyService.나의모집파티목록(loginUser.getUser().getId());
+        return new ResponseEntity<>(new ResponseDto<>("나의 모집 파티 목록 보기 완료", roomListByMyIdRespDto), HttpStatus.OK);
+    }
+
+    // 파티방 상세보기
+    @GetMapping("/party/{roomId}")
+    public ResponseEntity<?> detailRoom(@PathVariable Long roomId) {
+        DetailRoomRespDto detailRoomRespDto = partyService.파티방상세보기(roomId);
+        return new ResponseEntity<>(new ResponseDto<>("파티방 상세보기 완료", detailRoomRespDto), HttpStatus.OK);
+    }
+
+    // 전체 파티방 목록 보기 -> 카테고리별, 페이징, 검색 필요
+    @GetMapping("/party/list")
+    public ResponseEntity<?> findAllRoom() {
+        RoomListRespDto roomListRespDto = partyService.전체파티방목록보기();
+        return new ResponseEntity<>(new ResponseDto<>("전체 파티방 목록 보기 완료", roomListRespDto), HttpStatus.OK);
+    }
+
+    // 참가중인 파티방 목록 보기
+    @GetMapping("/party/joins")
+    public ResponseEntity<?> findJoinRooms(@AuthenticationPrincipal LoginUser loginUser) {
+        RoomListByIdRespDto roomListByIdRespDto = partyService.참가중인파티방목록보기(loginUser.getUser().getId());
+        return new ResponseEntity<>(new ResponseDto<>("참가중인 파티방 목록 보기 완료",
+                roomListByIdRespDto), HttpStatus.OK);
+    }
+
 }

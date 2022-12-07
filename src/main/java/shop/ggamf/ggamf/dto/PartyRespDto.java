@@ -127,4 +127,109 @@ public class PartyRespDto {
             this.stay = enter.getStay();
         }
     }
+
+    @Setter
+    @Getter
+    public static class RoomListByMyIdRespDto { // 내가방장인파티방목록보기
+
+        List<RoomDto> rooms;
+
+        public RoomListByMyIdRespDto(List<Room> rooms) {
+            this.rooms = rooms.stream().map((room) -> new RoomDto(room)).collect(Collectors.toList());
+        }
+
+        @Setter
+        @Getter
+        public class RoomDto {
+            private Long id;
+            private String roomName;
+            private String nickName;
+            private Long totalPeople;
+            private String gameLogo;
+
+            public RoomDto(Room room) {
+                this.id = room.getId();
+                this.roomName = room.getRoomName();
+                this.nickName = room.getUser().getNickname();
+                this.totalPeople = room.getTotalPeople();
+                this.gameLogo = room.getGameCode().getLogo();
+            }
+        }
+    }
+
+    @Setter
+    @Getter
+    public static class DetailRoomRespDto {
+        private Long roomId;
+        private String roomName;
+        private String userNickName;
+        private String gameName;
+        // 채팅내용
+
+        public DetailRoomRespDto(Room room) {
+            this.roomId = room.getId();
+            this.roomName = room.getRoomName();
+            this.userNickName = room.getUser().getNickname();
+            this.gameName = room.getGameName();
+        }
+    }
+
+    @Setter
+    @Getter
+    public static class RoomListRespDto { // 전체 파티방 목록 보기
+
+        List<RoomDto> rooms;
+
+        public RoomListRespDto(List<Room> rooms) {
+            this.rooms = rooms.stream().map((room) -> new RoomDto(room)).collect(Collectors.toList());
+        }
+
+        @Setter
+        @Getter
+        public class RoomDto {
+            private Long id;
+            private String roomName;
+            private String nickName;
+            private String gameName;
+            private Boolean active;
+
+            public RoomDto(Room room) {
+                this.id = room.getId();
+                this.roomName = room.getRoomName();
+                this.nickName = room.getUser().getNickname();
+                this.gameName = room.getGameCode().getGameName();
+                this.active = room.getActive();
+            }
+        }
+    }
+
+    @Setter
+    @Getter
+    public static class RoomListByIdRespDto { // 내가 참여중인 방
+
+        List<RoomDto> rooms;
+
+        public RoomListByIdRespDto(List<Enter> rooms) {
+            this.rooms = rooms.stream().map((enter) -> new RoomDto(enter)).collect(Collectors.toList());
+        }
+
+        @Setter
+        @Getter
+        public class RoomDto {
+            private Long id;
+            private String roomName;
+            private String nickName;
+            private Long totalPeople;
+            private String gameLogo;
+
+            public RoomDto(Enter enter) {
+                this.id = enter.getRoom().getId();
+                this.roomName = enter.getRoom().getRoomName();
+                this.nickName = enter.getRoom().getUser().getNickname();
+                this.totalPeople = enter.getRoom().getTotalPeople();
+                this.gameLogo = enter.getRoom().getGameCode().getLogo();
+            }
+        }
+    }
+
 }
