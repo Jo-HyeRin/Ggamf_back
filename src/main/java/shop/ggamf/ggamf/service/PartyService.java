@@ -25,6 +25,7 @@ import shop.ggamf.ggamf.dto.PartyReqDto.ExitRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.JoinRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.KickUserReqDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.CreateRoomRespDto;
+import shop.ggamf.ggamf.dto.PartyRespDto.DetailRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.EndRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.ExitRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.JoinRoomRespDto;
@@ -142,6 +143,13 @@ public class PartyService {
     public RoomListByMyIdRespDto 나의모집파티목록(Long userId) {
         List<Room> roomListPS = roomRepository.findByUserId(userId);
         return new RoomListByMyIdRespDto(roomListPS);
+    }
+
+    public DetailRoomRespDto 파티방상세보기(Long roomId) {
+        Room roomPS = roomRepository.findById(roomId)
+                .orElseThrow(
+                        () -> new CustomApiException("해당 파티방을 찾을 수 없습니다", HttpStatus.FORBIDDEN));
+        return new DetailRoomRespDto(roomPS);
     }
 
 }

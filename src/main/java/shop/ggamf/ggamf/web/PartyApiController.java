@@ -21,6 +21,7 @@ import shop.ggamf.ggamf.dto.PartyReqDto.ExitRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.JoinRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.KickUserReqDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.CreateRoomRespDto;
+import shop.ggamf.ggamf.dto.PartyRespDto.DetailRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.EndRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.ExitRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.JoinRoomRespDto;
@@ -99,6 +100,13 @@ public class PartyApiController {
     public ResponseEntity<?> findByMyIdRoom(@AuthenticationPrincipal LoginUser loginUser) {
         RoomListByMyIdRespDto roomListByMyIdRespDto = partyService.나의모집파티목록(loginUser.getUser().getId());
         return new ResponseEntity<>(new ResponseDto<>("나의 모집 파티 목록 보기 완료", roomListByMyIdRespDto), HttpStatus.OK);
+    }
+
+    // 파티방 상세보기
+    @GetMapping("/party/{roomId}")
+    public ResponseEntity<?> detailRoom(@PathVariable Long roomId) {
+        DetailRoomRespDto detailRoomRespDto = partyService.파티방상세보기(roomId);
+        return new ResponseEntity<>(new ResponseDto<>("파티방 상세보기 완료", detailRoomRespDto), HttpStatus.OK);
     }
 
 }
