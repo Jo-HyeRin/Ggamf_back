@@ -30,6 +30,7 @@ import shop.ggamf.ggamf.dto.PartyRespDto.EndRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.ExitRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.JoinRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.KickUserRespDto;
+import shop.ggamf.ggamf.dto.PartyRespDto.RoomListByIdRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.RoomListByMyIdRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.RoomListRespDto;
 
@@ -156,6 +157,12 @@ public class PartyService {
     public RoomListRespDto 전체파티방목록보기() {
         List<Room> roomListPS = roomRepository.findByActive();
         return new RoomListRespDto(roomListPS);
+    }
+
+    public RoomListByIdRespDto 참가중인파티방목록보기(Long userId) {
+        // Enter.userId == loginUser.id
+        List<Enter> enterListPS = enterRepository.findByUserId(userId);
+        return new RoomListByIdRespDto(enterListPS);
     }
 
 }

@@ -202,4 +202,33 @@ public class PartyRespDto {
             }
         }
     }
+
+    @Setter
+    @Getter
+    public static class RoomListByIdRespDto { // 내가 참여중인 방
+
+        List<RoomDto> rooms;
+
+        public RoomListByIdRespDto(List<Enter> rooms) {
+            this.rooms = rooms.stream().map((enter) -> new RoomDto(enter)).collect(Collectors.toList());
+        }
+
+        @Setter
+        @Getter
+        public class RoomDto {
+            private Long id;
+            private String roomName;
+            private String nickName;
+            private Long totalPeople;
+            private String gameLogo;
+
+            public RoomDto(Enter enter) {
+                this.id = enter.getRoom().getId();
+                this.roomName = enter.getRoom().getRoomName();
+                this.nickName = enter.getRoom().getUser().getNickname();
+                this.totalPeople = enter.getRoom().getTotalPeople();
+                this.gameLogo = enter.getRoom().getGameCode().getLogo();
+            }
+        }
+    }
 }
