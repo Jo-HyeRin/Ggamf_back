@@ -23,4 +23,20 @@ public class GgamfRespDto {
             this.followingPhoto = follow.getFollowing().getPhoto();
         }
     }
+
+    @Setter
+    @Getter
+    public static class AcceptGgamfRespDto {
+        private Long followId;
+        private Long userId;
+        private Long ggamfId;
+        private Boolean accept;
+
+        public AcceptGgamfRespDto(Follow follow) {
+            this.followId = follow.getId();
+            this.userId = follow.getFollowing().getId();
+            this.ggamfId = follow.getFollower().getId();
+            this.accept = follow.getAccept();
+        }
+    }
 }

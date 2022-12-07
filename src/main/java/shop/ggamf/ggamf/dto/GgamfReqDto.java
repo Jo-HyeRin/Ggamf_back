@@ -22,4 +22,11 @@ public class GgamfReqDto {
         }
     }
 
+    @Setter
+    @Getter
+    public static class AcceptGgamfReqDto {
+        private Long followId;
+        private Long userId;
+    }
+
 }

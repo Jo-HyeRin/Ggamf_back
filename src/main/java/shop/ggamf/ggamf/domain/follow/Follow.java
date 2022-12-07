@@ -1,6 +1,5 @@
 package shop.ggamf.ggamf.domain.follow;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -41,4 +40,10 @@ public class Follow {
         this.follower = follower;
         this.following = following;
     }
+
+    // 겜프 수락
+    public void acceptGgamf() {
+        accept = true;
+    }
+
 }
