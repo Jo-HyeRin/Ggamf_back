@@ -100,4 +100,5 @@ public class PartyApiController {
         RoomListByMyIdRespDto roomListByMyIdRespDto = partyService.나의모집파티목록(loginUser.getUser().getId());
         return new ResponseEntity<>(new ResponseDto<>("나의 모집 파티 목록 보기 완료", roomListByMyIdRespDto), HttpStatus.OK);
     }
+
 }

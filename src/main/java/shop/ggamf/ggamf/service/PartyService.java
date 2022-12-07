@@ -143,4 +143,5 @@ public class PartyService {
         List<Room> roomListPS = roomRepository.findByUserId(userId);
         return new RoomListByMyIdRespDto(roomListPS);
     }
+
 }
