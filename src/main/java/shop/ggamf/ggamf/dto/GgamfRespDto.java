@@ -12,8 +12,6 @@ public class GgamfRespDto {
         private Long followerId;
         private Long followingId;
         private Boolean accept;
-
-        // 화면
         private String followingNick;
         private String followingPhoto;
 

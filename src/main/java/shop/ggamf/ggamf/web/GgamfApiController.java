@@ -28,7 +28,7 @@ public class GgamfApiController {
 
     // 겜프 요청
     @PostMapping("/ggamf/follow/{followingId}")
-    public ResponseEntity<?> createRoom(@RequestBody FollowGgamfReqDto followGgamfReqDto,
+    public ResponseEntity<?> followGgamf(@RequestBody FollowGgamfReqDto followGgamfReqDto,
             @PathVariable Long followingId,
             @AuthenticationPrincipal LoginUser loginUser) {
         log.debug("디버그 : 겜프 요청 컨트롤러 호출");

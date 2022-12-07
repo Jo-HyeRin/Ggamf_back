@@ -1,5 +1,7 @@
 package shop.ggamf.ggamf.service;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -30,11 +32,18 @@ public class GgamfService {
         // 나
         User follower = userRepository.findById(followGgamfReqDto.getFollowerId())
                 .orElseThrow(() -> new CustomApiException("내 유저 정보가 없습니다", HttpStatus.FORBIDDEN));
-
         // 요청받은사람
         User following = userRepository.findById(followGgamfReqDto.getFollowingId())
                 .orElseThrow(() -> new CustomApiException("해당 유저가 없습니다", HttpStatus.FORBIDDEN));
-
+        // // 검증 - 고민중
+        // if (followRepository.findFollow(followGgamfReqDto.getFollowerId(),
+        // followGgamfReqDto.getFollowingId()) != null) {
+        // throw new CustomApiException("당신은 이미 요청했습니다. 기다리세요.",
+        // HttpStatus.BAD_REQUEST);
+        // } else if (followRepository.findFollow(followGgamfReqDto.getFollowingId(),
+        // followGgamfReqDto.getFollowerId()) != null) {
+        // throw new CustomApiException("상대가 이미 요청했습니다.", HttpStatus.BAD_REQUEST);
+        // }
         Follow follow = followGgamfReqDto.toEntity(follower, following);
         Follow followPS = followRepository.save(follow);
         return new FollowGgamfRespDto(followPS);
