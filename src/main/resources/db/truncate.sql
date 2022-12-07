@@ -11,5 +11,5 @@ truncate table room;
 truncate table star_rate;
 truncate table state_code;
 truncate table statistics;
-truncate table user;
+truncate table users;
 SET REFERENTIAL_INTEGRITY TRUE;

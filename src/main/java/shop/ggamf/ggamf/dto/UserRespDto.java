@@ -3,7 +3,9 @@ package shop.ggamf.ggamf.dto;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import shop.ggamf.ggamf.config.enums.UserEnum;
 import shop.ggamf.ggamf.config.enums.UserStateEnum;
@@ -84,7 +86,33 @@ public class UserRespDto {
         private Long id;
         private String photo;
         private String nickname;
-        private List<Integer> statics;
-        private float starRate;
+        private String intro;    
+    }
+
+    @Setter
+    @Getter
+    public static class StarRateRespDto {
+        private Long receiverId;
+        private Long rate;
+    }
+
+    @Setter
+    @Getter
+    public static class ReturnRespDto {
+        private Long id;
+        private String photo;
+        private String nickname;
+        private String intro;
+        private Long receiverId;
+        private Long rate;
+
+        public ReturnRespDto(DetailRespDto detailRespDto, StarRateRespDto starRateRespDto) {
+            this.id = detailRespDto.getId();
+            this.photo = detailRespDto.getPhoto();
+            this.nickname = detailRespDto.getNickname();
+            this.intro = detailRespDto.getIntro();
+            this.receiverId = starRateRespDto.getReceiverId();
+            this.rate = starRateRespDto.getRate();
+        }
     }
 }

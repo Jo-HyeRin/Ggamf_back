@@ -12,12 +12,18 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import shop.ggamf.ggamf.config.auth.LoginUser;
 import shop.ggamf.ggamf.config.exception.CustomApiException;
+import shop.ggamf.ggamf.domain.starRate.StarRateRepository;
+import shop.ggamf.ggamf.domain.starRate.StarRateRepositoryQuery;
 import shop.ggamf.ggamf.domain.user.User;
 import shop.ggamf.ggamf.domain.user.UserRepository;
+import shop.ggamf.ggamf.domain.user.UserRepositoryQuery;
 import shop.ggamf.ggamf.dto.UserReqDto.JoinReqDto;
 import shop.ggamf.ggamf.dto.UserReqDto.UpdateReqDto;
 import shop.ggamf.ggamf.dto.UserReqDto.UpdateStateReqDto;
+import shop.ggamf.ggamf.dto.UserRespDto.DetailRespDto;
 import shop.ggamf.ggamf.dto.UserRespDto.JoinRespDto;
+import shop.ggamf.ggamf.dto.UserRespDto.ReturnRespDto;
+import shop.ggamf.ggamf.dto.UserRespDto.StarRateRespDto;
 import shop.ggamf.ggamf.dto.UserRespDto.UpdateRespDto;
 import shop.ggamf.ggamf.dto.UserRespDto.UpdateStateRespDto;
 
@@ -28,6 +34,9 @@ public class UserService {
     
     private final Logger log = LoggerFactory.getLogger(getClass());
     private final UserRepository userRepository;
+    private final StarRateRepository starRateRepository;
+    private final UserRepositoryQuery userRepositoryQuery;
+    private final StarRateRepositoryQuery starRateRepositoryQuery;
     private final BCryptPasswordEncoder passwordEncoder;
     private static LoginUser loginuser;
 
@@ -42,6 +51,19 @@ public class UserService {
         User userPS = userRepository.save(joinReqDto.toEntity());
         // 3. DTO 응답
         return new JoinRespDto(userPS);
+    }
+
+    public ReturnRespDto 유저상세보기(Long id) {
+         //1. user가 본인인지 체크
+         Optional<User> userOP = userRepository.findById(id);
+         if (!userOP.isPresent()) {
+             userRepository.findById(id)
+                     .orElseThrow(() -> (new CustomApiException("해당유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST)));
+         }
+        DetailRespDto detailRespDto = userRepositoryQuery.findDetailById(id);
+        StarRateRespDto starRateRespDto = starRateRepositoryQuery.caculateStaRateById(id);
+        
+        return new ReturnRespDto(detailRespDto, starRateRespDto);
     }
 
     @Transactional
