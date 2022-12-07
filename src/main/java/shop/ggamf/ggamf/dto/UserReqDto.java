@@ -1,11 +1,13 @@
 package shop.ggamf.ggamf.dto;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import shop.ggamf.ggamf.config.enums.UserEnum;
+import shop.ggamf.ggamf.config.enums.UserStateEnum;
 import shop.ggamf.ggamf.domain.user.User;
 
 public class UserReqDto {
@@ -21,7 +23,7 @@ public class UserReqDto {
     @Setter
     public static class JoinReqDto {
         @Size(min = 2, max = 20)
-        // @NotBlank(message = "유저네임은 필수입니다.")
+        // @NotEmpty(message = "유저네임은 필수입니다.")
         private String username;
 
         // @Pattern(regexp = "^[가-힣]{4,20}", message = "비밀번호는 영문,숫자,특수문자 최소4에서
@@ -31,7 +33,7 @@ public class UserReqDto {
         private String phone;
         private String nickname;
         private String email;
-        // private UserEnum role;
+        private Boolean agree;
 
         public User toEntity() {
             return User.builder()
@@ -41,6 +43,8 @@ public class UserReqDto {
                     .phone(phone)
                     .nickname(nickname)
                     .email(email)
+                    .agree(true)
+                    .state(UserStateEnum.NORMAL)
                     .role(UserEnum.USER)
                     .build();
         }
@@ -49,16 +53,19 @@ public class UserReqDto {
     @Setter
     @Getter
     public static class UpdateReqDto {
+        private Long id; //서비스로직
+        private String photo;
+        private String intro;
+        private String nickname;
         private String password;
         private String phone;
-        private String nickname;
         private String email;
+    }
 
-        public UpdateReqDto(String password, String phone, String nickname, String email) {
-            this.password = password;
-            this.phone = phone;
-            this.nickname = nickname;
-            this.email = email;
-        }
+    @Setter
+    @Getter
+    public static class UpdateStateReqDto {
+        private Long id; //서비스로직
+        private UserStateEnum state;
     }
 }
