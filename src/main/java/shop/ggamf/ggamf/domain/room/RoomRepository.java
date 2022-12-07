@@ -11,4 +11,7 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
     @Query("select r from Room r join fetch r.user u where r.user.id = :userId")
     List<Room> findByUserId(@Param("userId") Long userId);
 
+    @Query("select r from Room r where active = true")
+    List<Room> findByActive();
+
 }
