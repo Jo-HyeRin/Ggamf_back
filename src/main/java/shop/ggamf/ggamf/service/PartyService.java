@@ -29,6 +29,7 @@ import shop.ggamf.ggamf.dto.PartyRespDto.EndRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.ExitRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.JoinRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.KickUserRespDto;
+import shop.ggamf.ggamf.dto.PartyRespDto.RoomListByMyIdRespDto;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -136,5 +137,10 @@ public class PartyService {
                         () -> new CustomApiException("해당 파티원은 추방할 수 없습니다", HttpStatus.FORBIDDEN));
         enterPS.notStayRoom();
         return new KickUserRespDto(enterPS);
+    }
+
+    public RoomListByMyIdRespDto 나의모집파티목록(Long userId) {
+        List<Room> roomListPS = roomRepository.findByUserId(userId);
+        return new RoomListByMyIdRespDto(roomListPS);
     }
 }

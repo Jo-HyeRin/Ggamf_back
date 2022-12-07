@@ -127,4 +127,33 @@ public class PartyRespDto {
             this.stay = enter.getStay();
         }
     }
+
+    @Setter
+    @Getter
+    public static class RoomListByMyIdRespDto { // 내가방장인파티방목록보기
+
+        List<RoomDto> rooms;
+
+        public RoomListByMyIdRespDto(List<Room> rooms) {
+            this.rooms = rooms.stream().map((room) -> new RoomDto(room)).collect(Collectors.toList());
+        }
+
+        @Setter
+        @Getter
+        public class RoomDto {
+            private Long id;
+            private String roomName;
+            private String nickName;
+            private Long totalPeople;
+            private String gameLogo;
+
+            public RoomDto(Room room) {
+                this.id = room.getId();
+                this.roomName = room.getRoomName();
+                this.nickName = room.getUser().getNickname();
+                this.totalPeople = room.getTotalPeople();
+                this.gameLogo = room.getGameCode().getLogo();
+            }
+        }
+    }
 }

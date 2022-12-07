@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -24,6 +25,7 @@ import shop.ggamf.ggamf.dto.PartyRespDto.EndRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.ExitRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.JoinRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.KickUserRespDto;
+import shop.ggamf.ggamf.dto.PartyRespDto.RoomListByMyIdRespDto;
 import shop.ggamf.ggamf.dto.ResponseDto;
 import shop.ggamf.ggamf.service.PartyService;
 
@@ -90,5 +92,12 @@ public class PartyApiController {
         kickUserReqDto.setRoomId(roomId);
         KickUserRespDto kickUserRespDto = partyService.파티원추방(kickUserReqDto);
         return new ResponseEntity<>(new ResponseDto<>("파티원 추방 완료", kickUserRespDto), HttpStatus.OK);
+    }
+
+    // 나의 모집 파티 목록
+    @GetMapping("/party/myrooms")
+    public ResponseEntity<?> findByMyIdRoom(@AuthenticationPrincipal LoginUser loginUser) {
+        RoomListByMyIdRespDto roomListByMyIdRespDto = partyService.나의모집파티목록(loginUser.getUser().getId());
+        return new ResponseEntity<>(new ResponseDto<>("나의 모집 파티 목록 보기 완료", roomListByMyIdRespDto), HttpStatus.OK);
     }
 }
