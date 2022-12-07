@@ -22,6 +22,7 @@ import shop.ggamf.ggamf.domain.follow.Follow;
 import shop.ggamf.ggamf.domain.follow.FollowRepository;
 import shop.ggamf.ggamf.domain.user.User;
 import shop.ggamf.ggamf.domain.user.UserRepository;
+import shop.ggamf.ggamf.dto.GgamfReqDto.AcceptGgamfReqDto;
 import shop.ggamf.ggamf.dto.GgamfReqDto.FollowGgamfReqDto;
 
 @Sql("classpath:db/truncate.sql")
@@ -53,7 +54,12 @@ public class GgamfApiControllerTest extends DummyEntity {
         User dada = userRepository.save(newUser("dada"));
         User kaka = userRepository.save(newUser("kaka"));
         // Follow : 겜프
-        Follow follow = followRepository.save(newFollow(ssar, cos));
+        Follow follow1 = followRepository.save(newFollow(ssar, cos));
+        Follow follow2 = followRepository.save(newFollow(ssar, lala));
+        Follow follow3 = followRepository.save(newFollow(ssar, dada));
+        Follow follow4 = followRepository.save(newFollow(cos, ssar));
+        Follow follow5 = followRepository.save(newFollow(lala, ssar));
+        Follow follow6 = followRepository.save(newFollow(kaka, ssar));
 
     }
 
@@ -78,6 +84,27 @@ public class GgamfApiControllerTest extends DummyEntity {
         // then
         resultActions.andExpect(MockMvcResultMatchers.status().isCreated());
         resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.accept").value(false));
+    }
+
+    @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    public void acceptGgamf_test() throws Exception {
+        // given
+        Long followId = 4L;
+        AcceptGgamfReqDto acceptGgamfReqDto = new AcceptGgamfReqDto();
+        acceptGgamfReqDto.setFollowId(followId);
+        String requestBody = om.writeValueAsString(acceptGgamfReqDto);
+        System.out.println("테스트 : " + requestBody);
+        // when
+        ResultActions resultActions = mvc
+                .perform(MockMvcRequestBuilders.put("/s/api/ggamf/accept/" + followId)
+                        .content(requestBody).contentType(APPLICATION_JSON_UTF8));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+        resultActions.andExpect(MockMvcResultMatchers.status().isCreated());
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.accept").value(true));
     }
 
 }
