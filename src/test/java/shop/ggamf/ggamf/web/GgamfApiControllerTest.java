@@ -77,7 +77,7 @@ public class GgamfApiControllerTest extends DummyEntity {
 
         // then
         resultActions.andExpect(MockMvcResultMatchers.status().isCreated());
-        // resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.roomName").value("초보만오세요"));
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.accept").value(false));
     }
 
 }
