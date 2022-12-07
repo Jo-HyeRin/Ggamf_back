@@ -39,7 +39,7 @@ public class UserRespDto {
             this.id = user.getId();
             this.username = user.getUsername();
             this.role = user.getRole();
-            this.state = user.getState().NORMAL;
+            this.state = user.getState();
         }
 
     }

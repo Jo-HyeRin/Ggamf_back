@@ -51,15 +51,14 @@ public class UserApiController {
 
     @PutMapping("/user/{userId}/withdraw")
     public ResponseEntity<?> withdraw(@PathVariable Long userId, @RequestBody UpdateStateReqDto updateStateReqDto) {
-        log.debug("디버그 : Controller userId : " + userId);
         updateStateReqDto.setId(userId);
         UpdateStateRespDto updateStateRespDto = userService.회원탈퇴(updateStateReqDto);
         return new ResponseEntity<>(new ResponseDto<>("회원탈퇴성공", updateStateRespDto), HttpStatus.OK);
     }
 
-    @DeleteMapping("/user/{userId}/delete")
-    public ResponseEntity<?> delete(@PathVariable Long userId) {
-        userService.회원영구삭제(userId);
-        return new ResponseEntity<>(new ResponseDto<>("회원삭제성공", null), HttpStatus.OK);
-    }
+    // @DeleteMapping("/user/{userId}/delete") //관리자만 가능
+    // public ResponseEntity<?> delete(@PathVariable Long userId) {
+    //     userService.회원영구삭제(userId);
+    //     return new ResponseEntity<>(new ResponseDto<>("회원삭제성공", null), HttpStatus.OK);
+    // }
 }

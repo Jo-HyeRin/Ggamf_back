@@ -49,6 +49,7 @@ public class User extends AuditingTime {
 
     private String intro;
 
+    @Enumerated(EnumType.STRING)
     private UserStateEnum state;
 
     @Enumerated(EnumType.STRING) // enum 쓸때 어노테이션

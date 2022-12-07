@@ -80,7 +80,7 @@ public class UserService {
 
 
     @Transactional
-    public void 회원영구삭제(Long id) {
+    public void 회원영구삭제(Long id) { //관리자만 가능
         //1. ROLE이 admin이고
         //2. user의 state가 '탈퇴' 상태이면
         //3. 회원 영구삭제

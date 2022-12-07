@@ -43,6 +43,7 @@ public class UserReqDto {
                     .phone(phone)
                     .nickname(nickname)
                     .email(email)
+                    .state(UserStateEnum.NORMAL)
                     .role(UserEnum.USER)
                     .build();
         }
