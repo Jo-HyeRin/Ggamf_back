@@ -62,7 +62,7 @@ public class UserService {
          }
         DetailRespDto detailRespDto = userRepositoryQuery.findDetailById(id);
         StarRateRespDto starRateRespDto = starRateRepositoryQuery.caculateStaRateById(id);
-        
+
         return new ReturnRespDto(detailRespDto, starRateRespDto);
     }
 

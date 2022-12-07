@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Profile;
 import lombok.RequiredArgsConstructor;
 import shop.ggamf.ggamf.domain.enter.Enter;
 import shop.ggamf.ggamf.domain.enter.EnterRepository;
+import shop.ggamf.ggamf.domain.follow.Follow;
+import shop.ggamf.ggamf.domain.follow.FollowRepository;
 import shop.ggamf.ggamf.domain.gameCode.GameCode;
 import shop.ggamf.ggamf.domain.gameCode.GameCodeRepository;
 import shop.ggamf.ggamf.domain.room.Room;
@@ -23,7 +25,7 @@ public class DevInit extends DummyEntity {
     @Bean
     public CommandLineRunner dataSetting(UserRepository userRepository,
             RoomRepository roomRepository,
-            GameCodeRepository gameCodeRepository, EnterRepository enterRepository) {
+            GameCodeRepository gameCodeRepository, EnterRepository enterRepository, FollowRepository followRepository) {
 
         return (args) -> {
             // User : 유저
@@ -31,6 +33,7 @@ public class DevInit extends DummyEntity {
             User lala = userRepository.save(newUser("lala"));
             User dada = userRepository.save(newUser("dada"));
             User kaka = userRepository.save(newUser("kaka"));
+            User nana = userRepository.save(newUser("nana"));
             // GameCode : 게임코드
             GameCode etc = gameCodeRepository.save(newGameCode("etc"));
             GameCode LoL = gameCodeRepository.save(newGameCode("LoL"));
@@ -47,6 +50,11 @@ public class DevInit extends DummyEntity {
             Enter enter111 = enterRepository.save(newEnter(kaka, room1));
             Enter enter2 = enterRepository.save(newEnter(cos, room2));
             Enter enter3 = enterRepository.save(newEnter(cos, room3));
+            // Follow : 겜프
+            Follow follow1 = followRepository.save(newFollow(cos, lala));
+            Follow follow2 = followRepository.save(newFollow(cos, kaka));
+            Follow follow3 = followRepository.save(newFollow(dada, cos));
+            Follow follow4 = followRepository.save(newFollow(nana, cos));
         };
     }
 }

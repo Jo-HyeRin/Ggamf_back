@@ -1,11 +1,8 @@
 package shop.ggamf.ggamf.dto;
 
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import shop.ggamf.ggamf.config.enums.UserEnum;
 import shop.ggamf.ggamf.config.enums.UserStateEnum;

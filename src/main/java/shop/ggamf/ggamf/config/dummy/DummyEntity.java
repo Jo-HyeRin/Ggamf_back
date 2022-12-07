@@ -5,6 +5,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import shop.ggamf.ggamf.config.enums.UserEnum;
 import shop.ggamf.ggamf.config.enums.UserStateEnum;
 import shop.ggamf.ggamf.domain.enter.Enter;
+import shop.ggamf.ggamf.domain.follow.Follow;
 import shop.ggamf.ggamf.domain.gameCode.GameCode;
 import shop.ggamf.ggamf.domain.room.Room;
 import shop.ggamf.ggamf.domain.user.User;
@@ -57,5 +58,14 @@ public abstract class DummyEntity {
                 .stay(true)
                 .build();
         return enter;
+    }
+
+    protected Follow newFollow(User follower, User following) {
+        Follow follow = Follow.builder()
+                .follower(follower)
+                .following(following)
+                .accept(false)
+                .build();
+        return follow;
     }
 }
