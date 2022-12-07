@@ -120,7 +120,7 @@ public class PartyApiController {
 
     // 참가중인 파티방 목록 보기
     @GetMapping("/party/joins")
-    public ResponseEntity<?> findByIdRoom(@AuthenticationPrincipal LoginUser loginUser) {
+    public ResponseEntity<?> findJoinRooms(@AuthenticationPrincipal LoginUser loginUser) {
         RoomListByIdRespDto roomListByIdRespDto = partyService.참가중인파티방목록보기(loginUser.getUser().getId());
         return new ResponseEntity<>(new ResponseDto<>("참가중인 파티방 목록 보기 완료",
                 roomListByIdRespDto), HttpStatus.OK);
