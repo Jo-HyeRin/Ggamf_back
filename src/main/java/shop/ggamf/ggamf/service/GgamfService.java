@@ -1,7 +1,5 @@
 package shop.ggamf.ggamf.service;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -14,7 +12,9 @@ import shop.ggamf.ggamf.domain.follow.Follow;
 import shop.ggamf.ggamf.domain.follow.FollowRepository;
 import shop.ggamf.ggamf.domain.user.User;
 import shop.ggamf.ggamf.domain.user.UserRepository;
+import shop.ggamf.ggamf.dto.GgamfReqDto.AcceptGgamfReqDto;
 import shop.ggamf.ggamf.dto.GgamfReqDto.FollowGgamfReqDto;
+import shop.ggamf.ggamf.dto.GgamfRespDto.AcceptGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.FollowGgamfRespDto;
 
 @Transactional(readOnly = true)
@@ -47,6 +47,17 @@ public class GgamfService {
         Follow follow = followGgamfReqDto.toEntity(follower, following);
         Follow followPS = followRepository.save(follow);
         return new FollowGgamfRespDto(followPS);
+    }
+
+    @Transactional
+    public AcceptGgamfRespDto 겜프수락(AcceptGgamfReqDto acceptGgamfReqDto) {
+        Follow followPS = followRepository.findById(acceptGgamfReqDto.getFollowId())
+                .orElseThrow(() -> new CustomApiException("겜프 신청 중이 아닙니다", HttpStatus.FORBIDDEN));
+        if (followPS.getFollowing().getId() != acceptGgamfReqDto.getUserId()) {
+            throw new CustomApiException("당신은 수락 권한이 없습니다.", HttpStatus.BAD_REQUEST);
+        }
+        followPS.acceptGgamf();
+        return new AcceptGgamfRespDto(followPS);
     }
 
 }
