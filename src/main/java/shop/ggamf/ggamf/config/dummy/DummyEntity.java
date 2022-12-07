@@ -3,6 +3,7 @@ package shop.ggamf.ggamf.config.dummy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import shop.ggamf.ggamf.config.enums.UserEnum;
+import shop.ggamf.ggamf.config.enums.UserStateEnum;
 import shop.ggamf.ggamf.domain.enter.Enter;
 import shop.ggamf.ggamf.domain.gameCode.GameCode;
 import shop.ggamf.ggamf.domain.room.Room;
@@ -23,7 +24,7 @@ public abstract class DummyEntity {
                 .phoneChecked(true)
                 .photo("내사진입니다")
                 .intro("안녕하세여 유저입니다")
-                .stateId(1L)
+                .state(UserStateEnum.NORMAL)
                 .role(UserEnum.USER)
                 .build();
         return user;

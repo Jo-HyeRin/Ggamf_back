@@ -48,63 +48,15 @@ public class UserReqDto {
         }
     }
 
-    // @Setter
-    // @Getter
-    // public static class UpdateReqDto {
-    //     private String password;
-    //     private String phone;
-    //     private String nickname;
-    //     private String email;
-    //     private String intro;
-
-    //     public UpdateReqDto(String password, String phone, String nickname, String email, String intro) {
-    //         this.password = password;
-    //         this.phone = phone;
-    //         this.nickname = nickname;
-    //         this.email = email;
-    //         this.intro = intro;
-    //     }
-    // }
-
     @Setter
     @Getter
-    public static class UpdatePhotoReqDto {
+    public static class UpdateReqDto {
         private Long id; //서비스로직
         private String photo;
-    }
-    
-    @Setter
-    @Getter
-    public static class UpdateIntroReqDto {
-        private Long id; //서비스로직
         private String intro;
-    }
-
-    @Setter
-    @Getter
-    public static class UpdateNicknameReqDto {
-        private Long id; //서비스로직
         private String nickname;
-    }
-
-    @Setter
-    @Getter
-    public static class UpdatePasswordReqDto {
-        private Long id; //서비스로직
         private String password;
-    }
-
-    @Setter
-    @Getter
-    public static class UpdatePhoneReqDto {
-        private Long id; //서비스로직
         private String phone;
-    }
-
-    @Setter
-    @Getter
-    public static class UpdateEmailReqDto {
-        private Long id; //서비스로직
         private String email;
     }
 

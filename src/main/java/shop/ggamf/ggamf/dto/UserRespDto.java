@@ -3,6 +3,7 @@ package shop.ggamf.ggamf.dto;
 import java.time.format.DateTimeFormatter;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import shop.ggamf.ggamf.config.enums.UserEnum;
 import shop.ggamf.ggamf.config.enums.UserStateEnum;
@@ -31,102 +32,37 @@ public class UserRespDto {
     public static class JoinRespDto {
         private Long id;
         private String username;
+        private UserStateEnum state;
         private UserEnum role;
 
         public JoinRespDto(User user) {
             this.id = user.getId();
             this.username = user.getUsername();
             this.role = user.getRole();
+            this.state = user.getState().NORMAL;
         }
 
     }
 
-    // @Setter
-    // @Getter
-    // public static class UpdateRespDto {
-    //     private Long id;
-    //     private String password;
-    //     private String phone;
-    //     private String nickname;
-    //     private String email;
-
-    //     public UpdateRespDto(User user) {
-    //         this.id = id;
-    //         this.password = user.getPassword();
-    //         this.phone = user.getPhone();
-    //         this.nickname = user.getNickname();
-    //         this.email = user.getEmail();
-    //     }
-    // }
 
     @Setter
     @Getter
-    public static class UpdatePhotoRespDto {
+    public static class UpdateRespDto {
         private Long id;
         private String photo;
-
-        public UpdatePhotoRespDto(User user) {
-            this.id = user.getId();
-            this.photo = user.getPhoto();
-        }
-    }
-
-    @Setter
-    @Getter
-    public static class UpdateIntroRespDto {
-        private Long id;
         private String intro;
-
-        public UpdateIntroRespDto(User user) {
-            this.id = user.getId();
-            this.intro = user.getIntro();
-        }
-    }
-
-    @Setter
-    @Getter
-    public static class UpdateNicknameRespDto {
-        private Long id;
         private String nickname;
-
-        public UpdateNicknameRespDto(User user) {
-            this.id = user.getId();
-            this.nickname = user.getNickname();
-        }
-    }
-
-    @Setter
-    @Getter
-    public static class UpdatePasswordRespDto {
-        private Long id;
         private String password;
-
-        public UpdatePasswordRespDto(User user) {
-            this.id = user.getId();
-            this.password = user.getPassword();
-        }
-    }
-
-    @Setter
-    @Getter
-    public static class UpdatePhoneRespDto {
-        private Long id;
         private String phone;
-
-        public UpdatePhoneRespDto(User user) {
-            this.id = user.getId();
-            this.phone = user.getPhone();
-        }
-    }
-
-    @Setter
-    @Getter
-    public static class UpdateEmailRespDto {
-        private Long id;
         private String email;
 
-        public UpdateEmailRespDto(User user) {
+        public UpdateRespDto(User user) {
             this.id = user.getId();
+            this.photo = user.getPhoto();
+            this.intro = user.getIntro();
+            this.nickname = user.getNickname();
+            this.password = user.getPassword();
+            this.phone = user.getPhone();
             this.email = user.getEmail();
         }
     }

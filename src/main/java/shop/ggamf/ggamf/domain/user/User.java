@@ -97,7 +97,7 @@ public class User extends AuditingTime {
     }
 
     public void 회원탈퇴(UserStateEnum state) {
-        this.state = state;
+        this.state = state.WITHDRAW;
     }
 
 }
