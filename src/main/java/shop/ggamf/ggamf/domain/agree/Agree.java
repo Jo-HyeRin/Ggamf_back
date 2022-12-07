@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(name = "agree")
 @Entity
-public class Agree {
+public class Agree { //User엔티티에 넣기...! 개인정보제공동의만 사용
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

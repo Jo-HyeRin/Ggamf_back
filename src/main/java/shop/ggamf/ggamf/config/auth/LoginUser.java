@@ -58,5 +58,4 @@ public class LoginUser implements UserDetails {
         // TODO Auto-generated method stub
         return true;
     }
-
 }
