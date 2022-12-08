@@ -1,11 +1,17 @@
 package shop.ggamf.ggamf.dto;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.format.DateTimeFormatter;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import shop.ggamf.ggamf.config.enums.UserEnum;
 import shop.ggamf.ggamf.config.enums.UserStateEnum;
+import shop.ggamf.ggamf.domain.user.DetailRespDto;
+import shop.ggamf.ggamf.domain.user.StarRateRespDto;
 import shop.ggamf.ggamf.domain.user.User;
 
 public class UserRespDto {
@@ -77,34 +83,38 @@ public class UserRespDto {
         }
     }
 
-    @Setter
-    @Getter
-    public static class DetailRespDto {
-        private Long id;
-        private String photo;
-        private String nickname;
-        private String intro;    
-    }
+    // @AllArgsConstructor
+    // @NoArgsConstructor
+    // @Setter
+    // @Getter
+    // public static class DetailRespDto {
+    //     private BigInteger id;
+    //     private String photo;
+    //     private String nickname;
+    //     private String intro;
+    // }
 
-    @Setter
-    @Getter
-    public static class StarRateRespDto {
-        private Long receiverId;
-        private Long rate;
-    }
+    // @AllArgsConstructor
+    // @NoArgsConstructor
+    // @Setter
+    // @Getter
+    // public static class StarRateRespDto {
+    //     private BigInteger receiverId;
+    //     private BigInteger rate;
+    // }
 
     @Setter
     @Getter
     public static class ReturnRespDto {
-        private Long id;
+        private BigInteger id;
         private String photo;
         private String nickname;
         private String intro;
-        private Long receiverId;
-        private Long rate;
+        private BigInteger receiverId;
+        private BigInteger rate;
 
         public ReturnRespDto(DetailRespDto detailRespDto, StarRateRespDto starRateRespDto) {
-            this.id = detailRespDto.getId();
+            // this.id = detailRespDto.getId();
             this.photo = detailRespDto.getPhoto();
             this.nickname = detailRespDto.getNickname();
             this.intro = detailRespDto.getIntro();

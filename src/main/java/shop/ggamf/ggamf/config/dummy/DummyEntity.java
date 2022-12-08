@@ -1,5 +1,7 @@
 package shop.ggamf.ggamf.config.dummy;
 
+import java.util.Random;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import shop.ggamf.ggamf.config.enums.UserEnum;
@@ -8,6 +10,7 @@ import shop.ggamf.ggamf.domain.enter.Enter;
 import shop.ggamf.ggamf.domain.follow.Follow;
 import shop.ggamf.ggamf.domain.gameCode.GameCode;
 import shop.ggamf.ggamf.domain.room.Room;
+import shop.ggamf.ggamf.domain.starRate.StarRate;
 import shop.ggamf.ggamf.domain.user.User;
 
 public abstract class DummyEntity {
@@ -67,5 +70,15 @@ public abstract class DummyEntity {
                 .accept(false)
                 .build();
         return follow;
+    }
+
+    protected StarRate newStarRate(User giver, User receiver) {
+        Random random = new Random();
+        StarRate starRate = StarRate.builder()
+        .giver(giver)
+        .receiver(receiver)
+        .rate(random.nextLong())
+                .build();
+        return starRate;
     }
 }

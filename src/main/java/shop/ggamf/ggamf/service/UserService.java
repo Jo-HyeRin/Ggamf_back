@@ -14,16 +14,16 @@ import shop.ggamf.ggamf.config.auth.LoginUser;
 import shop.ggamf.ggamf.config.exception.CustomApiException;
 import shop.ggamf.ggamf.domain.starRate.StarRateRepository;
 import shop.ggamf.ggamf.domain.starRate.StarRateRepositoryQuery;
+import shop.ggamf.ggamf.domain.user.DetailRespDto;
+import shop.ggamf.ggamf.domain.user.StarRateRespDto;
 import shop.ggamf.ggamf.domain.user.User;
 import shop.ggamf.ggamf.domain.user.UserRepository;
 import shop.ggamf.ggamf.domain.user.UserRepositoryQuery;
 import shop.ggamf.ggamf.dto.UserReqDto.JoinReqDto;
 import shop.ggamf.ggamf.dto.UserReqDto.UpdateReqDto;
 import shop.ggamf.ggamf.dto.UserReqDto.UpdateStateReqDto;
-import shop.ggamf.ggamf.dto.UserRespDto.DetailRespDto;
 import shop.ggamf.ggamf.dto.UserRespDto.JoinRespDto;
 import shop.ggamf.ggamf.dto.UserRespDto.ReturnRespDto;
-import shop.ggamf.ggamf.dto.UserRespDto.StarRateRespDto;
 import shop.ggamf.ggamf.dto.UserRespDto.UpdateRespDto;
 import shop.ggamf.ggamf.dto.UserRespDto.UpdateStateRespDto;
 
@@ -60,7 +60,9 @@ public class UserService {
              userRepository.findById(id)
                      .orElseThrow(() -> (new CustomApiException("해당유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST)));
          }
+         log.debug("디버그 : service id : "+id);
         DetailRespDto detailRespDto = userRepositoryQuery.findDetailById(id);
+        log.debug("디버그 : 불러오긴했어~!");
         StarRateRespDto starRateRespDto = starRateRepositoryQuery.caculateStaRateById(id);
 
         return new ReturnRespDto(detailRespDto, starRateRespDto);
