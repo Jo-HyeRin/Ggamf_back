@@ -62,8 +62,6 @@ public class GgamfApiControllerTest extends DummyEntity {
         Follow follow4 = followRepository.save(newFollow(kaka, ssar));
         Follow friend5 = followRepository.save(newFriend(ssar, vovo));
         Follow friend6 = followRepository.save(newFriend(toto, ssar));
-
-
     }
 
     @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
@@ -127,6 +125,25 @@ public class GgamfApiControllerTest extends DummyEntity {
         // then
         resultActions.andExpect(MockMvcResultMatchers.status().isOk());
         resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.followId").value(5L));
+    }
+
+    @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    public void rejectGgamf_test() throws Exception {
+        // given
+        Long followId = 3L;
+        Long userId = 1L;
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(MockMvcRequestBuilders.delete("/s/api/ggamf/user/" + userId + "/reject/" + followId)
+                        .contentType(APPLICATION_JSON_UTF8));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+        resultActions.andExpect(MockMvcResultMatchers.status().isOk());
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.followId").value(3L));
     }
 
 }

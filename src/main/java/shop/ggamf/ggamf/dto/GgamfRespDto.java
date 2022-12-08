@@ -1,12 +1,8 @@
 package shop.ggamf.ggamf.dto;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import lombok.Getter;
 import lombok.Setter;
 import shop.ggamf.ggamf.domain.follow.Follow;
-import shop.ggamf.ggamf.domain.user.User;
 
 public class GgamfRespDto {
 
@@ -54,4 +50,16 @@ public class GgamfRespDto {
             this.followId = followId;
         }
     }
+
+    @Setter
+    @Getter
+    public static class RejectGgamfRespDto {
+        private Long followId;
+        // 나중에 내가받은겜프요청 목록 보여주기
+
+        public RejectGgamfRespDto(Long followId) {
+            this.followId = followId;
+        }
+    }
+
 }

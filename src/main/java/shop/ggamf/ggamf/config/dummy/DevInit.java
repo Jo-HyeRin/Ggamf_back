@@ -36,7 +36,6 @@ public class DevInit extends DummyEntity {
             User nana = userRepository.save(newUser("nana"));
             User vovo = userRepository.save(newUser("vovo"));
             User toto = userRepository.save(newUser("toto"));
-
             // GameCode : 게임코드
             GameCode etc = gameCodeRepository.save(newGameCode("etc"));
             GameCode LoL = gameCodeRepository.save(newGameCode("LoL"));
@@ -60,7 +59,6 @@ public class DevInit extends DummyEntity {
             Follow follow4 = followRepository.save(newFollow(nana, cos));
             Follow friend5 = followRepository.save(newFriend(cos, vovo));
             Follow friend6 = followRepository.save(newFriend(toto, cos));
-
         };
     }
 }
