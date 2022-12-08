@@ -91,7 +91,7 @@ public class GgamfApiController {
             throw new CustomApiException("당신은 취소 권한이 없습니다.", HttpStatus.BAD_REQUEST);
         }
         CancelGgamfRespDto cancelGgamfRespDto = ggamfService.겜프요청취소(userId, followId);
-        return new ResponseEntity<>(new ResponseDto<>("겜프 거절 완료", cancelGgamfRespDto), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDto<>("겜프요청취소 완료", cancelGgamfRespDto), HttpStatus.OK);
     }
 
 }
