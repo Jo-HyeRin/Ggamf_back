@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -17,9 +17,10 @@ import lombok.RequiredArgsConstructor;
 import shop.ggamf.ggamf.config.auth.LoginUser;
 import shop.ggamf.ggamf.dto.ResponseDto;
 import shop.ggamf.ggamf.dto.UserReqDto.JoinReqDto;
-import shop.ggamf.ggamf.dto.UserReqDto.UpdateIntroReqDto;
+import shop.ggamf.ggamf.dto.UserReqDto.UpdateReqDto;
+import shop.ggamf.ggamf.dto.UserReqDto.UpdateStateReqDto;
 import shop.ggamf.ggamf.dto.UserRespDto.JoinRespDto;
-import shop.ggamf.ggamf.dto.UserRespDto.UpdateIntroRespDto;
+import shop.ggamf.ggamf.dto.UserRespDto.UpdateStateRespDto;
 import shop.ggamf.ggamf.service.UserService;
 
 @RequestMapping("/s/api")
@@ -36,29 +37,33 @@ public class UserApiController {
         return new ResponseEntity<>(new ResponseDto<>("회원가입성공", joinRespDto), HttpStatus.CREATED);
     }
 
-    // @PutMapping("/user/{id}/update")
-    // public ResponseEntity<?> update(@RequestBody UpdateReqDto updateReqDto, @PathVariable Long id) {
-    //     UpdateRespDto updateRespDto = userService.회원정보수정(updateReqDto, id);
-    //     return new ResponseEntity<>(new ResponseDto<>("회원정보수정성공", updateRespDto), HttpStatus.CREATED);
-    // }
-
-    @PutMapping("/user/{userId}/updateIntro")
-    public ResponseEntity<?> updateIntro(@PathVariable Long userId, @RequestBody UpdateIntroReqDto updateIntroReqDto, 
+    @PutMapping("/user/{userId}/update")
+    public ResponseEntity<?> update(@PathVariable Long userId, @RequestBody UpdateReqDto updateReqDto,
             @AuthenticationPrincipal LoginUser loginUser) {
-                
         if (userId != loginUser.getUser().getId()) {
             return new ResponseEntity<>(new ResponseDto<>("권한이 없습니다", null), HttpStatus.FORBIDDEN);
         }
-        log.debug("디버그 : 컨트롤러userId:" + loginUser.getUser().getId());
-            updateIntroReqDto.setId(userId);
-            UpdateIntroRespDto updateIntroRespDto = userService.자기소개수정(updateIntroReqDto);
-        return new ResponseEntity<>(new ResponseDto<>("자기소개 수정 성공", updateIntroRespDto), HttpStatus.OK);
-    }
-    
-    @DeleteMapping("/user/{userId}/delete")
-    public ResponseEntity<?> delete(@PathVariable Long userId) {
-        userService.회원영구삭제(userId);
-        return new ResponseEntity<>(new ResponseDto<>("회원삭제성공", null), HttpStatus.OK);
+        updateReqDto.setId(userId);
+        UpdateRespDto updateRespDto = userService.회원정보수정(updateReqDto);
+        return new ResponseEntity<>(new ResponseDto<>("회원정보수정성공", updateRespDto), HttpStatus.CREATED);
     }
 
+    @PutMapping("/user/{userId}/withdraw")
+    public ResponseEntity<?> withdraw(@PathVariable Long userId, @RequestBody UpdateStateReqDto updateStateReqDto) {
+        updateStateReqDto.setId(userId);
+        UpdateStateRespDto updateStateRespDto = userService.회원탈퇴(updateStateReqDto);
+        return new ResponseEntity<>(new ResponseDto<>("회원탈퇴성공", updateStateRespDto), HttpStatus.OK);
+    }
+
+    @GetMapping("/user/{userId}/detail")
+    public ResponseEntity<?> detail (@PathVariable Long userId){
+        
+        return new ResponseEntity<>(new ResponseDto<>("", null), HttpStatus.OK);
+    }
+
+    // @DeleteMapping("/user/{userId}/delete") //관리자만 가능
+    // public ResponseEntity<?> delete(@PathVariable Long userId) {
+    //     userService.회원영구삭제(userId);
+    //     return new ResponseEntity<>(new ResponseDto<>("회원삭제성공", null), HttpStatus.OK);
+    // }
 }

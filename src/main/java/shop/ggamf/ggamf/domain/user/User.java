@@ -49,15 +49,18 @@ public class User extends AuditingTime {
 
     private String intro;
 
+    @Enumerated(EnumType.STRING)
     private UserStateEnum state;
 
     @Enumerated(EnumType.STRING) // enum 쓸때 어노테이션
     @Column(nullable = false)
     private UserEnum role;
 
+    private Boolean agree;
+
     @Builder
     public User(Long id, String username, String password, String name, String phone, String nickname, String email,
-            Boolean phoneChecked, String photo, String intro, UserStateEnum state, UserEnum role) {
+            Boolean phoneChecked, String photo, String intro, UserStateEnum state, UserEnum role, Boolean agree) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -70,6 +73,7 @@ public class User extends AuditingTime {
         this.intro = intro;
         this.state = state;
         this.role = role;
+        this.agree = agree;
     }
 
     public void 사진수정(String photo) {
@@ -97,7 +101,7 @@ public class User extends AuditingTime {
     }
 
     public void 회원탈퇴(UserStateEnum state) {
-        this.state = state;
+        this.state = state.WITHDRAW;
     }
 
 }

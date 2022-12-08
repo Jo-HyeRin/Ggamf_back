@@ -3,8 +3,11 @@ package shop.ggamf.ggamf.config.dummy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import shop.ggamf.ggamf.config.enums.UserEnum;
+import shop.ggamf.ggamf.config.enums.UserStateEnum;
 import shop.ggamf.ggamf.domain.enter.Enter;
+import shop.ggamf.ggamf.domain.follow.Follow;
 import shop.ggamf.ggamf.domain.gameCode.GameCode;
+import shop.ggamf.ggamf.domain.reasonCode.ReasonCode;
 import shop.ggamf.ggamf.domain.room.Room;
 import shop.ggamf.ggamf.domain.user.User;
 
@@ -23,7 +26,7 @@ public abstract class DummyEntity {
                 .phoneChecked(true)
                 .photo("내사진입니다")
                 .intro("안녕하세여 유저입니다")
-                .stateId(1L)
+                .state(UserStateEnum.NORMAL)
                 .role(UserEnum.USER)
                 .build();
         return user;
@@ -56,5 +59,30 @@ public abstract class DummyEntity {
                 .stay(true)
                 .build();
         return enter;
+    }
+
+    protected Follow newFollow(User follower, User following) {
+        Follow follow = Follow.builder()
+                .follower(follower)
+                .following(following)
+                .accept(false)
+                .build();
+        return follow;
+    }
+
+    protected Follow newFriend(User follower, User following) {
+        Follow follow = Follow.builder()
+                .follower(follower)
+                .following(following)
+                .accept(true)
+                .build();
+        return follow;
+    }
+
+    protected ReasonCode newReasonCode(String reason) {
+        ReasonCode reasonCode = ReasonCode.builder()
+                .reason(reason)
+                .build();
+        return reasonCode;
     }
 }

@@ -1,6 +1,7 @@
 package shop.ggamf.ggamf.dto;
 
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -31,12 +32,14 @@ public class UserRespDto {
     public static class JoinRespDto {
         private Long id;
         private String username;
+        private UserStateEnum state;
         private UserEnum role;
 
         public JoinRespDto(User user) {
             this.id = user.getId();
             this.username = user.getUsername();
             this.role = user.getRole();
+            this.state = user.getState();
         }
 
     }
@@ -99,6 +102,9 @@ public class UserRespDto {
     @Getter
     public static class UpdatePasswordRespDto {
         private Long id;
+        private String photo;
+        private String intro;
+        private String nickname;
         private String password;
 
         public UpdatePasswordRespDto(User user) {
@@ -112,21 +118,15 @@ public class UserRespDto {
     public static class UpdatePhoneRespDto {
         private Long id;
         private String phone;
-
-        public UpdatePhoneRespDto(User user) {
-            this.id = user.getId();
-            this.phone = user.getPhone();
-        }
-    }
-
-    @Setter
-    @Getter
-    public static class UpdateEmailRespDto {
-        private Long id;
         private String email;
 
-        public UpdateEmailRespDto(User user) {
+        public UpdateRespDto(User user) {
             this.id = user.getId();
+            this.photo = user.getPhoto();
+            this.intro = user.getIntro();
+            this.nickname = user.getNickname();
+            this.password = user.getPassword();
+            this.phone = user.getPhone();
             this.email = user.getEmail();
         }
     }
@@ -141,5 +141,15 @@ public class UserRespDto {
             this.id = user.getId();
             this.state = user.getState();
         }
+    }
+
+    @Setter
+    @Getter
+    public static class DetailRespDto {
+        private Long id;
+        private String photo;
+        private String nickname;
+        private List<Integer> statics;
+        private float starRate;
     }
 }

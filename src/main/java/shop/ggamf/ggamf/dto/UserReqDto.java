@@ -33,7 +33,7 @@ public class UserReqDto {
         private String phone;
         private String nickname;
         private String email;
-        // private UserEnum role;
+        private Boolean agree;
 
         public User toEntity() {
             return User.builder()
@@ -43,6 +43,8 @@ public class UserReqDto {
                     .phone(phone)
                     .nickname(nickname)
                     .email(email)
+                    .agree(true)
+                    .state(UserStateEnum.NORMAL)
                     .role(UserEnum.USER)
                     .build();
         }
@@ -68,43 +70,13 @@ public class UserReqDto {
 
     @Setter
     @Getter
-    public static class UpdatePhotoReqDto {
+    public static class UpdateReqDto {
         private Long id; //서비스로직
         private String photo;
-    }
-    
-    @Setter
-    @Getter
-    public static class UpdateIntroReqDto {
-        private Long id; //서비스로직
         private String intro;
-    }
-
-    @Setter
-    @Getter
-    public static class UpdateNicknameReqDto {
-        private Long id; //서비스로직
         private String nickname;
-    }
-
-    @Setter
-    @Getter
-    public static class UpdatePasswordReqDto {
-        private Long id; //서비스로직
         private String password;
-    }
-
-    @Setter
-    @Getter
-    public static class UpdatePhoneReqDto {
-        private Long id; //서비스로직
         private String phone;
-    }
-
-    @Setter
-    @Getter
-    public static class UpdateEmailReqDto {
-        private Long id; //서비스로직
         private String email;
     }
 
