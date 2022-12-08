@@ -1,7 +1,5 @@
 package shop.ggamf.ggamf.service;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -18,7 +16,6 @@ import shop.ggamf.ggamf.dto.GgamfReqDto.AcceptGgamfReqDto;
 import shop.ggamf.ggamf.dto.GgamfReqDto.FollowGgamfReqDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.AcceptGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.DeleteGgamfRespDto;
-import shop.ggamf.ggamf.dto.GgamfRespDto.FollowGgamfRespDto;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -73,4 +70,5 @@ public class GgamfService {
         followRepository.delete(followPS);
         return new DeleteGgamfRespDto(followId);
     }
+
 }

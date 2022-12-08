@@ -54,5 +54,4 @@ public class GgamfRespDto {
             this.followId = followId;
         }
     }
-
 }

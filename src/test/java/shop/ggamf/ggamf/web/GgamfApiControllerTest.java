@@ -63,6 +63,7 @@ public class GgamfApiControllerTest extends DummyEntity {
         Follow friend5 = followRepository.save(newFriend(ssar, vovo));
         Follow friend6 = followRepository.save(newFriend(toto, ssar));
 
+
     }
 
     @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
