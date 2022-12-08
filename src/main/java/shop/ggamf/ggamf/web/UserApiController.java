@@ -20,6 +20,7 @@ import shop.ggamf.ggamf.dto.UserReqDto.JoinReqDto;
 import shop.ggamf.ggamf.dto.UserReqDto.UpdateReqDto;
 import shop.ggamf.ggamf.dto.UserReqDto.UpdateStateReqDto;
 import shop.ggamf.ggamf.dto.UserRespDto.JoinRespDto;
+import shop.ggamf.ggamf.dto.UserRespDto.UpdateRespDto;
 import shop.ggamf.ggamf.dto.UserRespDto.UpdateStateRespDto;
 import shop.ggamf.ggamf.service.UserService;
 
@@ -56,9 +57,9 @@ public class UserApiController {
     }
 
     @GetMapping("/user/{userId}/detail")
-    public ResponseEntity<?> detail (@PathVariable Long userId){
-        
-        return new ResponseEntity<>(new ResponseDto<>("", null), HttpStatus.OK);
+    public ResponseEntity<?> detail(@PathVariable Long userId) {
+        log.debug("디버그 : controller id : "+ userId);
+        return new ResponseEntity<>(new ResponseDto<>("유저 상세보기 성공", userService.유저상세보기(userId)), HttpStatus.OK);
     }
 
     // @DeleteMapping("/user/{userId}/delete") //관리자만 가능
