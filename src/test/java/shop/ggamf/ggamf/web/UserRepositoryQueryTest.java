@@ -21,7 +21,7 @@ import shop.ggamf.ggamf.domain.user.UserRepository;
 import shop.ggamf.ggamf.domain.user.UserRepositoryQuery;
 
 
-@Import({ UserRepositoryQuery.class, StarRateRepositoryQuery.class })
+@Import({UserRepositoryQuery.class, StarRateRepositoryQuery.class})
 @ActiveProfiles("test")
 @DataJpaTest
 public class UserRepositoryQueryTest extends DummyEntity {
