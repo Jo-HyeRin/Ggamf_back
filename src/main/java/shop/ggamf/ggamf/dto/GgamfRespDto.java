@@ -48,12 +48,10 @@ public class GgamfRespDto {
     @Getter
     public static class DeleteGgamfRespDto {
         private Long followId;
-        private Boolean accept;
         // 나중에 친구 목록 보여주기
 
-        public DeleteGgamfRespDto(Follow follow) {
-            this.followId = follow.getId();
-            this.accept = follow.getAccept();
+        public DeleteGgamfRespDto(Long followId) {
+            this.followId = followId;
         }
     }
 

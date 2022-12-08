@@ -71,6 +71,6 @@ public class GgamfService {
             throw new CustomApiException("겜프 사이가 아닙니다", HttpStatus.BAD_REQUEST);
         }
         followRepository.delete(followPS);
-        return new DeleteGgamfRespDto(followPS);
+        return new DeleteGgamfRespDto(followId);
     }
 }

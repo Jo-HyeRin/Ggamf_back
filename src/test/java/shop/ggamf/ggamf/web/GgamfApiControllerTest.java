@@ -53,13 +53,15 @@ public class GgamfApiControllerTest extends DummyEntity {
         User lala = userRepository.save(newUser("lala"));
         User dada = userRepository.save(newUser("dada"));
         User kaka = userRepository.save(newUser("kaka"));
+        User vovo = userRepository.save(newUser("vovo"));
+        User toto = userRepository.save(newUser("toto"));
         // Follow : 겜프
         Follow follow1 = followRepository.save(newFollow(ssar, cos));
         Follow follow2 = followRepository.save(newFollow(ssar, lala));
-        Follow follow3 = followRepository.save(newFollow(ssar, dada));
-        Follow follow4 = followRepository.save(newFollow(cos, ssar));
-        Follow follow5 = followRepository.save(newFollow(lala, ssar));
-        Follow follow6 = followRepository.save(newFollow(kaka, ssar));
+        Follow follow3 = followRepository.save(newFollow(dada, ssar));
+        Follow follow4 = followRepository.save(newFollow(kaka, ssar));
+        Follow friend5 = followRepository.save(newFriend(ssar, vovo));
+        Follow friend6 = followRepository.save(newFriend(toto, ssar));
 
     }
 
@@ -105,6 +107,25 @@ public class GgamfApiControllerTest extends DummyEntity {
         // then
         resultActions.andExpect(MockMvcResultMatchers.status().isCreated());
         resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.accept").value(true));
+    }
+
+    @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    public void deleteGgamf_test() throws Exception {
+        // given
+        Long followId = 5L;
+        Long userId = 1L;
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(MockMvcRequestBuilders.delete("/s/api/ggamf/user/" + userId + "/unfollow/" + followId)
+                        .contentType(APPLICATION_JSON_UTF8));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+        resultActions.andExpect(MockMvcResultMatchers.status().isOk());
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.followId").value(5L));
     }
 
 }
