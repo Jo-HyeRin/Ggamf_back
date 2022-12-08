@@ -1,12 +1,8 @@
 package shop.ggamf.ggamf.dto;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import lombok.Getter;
 import lombok.Setter;
 import shop.ggamf.ggamf.domain.follow.Follow;
-import shop.ggamf.ggamf.domain.user.User;
 
 public class GgamfRespDto {
 
