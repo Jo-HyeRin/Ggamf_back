@@ -31,6 +31,7 @@ public abstract class DummyEntity {
                 .intro("안녕하세여 유저입니다")
                 .state(UserStateEnum.NORMAL)
                 .role(UserEnum.USER)
+                .agree(true)
                 .build();
         return user;
     }

@@ -64,6 +64,7 @@ public class UserService {
         DetailRespDto detailRespDto = userRepositoryQuery.findDetailById(id);
         log.debug("디버그 : 불러오긴했어~!");
         StarRateRespDto starRateRespDto = starRateRepositoryQuery.caculateStaRateById(id);
+        log.debug("디버그 : 불러오긴했어~11");
 
         return new ReturnRespDto(detailRespDto, starRateRespDto);
     }

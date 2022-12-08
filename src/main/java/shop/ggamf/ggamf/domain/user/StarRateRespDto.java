@@ -1,5 +1,6 @@
 package shop.ggamf.ggamf.domain.user;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import lombok.AllArgsConstructor;
@@ -13,5 +14,5 @@ import lombok.Setter;
 @Getter
 public class StarRateRespDto {
     private BigInteger receiverId;
-    private BigInteger rate;
+    private BigDecimal rate;
 }

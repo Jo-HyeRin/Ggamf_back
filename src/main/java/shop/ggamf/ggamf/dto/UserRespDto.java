@@ -4,9 +4,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.format.DateTimeFormatter;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import shop.ggamf.ggamf.config.enums.UserEnum;
 import shop.ggamf.ggamf.config.enums.UserStateEnum;
@@ -111,10 +109,10 @@ public class UserRespDto {
         private String nickname;
         private String intro;
         private BigInteger receiverId;
-        private BigInteger rate;
+        private BigDecimal rate;
 
         public ReturnRespDto(DetailRespDto detailRespDto, StarRateRespDto starRateRespDto) {
-            // this.id = detailRespDto.getId();
+            this.id = detailRespDto.getId();
             this.photo = detailRespDto.getPhoto();
             this.nickname = detailRespDto.getNickname();
             this.intro = detailRespDto.getIntro();

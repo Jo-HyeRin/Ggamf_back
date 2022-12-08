@@ -9,6 +9,6 @@ import org.springframework.data.repository.query.Param;
 
 public interface StarRateRepository extends JpaRepository<StarRate, Long> {
 
-    @Query("select sr.receiverId, avg(sr.rate) from StarRate sr where sr.receiverId = :receiverId")
-    Optional<StarRate> caculateStaRateById (@Param("receiverId") Long receiverId);
+    // @Query("select sr.receiverId, avg(sr.rate) from StarRate sr where sr.receiverId = :receiverId")
+    // Optional<StarRate> caculateStaRateById (@Param("receiverId") Long receiverId);
 }
