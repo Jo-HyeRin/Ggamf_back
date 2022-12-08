@@ -113,6 +113,5 @@ public class GgamfApiController {
         reportGgamfReqDto.setBadUserId(badUserId);
         ReportGgamfRespDto reportGgamfRespDto = ggamfService.겜프신고(reportGgamfReqDto);
         return new ResponseEntity<>(new ResponseDto<>("겜프신고 완료", reportGgamfRespDto), HttpStatus.CREATED);
-
     }
 }
