@@ -55,4 +55,15 @@ public class GgamfRespDto {
         }
     }
 
+    @Setter
+    @Getter
+    public static class RejectGgamfRespDto {
+        private Long followId;
+        // 나중에 내가받은겜프요청 목록 보여주기
+
+        public RejectGgamfRespDto(Long followId) {
+            this.followId = followId;
+        }
+    }
+
 }

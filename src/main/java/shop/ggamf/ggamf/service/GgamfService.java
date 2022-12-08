@@ -1,7 +1,5 @@
 package shop.ggamf.ggamf.service;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -19,6 +17,7 @@ import shop.ggamf.ggamf.dto.GgamfReqDto.FollowGgamfReqDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.AcceptGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.DeleteGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.FollowGgamfRespDto;
+import shop.ggamf.ggamf.dto.GgamfRespDto.RejectGgamfRespDto;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -31,7 +30,7 @@ public class GgamfService {
 
     @Transactional
     public FollowGgamfRespDto 겜프요청(FollowGgamfReqDto followGgamfReqDto) {
-        log.debug("디버그 : 파티방생성 서비스 호출");
+        log.debug("디버그 : 겜프요청 서비스 호출");
         // 나
         User follower = userRepository.findById(followGgamfReqDto.getFollowerId())
                 .orElseThrow(() -> new CustomApiException("내 유저 정보가 없습니다", HttpStatus.FORBIDDEN));
@@ -54,6 +53,7 @@ public class GgamfService {
 
     @Transactional
     public AcceptGgamfRespDto 겜프수락(AcceptGgamfReqDto acceptGgamfReqDto) {
+        log.debug("디버그 : 겜프수락 서비스 호출");
         Follow followPS = followRepository.findById(acceptGgamfReqDto.getFollowId())
                 .orElseThrow(() -> new CustomApiException("겜프 신청 중이 아닙니다", HttpStatus.FORBIDDEN));
         if (followPS.getFollowing().getId() != acceptGgamfReqDto.getUserId()) {
@@ -65,6 +65,7 @@ public class GgamfService {
 
     @Transactional
     public DeleteGgamfRespDto 겜프삭제(Long userId, Long followId) {
+        log.debug("디버그 : 겜프삭제 서비스 호출");
         Follow followPS = followRepository.findById(followId)
                 .orElseThrow(() -> new CustomApiException("삭제할 겜프가 없습니다", HttpStatus.FORBIDDEN));
         if (followPS.getAccept() != true) {
@@ -72,5 +73,20 @@ public class GgamfService {
         }
         followRepository.delete(followPS);
         return new DeleteGgamfRespDto(followId);
+    }
+
+    @Transactional
+    public RejectGgamfRespDto 겜프거절(Long userId, Long followId) {
+        log.debug("디버그 : 겜프거절 서비스 호출");
+        Follow followPS = followRepository.findById(followId)
+                .orElseThrow(() -> new CustomApiException("거절 할 겜프 요청이 없습니다", HttpStatus.FORBIDDEN));
+        if (followPS.getAccept() == true) {
+            throw new CustomApiException("이미 겜프입니다. 삭제를 원하면 겜프 프로필에서 삭제하세요", HttpStatus.BAD_REQUEST);
+        }
+        if (followPS.getFollowing().getId() != userId) {
+            throw new CustomApiException("당신은 거절 권한이 없습니다.", HttpStatus.BAD_REQUEST);
+        }
+        followRepository.delete(followPS);
+        return new RejectGgamfRespDto(followId);
     }
 }
