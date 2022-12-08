@@ -15,6 +15,7 @@ import shop.ggamf.ggamf.domain.user.UserRepository;
 import shop.ggamf.ggamf.dto.GgamfReqDto.AcceptGgamfReqDto;
 import shop.ggamf.ggamf.dto.GgamfReqDto.FollowGgamfReqDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.AcceptGgamfRespDto;
+import shop.ggamf.ggamf.dto.GgamfRespDto.CancelGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.DeleteGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.FollowGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.RejectGgamfRespDto;
@@ -88,5 +89,20 @@ public class GgamfService {
         }
         followRepository.delete(followPS);
         return new RejectGgamfRespDto(followId);
+    }
+
+    @Transactional
+    public CancelGgamfRespDto 겜프요청취소(Long userId, Long followId) {
+        log.debug("디버그 : 겜프요청취소 서비스 호출");
+        Follow followPS = followRepository.findById(followId)
+                .orElseThrow(() -> new CustomApiException("취소 할 겜프 요청이 없습니다", HttpStatus.FORBIDDEN));
+        if (followPS.getAccept() == true) {
+            throw new CustomApiException("이미 겜프입니다. 삭제를 원하면 겜프 프로필에서 삭제하세요", HttpStatus.BAD_REQUEST);
+        }
+        if (followPS.getFollower().getId() != userId) {
+            throw new CustomApiException("당신은 취소 권한이 없습니다.", HttpStatus.BAD_REQUEST);
+        }
+        followRepository.delete(followPS);
+        return new CancelGgamfRespDto(followId);
     }
 }
