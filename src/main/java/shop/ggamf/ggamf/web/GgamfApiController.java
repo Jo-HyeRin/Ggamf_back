@@ -19,6 +19,7 @@ import shop.ggamf.ggamf.config.exception.CustomApiException;
 import shop.ggamf.ggamf.dto.GgamfReqDto.AcceptGgamfReqDto;
 import shop.ggamf.ggamf.dto.GgamfReqDto.FollowGgamfReqDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.AcceptGgamfRespDto;
+import shop.ggamf.ggamf.dto.GgamfRespDto.CancelGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.DeleteGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.FollowGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.RejectGgamfRespDto;
@@ -79,6 +80,18 @@ public class GgamfApiController {
         }
         RejectGgamfRespDto rejectGgamfRespDto = ggamfService.겜프거절(userId, followId);
         return new ResponseEntity<>(new ResponseDto<>("겜프 거절 완료", rejectGgamfRespDto), HttpStatus.OK);
+    }
+
+    // 겜프 요청 취소
+    @DeleteMapping("ggamf/user/{userId}/cancel/{followId}")
+    public ResponseEntity<?> cancelGgamf(@PathVariable Long userId, @PathVariable Long followId,
+            @AuthenticationPrincipal LoginUser loginUser) {
+        log.debug("디버그 : 겜프 요청 취소 컨트롤러 호출");
+        if (loginUser.getUser().getId() != userId) {
+            throw new CustomApiException("당신은 취소 권한이 없습니다.", HttpStatus.BAD_REQUEST);
+        }
+        CancelGgamfRespDto cancelGgamfRespDto = ggamfService.겜프요청취소(userId, followId);
+        return new ResponseEntity<>(new ResponseDto<>("겜프요청취소 완료", cancelGgamfRespDto), HttpStatus.OK);
     }
 
 }
