@@ -68,10 +68,13 @@ public class UserRepositoryQueryTest extends DummyEntity {
 
     @Test
     public void dto_select_test() {
+        //given
         Long id = 1L;
-
+        
+        //when
         DetailRespDto detailRespDto = userRepositoryQuery.findDetailById(id);
 
+        //then
         Assertions.assertThat(detailRespDto.getNickname()).isEqualTo("nickssar");
     }
 
