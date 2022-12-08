@@ -1,5 +1,7 @@
 package shop.ggamf.ggamf.service;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -23,6 +25,7 @@ import shop.ggamf.ggamf.dto.GgamfRespDto.AcceptGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.CancelGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.DeleteGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.FollowGgamfRespDto;
+import shop.ggamf.ggamf.dto.GgamfRespDto.GgamfListRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.RejectGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.ReportGgamfRespDto;
 
@@ -130,5 +133,13 @@ public class GgamfService {
         Report report = reportGgamfReqDto.toEntity(follower, following, reasonCode);
         Report reportPS = reportRepository.save(report);
         return new ReportGgamfRespDto(reportPS);
+    }
+
+    public GgamfListRespDto 겜프목록보기(Long userId) {
+        // 내가 요청해서 맺은 친구 목록
+        List<Follow> followerListPS = followRepository.findByFollowerId(userId);
+        // 내가 수락해서 맺은 친구 목록
+        List<Follow> followingListPS = followRepository.findByFollowingId(userId);
+        return new GgamfListRespDto(followerListPS, followingListPS);
     }
 }

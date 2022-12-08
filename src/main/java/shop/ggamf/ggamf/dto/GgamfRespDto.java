@@ -1,5 +1,8 @@
 package shop.ggamf.ggamf.dto;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import lombok.Getter;
 import lombok.Setter;
 import shop.ggamf.ggamf.domain.follow.Follow;
@@ -89,6 +92,52 @@ public class GgamfRespDto {
             this.badUserNick = report.getBadUser().getNickname();
             this.reason = report.getReasonCode().getReason();
             this.detail = report.getDetail();
+        }
+    }
+
+    @Setter
+    @Getter
+    public static class GgamfListRespDto {
+
+        List<FollowerDto> followers; // 내가 요청해서 맺은 친구 목록
+        List<FollowingDto> followings; // 내가 수락해서 맺은 친구 목록
+
+        public GgamfListRespDto(List<Follow> followers, List<Follow> followings) {
+            this.followers = followers.stream().map((follow) -> new FollowerDto(follow)).collect(Collectors.toList());
+            this.followings = followings.stream().map((follow) -> new FollowingDto(follow))
+                    .collect(Collectors.toList());
+        }
+
+        @Setter
+        @Getter
+        public class FollowerDto {
+            private Long friendId;
+            private String photo;
+            private String nickName;
+            private String intro;
+
+            public FollowerDto(Follow follow) {
+                this.friendId = follow.getFollowing().getId();
+                this.photo = follow.getFollowing().getPhoto();
+                this.nickName = follow.getFollowing().getNickname();
+                this.intro = follow.getFollowing().getIntro();
+            }
+        }
+
+        @Setter
+        @Getter
+        public class FollowingDto {
+            private Long friendId;
+            private String photo;
+            private String nickName;
+            private String intro;
+
+            public FollowingDto(Follow follow) {
+                this.friendId = follow.getFollower().getId();
+                this.photo = follow.getFollower().getPhoto();
+                this.nickName = follow.getFollower().getNickname();
+                this.intro = follow.getFollower().getIntro();
+            }
         }
     }
 

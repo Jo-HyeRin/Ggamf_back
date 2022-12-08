@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -23,6 +24,7 @@ import shop.ggamf.ggamf.dto.GgamfRespDto.AcceptGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.CancelGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.DeleteGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.FollowGgamfRespDto;
+import shop.ggamf.ggamf.dto.GgamfRespDto.GgamfListRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.RejectGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.ReportGgamfRespDto;
 import shop.ggamf.ggamf.dto.ResponseDto;
@@ -113,5 +115,13 @@ public class GgamfApiController {
         reportGgamfReqDto.setBadUserId(badUserId);
         ReportGgamfRespDto reportGgamfRespDto = ggamfService.겜프신고(reportGgamfReqDto);
         return new ResponseEntity<>(new ResponseDto<>("겜프신고 완료", reportGgamfRespDto), HttpStatus.CREATED);
+    }
+
+    // 겜프 목록 보기
+    @GetMapping("ggamf/list")
+    public ResponseEntity<?> findGgamfList(@AuthenticationPrincipal LoginUser loginUser) {
+        log.debug("디버그 : 겜프 목록 보기 컨트롤러 호출");
+        GgamfListRespDto ggamfListRespDto = ggamfService.겜프목록보기(loginUser.getUser().getId());
+        return new ResponseEntity<>(new ResponseDto<>("겜프목록보기 완료", ggamfListRespDto), HttpStatus.OK);
     }
 }
