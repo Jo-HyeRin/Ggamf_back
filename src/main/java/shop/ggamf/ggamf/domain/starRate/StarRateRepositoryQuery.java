@@ -1,6 +1,7 @@
 package shop.ggamf.ggamf.domain.starRate;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 import org.qlrm.mapper.JpaResultMapper;
@@ -23,7 +24,11 @@ public class StarRateRepositoryQuery {
         .setParameter("receiverId", receiverId);
 
         JpaResultMapper result = new JpaResultMapper();
-        StarRateRespDto starRateRespDto = result.uniqueResult(query, StarRateRespDto.class);
-        return starRateRespDto;
+        try {
+            StarRateRespDto starRateRespDto = result.uniqueResult(query, StarRateRespDto.class);
+            return starRateRespDto;
+        } catch (NoResultException e) {
+            return new StarRateRespDto();
+        }
     }
 }
