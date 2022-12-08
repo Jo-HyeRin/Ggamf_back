@@ -1,5 +1,7 @@
 package shop.ggamf.ggamf.service;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -15,6 +17,7 @@ import shop.ggamf.ggamf.domain.user.UserRepository;
 import shop.ggamf.ggamf.dto.GgamfReqDto.AcceptGgamfReqDto;
 import shop.ggamf.ggamf.dto.GgamfReqDto.FollowGgamfReqDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.AcceptGgamfRespDto;
+import shop.ggamf.ggamf.dto.GgamfRespDto.DeleteGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.FollowGgamfRespDto;
 
 @Transactional(readOnly = true)
@@ -60,4 +63,14 @@ public class GgamfService {
         return new AcceptGgamfRespDto(followPS);
     }
 
+    @Transactional
+    public DeleteGgamfRespDto 겜프삭제(Long userId, Long followId) {
+        Follow followPS = followRepository.findById(followId)
+                .orElseThrow(() -> new CustomApiException("삭제할 겜프가 없습니다", HttpStatus.FORBIDDEN));
+        if (followPS.getAccept() != true) {
+            throw new CustomApiException("겜프 사이가 아닙니다", HttpStatus.BAD_REQUEST);
+        }
+        followRepository.delete(followPS);
+        return new DeleteGgamfRespDto(followPS);
+    }
 }

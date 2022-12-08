@@ -68,4 +68,13 @@ public abstract class DummyEntity {
                 .build();
         return follow;
     }
+
+    protected Follow newFriend(User follower, User following) {
+        Follow follow = Follow.builder()
+                .follower(follower)
+                .following(following)
+                .accept(true)
+                .build();
+        return follow;
+    }
 }

@@ -1,8 +1,12 @@
 package shop.ggamf.ggamf.dto;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import lombok.Getter;
 import lombok.Setter;
 import shop.ggamf.ggamf.domain.follow.Follow;
+import shop.ggamf.ggamf.domain.user.User;
 
 public class GgamfRespDto {
 
@@ -39,4 +43,18 @@ public class GgamfRespDto {
             this.accept = follow.getAccept();
         }
     }
+
+    @Setter
+    @Getter
+    public static class DeleteGgamfRespDto {
+        private Long followId;
+        private Boolean accept;
+        // 나중에 친구 목록 보여주기
+
+        public DeleteGgamfRespDto(Follow follow) {
+            this.followId = follow.getId();
+            this.accept = follow.getAccept();
+        }
+    }
+
 }
