@@ -13,6 +13,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import shop.ggamf.ggamf.domain.AuditingTime;
 import shop.ggamf.ggamf.domain.room.Room;
 import shop.ggamf.ggamf.domain.user.User;
 
@@ -20,7 +21,7 @@ import shop.ggamf.ggamf.domain.user.User;
 @Getter
 @Table(name = "enter")
 @Entity
-public class Enter {
+public class Enter extends AuditingTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
