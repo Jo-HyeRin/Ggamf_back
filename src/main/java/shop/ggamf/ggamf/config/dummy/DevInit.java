@@ -12,6 +12,8 @@ import shop.ggamf.ggamf.domain.follow.Follow;
 import shop.ggamf.ggamf.domain.follow.FollowRepository;
 import shop.ggamf.ggamf.domain.gameCode.GameCode;
 import shop.ggamf.ggamf.domain.gameCode.GameCodeRepository;
+import shop.ggamf.ggamf.domain.reasonCode.ReasonCode;
+import shop.ggamf.ggamf.domain.reasonCode.ReasonCodeRepository;
 import shop.ggamf.ggamf.domain.room.Room;
 import shop.ggamf.ggamf.domain.room.RoomRepository;
 import shop.ggamf.ggamf.domain.user.User;
@@ -25,7 +27,8 @@ public class DevInit extends DummyEntity {
     @Bean
     public CommandLineRunner dataSetting(UserRepository userRepository,
             RoomRepository roomRepository,
-            GameCodeRepository gameCodeRepository, EnterRepository enterRepository, FollowRepository followRepository) {
+            GameCodeRepository gameCodeRepository, EnterRepository enterRepository, FollowRepository followRepository,
+            ReasonCodeRepository reasonCodeRepository) {
 
         return (args) -> {
             // User : 유저
@@ -59,6 +62,10 @@ public class DevInit extends DummyEntity {
             Follow follow4 = followRepository.save(newFollow(nana, cos));
             Follow friend5 = followRepository.save(newFriend(cos, vovo));
             Follow friend6 = followRepository.save(newFriend(toto, cos));
+            // ReasonCode : 신고카테고리
+            ReasonCode reason1 = reasonCodeRepository.save(newReasonCode("욕설"));
+            ReasonCode reason2 = reasonCodeRepository.save(newReasonCode("탈주"));
+            ReasonCode reason3 = reasonCodeRepository.save(newReasonCode("기타"));
         };
     }
 }

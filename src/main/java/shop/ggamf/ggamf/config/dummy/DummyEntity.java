@@ -7,6 +7,7 @@ import shop.ggamf.ggamf.config.enums.UserStateEnum;
 import shop.ggamf.ggamf.domain.enter.Enter;
 import shop.ggamf.ggamf.domain.follow.Follow;
 import shop.ggamf.ggamf.domain.gameCode.GameCode;
+import shop.ggamf.ggamf.domain.reasonCode.ReasonCode;
 import shop.ggamf.ggamf.domain.room.Room;
 import shop.ggamf.ggamf.domain.user.User;
 
@@ -76,5 +77,12 @@ public abstract class DummyEntity {
                 .accept(true)
                 .build();
         return follow;
+    }
+
+    protected ReasonCode newReasonCode(String reason) {
+        ReasonCode reasonCode = ReasonCode.builder()
+                .reason(reason)
+                .build();
+        return reasonCode;
     }
 }
