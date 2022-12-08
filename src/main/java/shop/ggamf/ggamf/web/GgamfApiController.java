@@ -18,11 +18,13 @@ import shop.ggamf.ggamf.config.auth.LoginUser;
 import shop.ggamf.ggamf.config.exception.CustomApiException;
 import shop.ggamf.ggamf.dto.GgamfReqDto.AcceptGgamfReqDto;
 import shop.ggamf.ggamf.dto.GgamfReqDto.FollowGgamfReqDto;
+import shop.ggamf.ggamf.dto.GgamfReqDto.ReportGgamfReqDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.AcceptGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.CancelGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.DeleteGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.FollowGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.RejectGgamfRespDto;
+import shop.ggamf.ggamf.dto.GgamfRespDto.ReportGgamfRespDto;
 import shop.ggamf.ggamf.dto.ResponseDto;
 import shop.ggamf.ggamf.service.GgamfService;
 
@@ -94,4 +96,22 @@ public class GgamfApiController {
         return new ResponseEntity<>(new ResponseDto<>("겜프요청취소 완료", cancelGgamfRespDto), HttpStatus.OK);
     }
 
+    // 겜프 신고
+    @PostMapping("ggamf/user/{userId}/report/{badUserId}")
+    public ResponseEntity<?> reportGgamf(@RequestBody ReportGgamfReqDto reportGgamfReqDto,
+            @PathVariable Long userId,
+            @PathVariable Long badUserId,
+            @AuthenticationPrincipal LoginUser loginUser) {
+        log.debug("디버그 : 겜프 신고 컨트롤러 호출");
+        if (loginUser.getUser().getId() != userId) {
+            throw new CustomApiException("로그인 유저와 신고하는 유저가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
+        }
+        if (userId == badUserId) {
+            throw new CustomApiException("본인을 신고할 수 없습니다.", HttpStatus.BAD_REQUEST);
+        }
+        reportGgamfReqDto.setUserId(userId);
+        reportGgamfReqDto.setBadUserId(badUserId);
+        ReportGgamfRespDto reportGgamfRespDto = ggamfService.겜프신고(reportGgamfReqDto);
+        return new ResponseEntity<>(new ResponseDto<>("겜프신고 완료", reportGgamfRespDto), HttpStatus.CREATED);
+    }
 }

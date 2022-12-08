@@ -10,15 +10,21 @@ import lombok.RequiredArgsConstructor;
 import shop.ggamf.ggamf.config.exception.CustomApiException;
 import shop.ggamf.ggamf.domain.follow.Follow;
 import shop.ggamf.ggamf.domain.follow.FollowRepository;
+import shop.ggamf.ggamf.domain.reasonCode.ReasonCode;
+import shop.ggamf.ggamf.domain.reasonCode.ReasonCodeRepository;
+import shop.ggamf.ggamf.domain.report.Report;
+import shop.ggamf.ggamf.domain.report.ReportRepository;
 import shop.ggamf.ggamf.domain.user.User;
 import shop.ggamf.ggamf.domain.user.UserRepository;
 import shop.ggamf.ggamf.dto.GgamfReqDto.AcceptGgamfReqDto;
 import shop.ggamf.ggamf.dto.GgamfReqDto.FollowGgamfReqDto;
+import shop.ggamf.ggamf.dto.GgamfReqDto.ReportGgamfReqDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.AcceptGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.CancelGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.DeleteGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.FollowGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.RejectGgamfRespDto;
+import shop.ggamf.ggamf.dto.GgamfRespDto.ReportGgamfRespDto;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -28,6 +34,8 @@ public class GgamfService {
     private final Logger log = LoggerFactory.getLogger(getClass());
     private final FollowRepository followRepository;
     private final UserRepository userRepository;
+    private final ReportRepository reportRepository;
+    private final ReasonCodeRepository reasonCodeRepository;
 
     @Transactional
     public FollowGgamfRespDto 겜프요청(FollowGgamfReqDto followGgamfReqDto) {
@@ -104,5 +112,23 @@ public class GgamfService {
         }
         followRepository.delete(followPS);
         return new CancelGgamfRespDto(followId);
+    }
+
+    @Transactional
+    public ReportGgamfRespDto 겜프신고(ReportGgamfReqDto reportGgamfReqDto) {
+        log.debug("디버그 : 겜프신고 서비스 호출");
+        // 신고하는자
+        User follower = userRepository.findById(reportGgamfReqDto.getUserId())
+                .orElseThrow(() -> new CustomApiException("내 정보가 없습니다", HttpStatus.FORBIDDEN));
+        // 신고당하는자
+        User following = userRepository.findById(reportGgamfReqDto.getBadUserId())
+                .orElseThrow(() -> new CustomApiException("신고할 유저 정보가 없습니다", HttpStatus.FORBIDDEN));
+        // 신고내용코드
+        ReasonCode reasonCode = reasonCodeRepository.findById(reportGgamfReqDto.getReasonCodeId())
+                .orElseThrow(() -> new CustomApiException("신고 내용 코드가 없습니다", HttpStatus.FORBIDDEN));
+        // 실행
+        Report report = reportGgamfReqDto.toEntity(follower, following, reasonCode);
+        Report reportPS = reportRepository.save(report);
+        return new ReportGgamfRespDto(reportPS);
     }
 }

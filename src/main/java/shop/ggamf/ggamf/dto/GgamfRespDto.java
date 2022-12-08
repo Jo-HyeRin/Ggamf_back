@@ -3,6 +3,7 @@ package shop.ggamf.ggamf.dto;
 import lombok.Getter;
 import lombok.Setter;
 import shop.ggamf.ggamf.domain.follow.Follow;
+import shop.ggamf.ggamf.domain.report.Report;
 
 public class GgamfRespDto {
 
@@ -70,6 +71,24 @@ public class GgamfRespDto {
 
         public CancelGgamfRespDto(Long followId) {
             this.followId = followId;
+        }
+    }
+
+    @Setter
+    @Getter
+    public static class ReportGgamfRespDto {
+        private Long reportId;
+        private String submitUserNick;
+        private String badUserNick;
+        private String reason;
+        private String detail;
+
+        public ReportGgamfRespDto(Report report) {
+            this.reportId = report.getId();
+            this.submitUserNick = report.getSubmitUser().getNickname();
+            this.badUserNick = report.getBadUser().getNickname();
+            this.reason = report.getReasonCode().getReason();
+            this.detail = report.getDetail();
         }
     }
 
