@@ -40,25 +40,31 @@ public class GgamfApiController {
     private final GgamfService ggamfService;
 
     // 겜프 요청
-    @PostMapping("/ggamf/follow/{followingId}")
+    @PostMapping("/ggamf/user/{userId}/follow/{followingId}")
     public ResponseEntity<?> followGgamf(@RequestBody FollowGgamfReqDto followGgamfReqDto,
-            @PathVariable Long followingId,
+            @PathVariable Long userId, @PathVariable Long followingId,
             @AuthenticationPrincipal LoginUser loginUser) {
         log.debug("디버그 : 겜프 요청 컨트롤러 호출");
-        followGgamfReqDto.setFollowerId(loginUser.getUser().getId());
+        if (loginUser.getUser().getId() != userId) {
+            throw new CustomApiException("로그인 유저와 요청 유저가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
+        }
+        followGgamfReqDto.setFollowerId(userId);
         followGgamfReqDto.setFollowingId(followingId);
         FollowGgamfRespDto followGgamfRespDto = ggamfService.겜프요청(followGgamfReqDto);
         return new ResponseEntity<>(new ResponseDto<>("겜프 요청 완료", followGgamfRespDto), HttpStatus.CREATED);
     }
 
     // 겜프 수락
-    @PutMapping("/ggamf/accept/{followId}")
-    public ResponseEntity<?> acceptGgamf(@RequestBody AcceptGgamfReqDto acceptGgamfReqDto,
+    @PutMapping("/ggamf/user/{userId}/accept/{followId}")
+    public ResponseEntity<?> acceptGgamf(@RequestBody AcceptGgamfReqDto acceptGgamfReqDto, @PathVariable Long userId,
             @PathVariable Long followId,
             @AuthenticationPrincipal LoginUser loginUser) {
         log.debug("디버그 : 겜프 수락 컨트롤러 호출");
+        if (loginUser.getUser().getId() != userId) {
+            throw new CustomApiException("로그인 유저와 요청 유저가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
+        }
         acceptGgamfReqDto.setFollowId(followId);
-        acceptGgamfReqDto.setUserId(loginUser.getUser().getId());
+        acceptGgamfReqDto.setUserId(userId);
         AcceptGgamfRespDto acceptGgamfRespDto = ggamfService.겜프수락(acceptGgamfReqDto);
         return new ResponseEntity<>(new ResponseDto<>("겜프 수락 완료", acceptGgamfRespDto), HttpStatus.CREATED);
     }
@@ -69,7 +75,7 @@ public class GgamfApiController {
             @AuthenticationPrincipal LoginUser loginUser) {
         log.debug("디버그 : 겜프 삭제 컨트롤러 호출");
         if (loginUser.getUser().getId() != userId) {
-            throw new CustomApiException("당신은 삭제 권한이 없습니다.", HttpStatus.BAD_REQUEST);
+            throw new CustomApiException("로그인 유저와 요청 유저가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
         DeleteGgamfRespDto deleteGgamfRespDto = ggamfService.겜프삭제(userId, followId);
         return new ResponseEntity<>(new ResponseDto<>("겜프 삭제 완료", deleteGgamfRespDto), HttpStatus.OK);
@@ -81,7 +87,7 @@ public class GgamfApiController {
             @AuthenticationPrincipal LoginUser loginUser) {
         log.debug("디버그 : 겜프 거절 컨트롤러 호출");
         if (loginUser.getUser().getId() != userId) {
-            throw new CustomApiException("당신은 거절 권한이 없습니다.", HttpStatus.BAD_REQUEST);
+            throw new CustomApiException("로그인 유저와 요청 유저가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
         RejectGgamfRespDto rejectGgamfRespDto = ggamfService.겜프거절(userId, followId);
         return new ResponseEntity<>(new ResponseDto<>("겜프 거절 완료", rejectGgamfRespDto), HttpStatus.OK);
@@ -93,7 +99,7 @@ public class GgamfApiController {
             @AuthenticationPrincipal LoginUser loginUser) {
         log.debug("디버그 : 겜프 요청 취소 컨트롤러 호출");
         if (loginUser.getUser().getId() != userId) {
-            throw new CustomApiException("당신은 취소 권한이 없습니다.", HttpStatus.BAD_REQUEST);
+            throw new CustomApiException("로그인 유저와 요청 유저가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
         CancelGgamfRespDto cancelGgamfRespDto = ggamfService.겜프요청취소(userId, followId);
         return new ResponseEntity<>(new ResponseDto<>("겜프요청취소 완료", cancelGgamfRespDto), HttpStatus.OK);
@@ -107,7 +113,7 @@ public class GgamfApiController {
             @AuthenticationPrincipal LoginUser loginUser) {
         log.debug("디버그 : 겜프 신고 컨트롤러 호출");
         if (loginUser.getUser().getId() != userId) {
-            throw new CustomApiException("로그인 유저와 신고하는 유저가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
+            throw new CustomApiException("로그인 유저와 요청 유저가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
         if (userId == badUserId) {
             throw new CustomApiException("본인을 신고할 수 없습니다.", HttpStatus.BAD_REQUEST);
@@ -119,15 +125,18 @@ public class GgamfApiController {
     }
 
     // 겜프 목록 보기
-    @GetMapping("ggamf/list")
-    public ResponseEntity<?> findGgamfList(@AuthenticationPrincipal LoginUser loginUser) {
+    @GetMapping("ggamf/user/{userId}/list")
+    public ResponseEntity<?> findGgamfList(@PathVariable Long userId, @AuthenticationPrincipal LoginUser loginUser) {
         log.debug("디버그 : 겜프 목록 보기 컨트롤러 호출");
-        GgamfListRespDto ggamfListRespDto = ggamfService.겜프목록보기(loginUser.getUser().getId());
+        if (loginUser.getUser().getId() != userId) {
+            throw new CustomApiException("로그인 유저와 요청 유저가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
+        }
+        GgamfListRespDto ggamfListRespDto = ggamfService.겜프목록보기(userId);
         return new ResponseEntity<>(new ResponseDto<>("겜프목록보기 완료", ggamfListRespDto), HttpStatus.OK);
     }
 
     // 추천 겜프 목록 보기
-    @GetMapping("ggamf/recommend/{userId}")
+    @GetMapping("ggamf/user/{userId}/recommend")
     public ResponseEntity<?> recommendGgamfList(@PathVariable Long userId,
             @AuthenticationPrincipal LoginUser loginUser) {
         log.debug("디버그 : 추천 겜프 목록 보기 컨트롤러 호출");

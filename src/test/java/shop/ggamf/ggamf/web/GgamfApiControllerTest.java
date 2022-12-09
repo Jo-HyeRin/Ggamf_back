@@ -96,22 +96,24 @@ public class GgamfApiControllerTest extends DummyEntity {
         Enter enter111 = enterRepository.save(endEnter(kaka, endroom1));
         Enter enter2 = enterRepository.save(newEnter(cos, room2));
         Enter enter3 = enterRepository.save(newEnter(ssar, room3));
-        Enter endEnter1 = enterRepository.save(endEnter(ssar, endroom4));        
+        Enter endEnter1 = enterRepository.save(endEnter(ssar, endroom4));
     }
 
     @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
     public void followGgamf_test() throws Exception {
         // given
+        Long userId = 1L;
         Long followingId = 3L;
         FollowGgamfReqDto followGgamfReqDto = new FollowGgamfReqDto();
+        followGgamfReqDto.setFollowerId(userId);
         followGgamfReqDto.setFollowingId(followingId);
         String requestBody = om.writeValueAsString(followGgamfReqDto);
         System.out.println("테스트 : " + requestBody);
 
         // when
         ResultActions resultActions = mvc
-                .perform(MockMvcRequestBuilders.post("/s/api/ggamf/follow/" + followingId)
+                .perform(MockMvcRequestBuilders.post("/s/api/ggamf/user/" + userId + "/follow/" + followingId)
                         .content(requestBody)
                         .contentType(APPLICATION_JSON_UTF8));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
@@ -126,14 +128,16 @@ public class GgamfApiControllerTest extends DummyEntity {
     @Test
     public void acceptGgamf_test() throws Exception {
         // given
+        Long userId = 1L;
         Long followId = 4L;
         AcceptGgamfReqDto acceptGgamfReqDto = new AcceptGgamfReqDto();
+        acceptGgamfReqDto.setUserId(userId);
         acceptGgamfReqDto.setFollowId(followId);
         String requestBody = om.writeValueAsString(acceptGgamfReqDto);
         System.out.println("테스트 : " + requestBody);
         // when
         ResultActions resultActions = mvc
-                .perform(MockMvcRequestBuilders.put("/s/api/ggamf/accept/" + followId)
+                .perform(MockMvcRequestBuilders.put("/s/api/ggamf/user/" + userId + "/accept/" + followId)
                         .content(requestBody).contentType(APPLICATION_JSON_UTF8));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
@@ -230,9 +234,12 @@ public class GgamfApiControllerTest extends DummyEntity {
     @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
     public void findGgamfList_test() throws Exception {
+        // given
+        Long userId = 1L;
+
         // when
         ResultActions resultActions = mvc
-                .perform(MockMvcRequestBuilders.get("/s/api/ggamf/list"));
+                .perform(MockMvcRequestBuilders.get("/s/api/ggamf/user/" + userId + "/list"));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
 
@@ -250,7 +257,7 @@ public class GgamfApiControllerTest extends DummyEntity {
 
         // when
         ResultActions resultActions = mvc
-                .perform(MockMvcRequestBuilders.get("/s/api/ggamf/recommend/" + userId));
+                .perform(MockMvcRequestBuilders.get("/s/api/ggamf/user/" + userId + "/recommend"));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
 
