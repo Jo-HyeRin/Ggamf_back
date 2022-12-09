@@ -14,10 +14,9 @@ import shop.ggamf.ggamf.config.auth.LoginUser;
 import shop.ggamf.ggamf.config.enums.UserEnum;
 import shop.ggamf.ggamf.config.exception.CustomApiException;
 import shop.ggamf.ggamf.domain.report.ReportRepositoryQuery;
+import shop.ggamf.ggamf.domain.report.ReportRespDto;
 import shop.ggamf.ggamf.domain.user.User;
 import shop.ggamf.ggamf.domain.user.UserRepository;
-import shop.ggamf.ggamf.dto.AdminRespDto.ReportRespDto;
-
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -29,11 +28,11 @@ public class AdminService {
     private final ReportRepositoryQuery reportRepositoryQuery;
     private static LoginUser loginUser;
 
-    public List <ReportRespDto> 신고목록보기(Long id) {
+    public List<ReportRespDto> 신고목록보기(Long id) {
         Optional<User> userOP = userRepository.findById(id);
         log.debug("디버그 : username : " + userOP.get().getUsername());
         log.debug("디버그 : role : " + userOP.get().getRole());
-        
+
         if (!userOP.isPresent()) {
             userRepository.findById(id)
                     .orElseThrow(() -> (new CustomApiException("해당유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST)));

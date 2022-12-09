@@ -13,11 +13,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import shop.ggamf.ggamf.dto.AdminRespDto.ReportRespDto;
-
 @Repository
 public class ReportRepositoryQuery {
-    
+
     @Autowired
     private EntityManager em;
 
@@ -27,7 +25,7 @@ public class ReportRepositoryQuery {
         StringBuffer sb = new StringBuffer();
         sb.append(
                 "select r.id, rs.reason, r.created_at, u.name submitUser, u.name badUser, u.state userState from report r inner join reason_code rs on rs.id = r.reason_code_id inner join users u on u.id = r.submit_user_id");
-        
+
         Query query = em.createNativeQuery(sb.toString());
 
         JpaResultMapper result = new JpaResultMapper();
@@ -35,11 +33,11 @@ public class ReportRepositoryQuery {
             List<ReportRespDto> reportRespDto = result.list(query, ReportRespDto.class);
             log.debug("디버그 : reportRespDto : " + reportRespDto.get(0).getId());
             return reportRespDto;
-                    
+
         } catch (NoResultException e) {
             List<ReportRespDto> reportRespDto = new ArrayList<>();
             return reportRespDto;
-            }
         }
-                
     }
+
+}
