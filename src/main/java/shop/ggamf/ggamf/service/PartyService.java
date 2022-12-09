@@ -96,7 +96,7 @@ public class PartyService {
             throw new CustomApiException("이미 종료된 방입니다", HttpStatus.BAD_REQUEST);
         }
         if (enterPS.getRoom().getUser().getId() == exitRoomReqDto.getUserId()) {
-            throw new CustomApiException("당신이 방장입니다", HttpStatus.BAD_REQUEST);
+            throw new CustomApiException("당신이 방장입니다 나갈 수 없습니다 종료하세요", HttpStatus.BAD_REQUEST);
         }
         // 실행
         enterPS.notStayRoom();
