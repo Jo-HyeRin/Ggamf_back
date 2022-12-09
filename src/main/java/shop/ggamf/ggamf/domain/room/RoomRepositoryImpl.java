@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import lombok.RequiredArgsConstructor;
 
 interface Dao {
-    // 추천 겜프 목록
+    // 내가 가장 최근에 종료한 방
     List<Room> findByUserIdEnd(@Param("userId") Long userId);
 }
 

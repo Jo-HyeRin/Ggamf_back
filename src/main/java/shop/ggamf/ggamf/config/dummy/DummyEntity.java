@@ -13,6 +13,7 @@ import shop.ggamf.ggamf.domain.reasonCode.ReasonCode;
 import shop.ggamf.ggamf.domain.room.Room;
 import shop.ggamf.ggamf.domain.starRate.StarRate;
 import shop.ggamf.ggamf.domain.user.User;
+import shop.ggamf.ggamf.service.UserService;
 
 public abstract class DummyEntity {
 
@@ -88,11 +89,24 @@ public abstract class DummyEntity {
         return enter;
     }
 
-    protected Follow newFollow(User follower, User following) {
+    // 신청보내기
+    protected Follow newFollowing(User users, User friend, Boolean accept) {
         Follow follow = Follow.builder()
-                .follower(follower)
-                .following(following)
-                .accept(false)
+                .users(users)
+                .follower(users)
+                .following(friend)
+                .accept(accept)
+                .build();
+        return follow;
+    }
+
+    // 받는사람같이입력하기
+    protected Follow newFollower(User users, User friend, Boolean accept) {
+        Follow follow = Follow.builder()
+                .users(users)
+                .follower(friend)
+                .following(users)
+                .accept(accept)
                 .build();
         return follow;
     }
@@ -105,16 +119,6 @@ public abstract class DummyEntity {
                 .rate(random.nextLong())
                 .build();
         return starRate;
-
-    }
-
-    protected Follow newFriend(User follower, User following) {
-        Follow follow = Follow.builder()
-                .follower(follower)
-                .following(following)
-                .accept(true)
-                .build();
-        return follow;
     }
 
     protected ReasonCode newReasonCode(String reason) {
