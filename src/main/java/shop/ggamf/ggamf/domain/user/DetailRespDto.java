@@ -9,9 +9,9 @@ import lombok.Setter;
 import shop.ggamf.ggamf.config.enums.UserEnum;
 
 @AllArgsConstructor
-    @NoArgsConstructor
-    @Setter
-    @Getter
+@NoArgsConstructor
+@Setter
+@Getter
 public class DetailRespDto {
         private BigInteger id;
         private String photo;

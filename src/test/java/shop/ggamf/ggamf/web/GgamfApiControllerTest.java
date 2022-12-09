@@ -18,10 +18,16 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import shop.ggamf.ggamf.config.dummy.DummyEntity;
+import shop.ggamf.ggamf.domain.enter.Enter;
+import shop.ggamf.ggamf.domain.enter.EnterRepository;
 import shop.ggamf.ggamf.domain.follow.Follow;
 import shop.ggamf.ggamf.domain.follow.FollowRepository;
+import shop.ggamf.ggamf.domain.gameCode.GameCode;
+import shop.ggamf.ggamf.domain.gameCode.GameCodeRepository;
 import shop.ggamf.ggamf.domain.reasonCode.ReasonCode;
 import shop.ggamf.ggamf.domain.reasonCode.ReasonCodeRepository;
+import shop.ggamf.ggamf.domain.room.Room;
+import shop.ggamf.ggamf.domain.room.RoomRepository;
 import shop.ggamf.ggamf.domain.user.User;
 import shop.ggamf.ggamf.domain.user.UserRepository;
 import shop.ggamf.ggamf.dto.GgamfReqDto.AcceptGgamfReqDto;
@@ -48,6 +54,12 @@ public class GgamfApiControllerTest extends DummyEntity {
     private UserRepository userRepository;
     @Autowired
     private ReasonCodeRepository reasonCodeRepository;
+    @Autowired
+    private RoomRepository roomRepository;
+    @Autowired
+    private GameCodeRepository gameCodeRepository;
+    @Autowired
+    private EnterRepository enterRepository;
 
     @BeforeEach
     public void setUp() {
@@ -70,6 +82,21 @@ public class GgamfApiControllerTest extends DummyEntity {
         ReasonCode reason1 = reasonCodeRepository.save(newReasonCode("욕설"));
         ReasonCode reason2 = reasonCodeRepository.save(newReasonCode("탈주"));
         ReasonCode reason3 = reasonCodeRepository.save(newReasonCode("기타"));
+        // GameCode : 게임카테고리
+        GameCode etc = gameCodeRepository.save(newGameCode("etc"));
+        GameCode LoL = gameCodeRepository.save(newGameCode("LoL"));
+        // Room : 파티방
+        Room endroom1 = roomRepository.save(endRoom("roomname1", ssar, LoL));
+        Room room2 = roomRepository.save(newRoom("roomname2", ssar, etc));
+        Room room3 = roomRepository.save(newRoom("roomname3", cos, LoL));
+        Room endroom4 = roomRepository.save(endRoom("roomname4", lala, etc));
+        // Enter : 방 참여 정보
+        Enter enter1 = enterRepository.save(endEnter(lala, endroom1));
+        Enter enter11 = enterRepository.save(endEnter(dada, endroom1));
+        Enter enter111 = enterRepository.save(endEnter(kaka, endroom1));
+        Enter enter2 = enterRepository.save(newEnter(cos, room2));
+        Enter enter3 = enterRepository.save(newEnter(ssar, room3));
+        Enter endEnter1 = enterRepository.save(endEnter(ssar, endroom4));        
     }
 
     @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
@@ -213,5 +240,23 @@ public class GgamfApiControllerTest extends DummyEntity {
         resultActions.andExpect(MockMvcResultMatchers.status().isOk());
         resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.followers.[0].nickName").value("nickvovo"));
         resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.followings.[0].nickName").value("nicktoto"));
+    }
+
+    @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    public void recommendGgamfList_test() throws Exception {
+        // given
+        Long userId = 1L;
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(MockMvcRequestBuilders.get("/s/api/ggamf/recommend/" + userId));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+        resultActions.andExpect(MockMvcResultMatchers.status().isOk());
+        // resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.followers.[0].nickName").value("nickvovo"));
+        // resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.followings.[0].nickName").value("nicktoto"));
     }
 }

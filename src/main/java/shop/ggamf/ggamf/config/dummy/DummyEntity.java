@@ -77,11 +77,34 @@ public abstract class DummyEntity {
         return room;
     }
 
+    protected Room endRoom(String roomname, User user, GameCode gameCode) {
+        Room room = Room.builder()
+                .user(user)
+                .gameCode(gameCode)
+                .gameName("게임이름" + roomname)
+                .roomName(roomname)
+                .totalPeople(5L)
+                .active(false)
+                .build();
+        return room;
+    }
+
     protected Enter newEnter(User user, Room room) {
         Enter enter = Enter.builder()
                 .user(user)
                 .room(room)
                 .stay(true)
+                .stayUntilEnd(false)
+                .build();
+        return enter;
+    }
+
+    protected Enter endEnter(User user, Room room) {
+        Enter enter = Enter.builder()
+                .user(user)
+                .room(room)
+                .stay(false)
+                .stayUntilEnd(true)
                 .build();
         return enter;
     }
@@ -131,10 +154,10 @@ public abstract class DummyEntity {
                 .build();
         return report;
     }
-    
+
     protected ReasonCode newReason(String reason) {
         ReasonCode reasonCode = ReasonCode.builder()
-        .reason(reason)
+                .reason(reason)
                 .build();
         return reasonCode;
     }

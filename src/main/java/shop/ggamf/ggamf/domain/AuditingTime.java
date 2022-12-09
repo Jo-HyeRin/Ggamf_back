@@ -20,11 +20,11 @@ public abstract class AuditingTime {
     // 수정시간
     @LastModifiedDate
     @Column(nullable = false)
-    protected LocalDateTime updatedAt; 
+    protected LocalDateTime updatedAt;
 
     // 생성시간
     @CreatedDate
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     protected LocalDateTime createdAt;
 
 }

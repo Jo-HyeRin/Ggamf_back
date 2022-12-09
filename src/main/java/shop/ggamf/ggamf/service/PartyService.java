@@ -1,5 +1,6 @@
 package shop.ggamf.ggamf.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -95,7 +96,7 @@ public class PartyService {
             throw new CustomApiException("이미 종료된 방입니다", HttpStatus.BAD_REQUEST);
         }
         if (enterPS.getRoom().getUser().getId() == exitRoomReqDto.getUserId()) {
-            throw new CustomApiException("당신이 방장입니다", HttpStatus.BAD_REQUEST);
+            throw new CustomApiException("당신이 방장입니다 나갈 수 없습니다 종료하세요", HttpStatus.BAD_REQUEST);
         }
         // 실행
         enterPS.notStayRoom();
@@ -118,12 +119,12 @@ public class PartyService {
         }
         roomPS.endRoom();
 
-        // Enter roomId = endRoomReqDto.getRoomId() 찾아서 stay = false 변경
+        // Enter roomId = endRoomReqDto.getRoomId(), stay=true 찾아서 stay = false 변경
         List<Enter> enterListPS = enterRepository.findByRoomId(endRoomReqDto.getRoomId());
 
         List<Enter> enterList = enterListPS.stream()
                 .map((enter) -> new Enter(enter.getId(), enter.getUser(),
-                        enter.getRoom(), false))
+                        enter.getRoom(), false, true))
                 .collect(Collectors.toList());
         List<Enter> enterListUpdate = enterRepository.saveAll(enterList);
 

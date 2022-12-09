@@ -10,12 +10,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import shop.ggamf.ggamf.config.exception.CustomApiException;
+import shop.ggamf.ggamf.domain.enter.Enter;
+import shop.ggamf.ggamf.domain.enter.EnterRepository;
 import shop.ggamf.ggamf.domain.follow.Follow;
 import shop.ggamf.ggamf.domain.follow.FollowRepository;
 import shop.ggamf.ggamf.domain.reasonCode.ReasonCode;
 import shop.ggamf.ggamf.domain.reasonCode.ReasonCodeRepository;
 import shop.ggamf.ggamf.domain.report.Report;
 import shop.ggamf.ggamf.domain.report.ReportRepository;
+import shop.ggamf.ggamf.domain.room.Room;
+import shop.ggamf.ggamf.domain.room.RoomRepository;
 import shop.ggamf.ggamf.domain.user.User;
 import shop.ggamf.ggamf.domain.user.UserRepository;
 import shop.ggamf.ggamf.dto.GgamfReqDto.AcceptGgamfReqDto;
@@ -26,6 +30,7 @@ import shop.ggamf.ggamf.dto.GgamfRespDto.CancelGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.DeleteGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.FollowGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.GgamfListRespDto;
+import shop.ggamf.ggamf.dto.GgamfRespDto.RecommendGgamfListRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.RejectGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.ReportGgamfRespDto;
 
@@ -39,6 +44,8 @@ public class GgamfService {
     private final UserRepository userRepository;
     private final ReportRepository reportRepository;
     private final ReasonCodeRepository reasonCodeRepository;
+    private final EnterRepository enterRepository;
+    private final RoomRepository roomRepository;
 
     @Transactional
     public FollowGgamfRespDto 겜프요청(FollowGgamfReqDto followGgamfReqDto) {
@@ -141,5 +148,16 @@ public class GgamfService {
         // 내가 수락해서 맺은 친구 목록
         List<Follow> followingListPS = followRepository.findByFollowingId(userId);
         return new GgamfListRespDto(followerListPS, followingListPS);
+    }
+
+    public RecommendGgamfListRespDto 추천겜프목록보기(Long userId) {
+        // 내가 방장인 경우 - 가장 최근 방에서 끝까지 함께 한 사람들 추천
+        List<Room> roomListPS = roomRepository.findByUserLatest(userId);
+        Room roomPS = roomRepository.findFirstByOrderByIdDesc();
+        List<Enter> latestEnterPS = enterRepository.findByLatestRoomId(roomPS.getId());
+
+        // 내가 참여한 경우
+        List<Enter> enterListPS = enterRepository.findRecommendByUserId(userId);
+        return new RecommendGgamfListRespDto(latestEnterPS, enterListPS);
     }
 }

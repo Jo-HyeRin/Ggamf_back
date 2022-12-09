@@ -81,10 +81,30 @@ public class UserRespDto {
         }
     }
 
+    // @AllArgsConstructor
+    // @NoArgsConstructor
+    // @Setter
+    // @Getter
+    // public static class DetailRespDto {
+    // private BigInteger id;
+    // private String photo;
+    // private String nickname;
+    // private String intro;
+    // }
+
+    // @AllArgsConstructor
+    // @NoArgsConstructor
+    // @Setter
+    // @Getter
+    // public static class StarRateRespDto {
+    // private BigInteger receiverId;
+    // private BigInteger rate;
+    // }
+
     @Setter
     @Getter
     public static class UpdateRoleRespDto {
-        private Long id; //서비스로직
+        private Long id; // 서비스로직
         private UserEnum role;
 
         public UpdateRoleRespDto(User user) {
@@ -98,10 +118,10 @@ public class UserRespDto {
     // @Setter
     // @Getter
     // public static class DetailRespDto {
-    //     private BigInteger id;
-    //     private String photo;
-    //     private String nickname;
-    //     private String intro;
+    // private BigInteger id;
+    // private String photo;
+    // private String nickname;
+    // private String intro;
     // }
 
     // @AllArgsConstructor
@@ -109,8 +129,8 @@ public class UserRespDto {
     // @Setter
     // @Getter
     // public static class StarRateRespDto {
-    //     private BigInteger receiverId;
-    //     private BigInteger rate;
+    // private BigInteger receiverId;
+    // private BigInteger rate;
     // }
 
     @Setter
