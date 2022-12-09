@@ -141,4 +141,33 @@ public class GgamfRespDto {
             }
         }
     }
+
+    @Setter
+    @Getter
+    public static class RecommendGgamfListRespDto {
+
+        List<EnterDto> latests; // 내가 최근에 닫은 방 유저들
+        List<EnterDto> enters; // 내가 참여했던 방 유저들
+
+        public RecommendGgamfListRespDto(List<Enter> latests, List<Enter> enters) {
+            this.latests = latests.stream().map((enter) -> new EnterDto(enter)).collect(Collectors.toList());
+            this.enters = enters.stream().map((enter) -> new EnterDto(enter)).collect(Collectors.toList());
+        }
+
+        @Setter
+        @Getter
+        public class EnterDto {
+            private Long friendId;
+            private String photo;
+            private String nickName;
+            private String intro;
+
+            public EnterDto(Enter enter) {
+                this.friendId = enter.getUser().getId();
+                this.photo = enter.getUser().getPhoto();
+                this.nickName = enter.getUser().getNickname();
+                this.intro = enter.getUser().getIntro();
+            }
+        }
+    }
 }

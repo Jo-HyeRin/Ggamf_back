@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import shop.ggamf.ggamf.config.exception.CustomApiException;
+import shop.ggamf.ggamf.domain.enter.Enter;
 import shop.ggamf.ggamf.domain.enter.EnterRepository;
 import shop.ggamf.ggamf.domain.follow.Follow;
 import shop.ggamf.ggamf.domain.follow.FollowRepository;
@@ -17,6 +18,7 @@ import shop.ggamf.ggamf.domain.reasonCode.ReasonCode;
 import shop.ggamf.ggamf.domain.reasonCode.ReasonCodeRepository;
 import shop.ggamf.ggamf.domain.report.Report;
 import shop.ggamf.ggamf.domain.report.ReportRepository;
+import shop.ggamf.ggamf.domain.room.Room;
 import shop.ggamf.ggamf.domain.room.RoomRepository;
 import shop.ggamf.ggamf.domain.user.User;
 import shop.ggamf.ggamf.domain.user.UserRepository;
@@ -28,6 +30,7 @@ import shop.ggamf.ggamf.dto.GgamfRespDto.CancelGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.DeleteGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.FollowGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.GgamfListRespDto;
+import shop.ggamf.ggamf.dto.GgamfRespDto.RecommendGgamfListRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.RejectGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.ReportGgamfRespDto;
 
@@ -145,5 +148,22 @@ public class GgamfService {
         // 내가 수락해서 맺은 친구 목록
         List<Follow> followingListPS = followRepository.findByFollowingId(userId);
         return new GgamfListRespDto(followerListPS, followingListPS);
+    }
+
+    public RecommendGgamfListRespDto 추천겜프목록보기(Long userId) {
+        // 내가 방장일 때
+        // 가장 최근 방 찾기
+        List<Room> roomListPS = roomRepository.findByUserIdEnd(userId, 1);
+        log.debug("디버그 : roomPS" + roomListPS.get(0).getId());
+        // 방 종료까지 함께한 인원 셀렉하기
+        List<Enter> latestPS = enterRepository.findByRoomIdEnd(roomListPS.get(0).getId());
+
+        // 내가 참여했을 때
+        // 내가 참여했던 최근 방
+        List<Enter> enterListPS = enterRepository.findTogether(userId);
+        Enter enterPS = enterRepository.findFirstByOrderByUpdatedAtDesc();
+        log.debug("디버그 : roomPS" + enterPS.getRoom().getId());
+
+        return new RecommendGgamfListRespDto(latestPS, enterListPS);
     }
 }

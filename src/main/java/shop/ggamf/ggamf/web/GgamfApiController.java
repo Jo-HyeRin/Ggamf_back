@@ -25,6 +25,7 @@ import shop.ggamf.ggamf.dto.GgamfRespDto.CancelGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.DeleteGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.FollowGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.GgamfListRespDto;
+import shop.ggamf.ggamf.dto.GgamfRespDto.RecommendGgamfListRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.RejectGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.ReportGgamfRespDto;
 import shop.ggamf.ggamf.dto.ResponseDto;
@@ -69,7 +70,7 @@ public class GgamfApiController {
     }
 
     // 겜프 삭제
-    @DeleteMapping("ggamf/user/{userId}/unfollow/{followId}")
+    @DeleteMapping("/ggamf/user/{userId}/unfollow/{followId}")
     public ResponseEntity<?> deleteGgamf(@PathVariable Long userId, @PathVariable Long followId,
             @AuthenticationPrincipal LoginUser loginUser) {
         log.debug("디버그 : 겜프 삭제 컨트롤러 호출");
@@ -81,7 +82,7 @@ public class GgamfApiController {
     }
 
     // 겜프 거절
-    @DeleteMapping("ggamf/user/{userId}/reject/{followId}")
+    @DeleteMapping("/ggamf/user/{userId}/reject/{followId}")
     public ResponseEntity<?> rejectGgamf(@PathVariable Long userId, @PathVariable Long followId,
             @AuthenticationPrincipal LoginUser loginUser) {
         log.debug("디버그 : 겜프 거절 컨트롤러 호출");
@@ -93,7 +94,7 @@ public class GgamfApiController {
     }
 
     // 겜프 요청 취소
-    @DeleteMapping("ggamf/user/{userId}/cancel/{followId}")
+    @DeleteMapping("/ggamf/user/{userId}/cancel/{followId}")
     public ResponseEntity<?> cancelGgamf(@PathVariable Long userId, @PathVariable Long followId,
             @AuthenticationPrincipal LoginUser loginUser) {
         log.debug("디버그 : 겜프 요청 취소 컨트롤러 호출");
@@ -105,7 +106,7 @@ public class GgamfApiController {
     }
 
     // 겜프 신고
-    @PostMapping("ggamf/user/{userId}/report/{badUserId}")
+    @PostMapping("/ggamf/user/{userId}/report/{badUserId}")
     public ResponseEntity<?> reportGgamf(@RequestBody ReportGgamfReqDto reportGgamfReqDto,
             @PathVariable Long userId,
             @PathVariable Long badUserId,
@@ -124,7 +125,7 @@ public class GgamfApiController {
     }
 
     // 겜프 목록 보기
-    @GetMapping("ggamf/user/{userId}/list")
+    @GetMapping("/ggamf/user/{userId}/list")
     public ResponseEntity<?> findGgamfList(@PathVariable Long userId, @AuthenticationPrincipal LoginUser loginUser) {
         log.debug("디버그 : 겜프 목록 보기 컨트롤러 호출");
         if (loginUser.getUser().getId() != userId) {
@@ -132,5 +133,17 @@ public class GgamfApiController {
         }
         GgamfListRespDto ggamfListRespDto = ggamfService.겜프목록보기(userId);
         return new ResponseEntity<>(new ResponseDto<>("겜프목록보기 완료", ggamfListRespDto), HttpStatus.OK);
+    }
+
+    // 추천 겜프 목록 보기
+    @GetMapping("/ggamf/user/{userId}/recommend")
+    public ResponseEntity<?> recommendGgamfList(@PathVariable Long userId,
+            @AuthenticationPrincipal LoginUser loginUser) {
+        log.debug("디버그 : 추천 겜프 목록 보기 컨트롤러 호출");
+        if (loginUser.getUser().getId() != userId) {
+            throw new CustomApiException("로그인 유저와 요청 유저가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
+        }
+        RecommendGgamfListRespDto recommendGgamfListRespDto = ggamfService.추천겜프목록보기(userId);
+        return new ResponseEntity<>(new ResponseDto<>("겜프목록보기 완료", recommendGgamfListRespDto), HttpStatus.OK);
     }
 }
