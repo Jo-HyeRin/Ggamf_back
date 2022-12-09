@@ -51,23 +51,24 @@ public class GgamfService {
     public FollowGgamfRespDto 겜프요청(FollowGgamfReqDto followGgamfReqDto) {
         log.debug("디버그 : 겜프요청 서비스 호출");
         // 나
-        User follower = userRepository.findById(followGgamfReqDto.getFollowerId())
+        User user = userRepository.findById(followGgamfReqDto.getUserId())
                 .orElseThrow(() -> new CustomApiException("내 유저 정보가 없습니다", HttpStatus.FORBIDDEN));
         // 요청받은사람
-        User following = userRepository.findById(followGgamfReqDto.getFollowingId())
+        User friend = userRepository.findById(followGgamfReqDto.getFriendId())
                 .orElseThrow(() -> new CustomApiException("해당 유저가 없습니다", HttpStatus.FORBIDDEN));
-        // // 검증 - 고민중
-        // if (followRepository.findFollow(followGgamfReqDto.getFollowerId(),
-        // followGgamfReqDto.getFollowingId()) != null) {
-        // throw new CustomApiException("당신은 이미 요청했습니다. 기다리세요.",
-        // HttpStatus.BAD_REQUEST);
-        // } else if (followRepository.findFollow(followGgamfReqDto.getFollowingId(),
-        // followGgamfReqDto.getFollowerId()) != null) {
-        // throw new CustomApiException("상대가 이미 요청했습니다.", HttpStatus.BAD_REQUEST);
-        // }
-        Follow follow = followGgamfReqDto.toEntity(follower, following);
-        Follow followPS = followRepository.save(follow);
-        return new FollowGgamfRespDto(followPS);
+        log.debug("디버그 : " + user.getNickname());
+        log.debug("디버그 : " + friend.getNickname());
+        if (followRepository.findByBothId(followGgamfReqDto.getUserId(), followGgamfReqDto.getFriendId()) != null
+                || followRepository.findByBothId(followGgamfReqDto.getFriendId(),
+                        followGgamfReqDto.getUserId()) != null) {
+            throw new CustomApiException("상대방과 이미 겜프이거나 이미 겜프 신청이 되어있는 상태입니다.",
+                    HttpStatus.BAD_REQUEST);
+        }
+        Follow myFollow = followGgamfReqDto.toEntity(user, friend);
+        Follow myFollowPS = followRepository.save(myFollow);
+        Follow yourFollow = followGgamfReqDto.toEntity(friend, user);
+        Follow yourFollowPS = followRepository.save(yourFollow);
+        return new FollowGgamfRespDto(myFollowPS, yourFollowPS);
     }
 
     @Transactional
@@ -142,13 +143,13 @@ public class GgamfService {
         return new ReportGgamfRespDto(reportPS);
     }
 
-    public GgamfListRespDto 겜프목록보기(Long userId) {
-        // 내가 요청해서 맺은 친구 목록
-        List<Follow> followerListPS = followRepository.findByFollowerId(userId);
-        // 내가 수락해서 맺은 친구 목록
-        List<Follow> followingListPS = followRepository.findByFollowingId(userId);
-        return new GgamfListRespDto(followerListPS, followingListPS);
-    }
+    // public GgamfListRespDto 겜프목록보기(Long userId) {
+    // // 내가 요청해서 맺은 친구 목록
+    // List<Follow> followerListPS = followRepository.findByFollowerId(userId);
+    // // 내가 수락해서 맺은 친구 목록
+    // List<Follow> followingListPS = followRepository.findByFollowingId(userId);
+    // return new GgamfListRespDto(followerListPS, followingListPS);
+    // }
 
     public RecommendGgamfListRespDto 추천겜프목록보기(Long userId) {
         // 내가 방장일 때

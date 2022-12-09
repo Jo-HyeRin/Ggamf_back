@@ -14,18 +14,31 @@ public class GgamfRespDto {
     @Setter
     @Getter
     public static class FollowGgamfRespDto {
-        private Long followerId;
-        private Long followingId;
+        // 내 입장
+        private Long userId;
+        private Long friendId;
+        private String friendNick;
+        private String friendPhoto;
         private Boolean accept;
-        private String followingNick;
-        private String followingPhoto;
 
-        public FollowGgamfRespDto(Follow follow) {
-            this.followerId = follow.getFollower().getId();
-            this.followingId = follow.getFollowing().getId();
-            this.accept = follow.getAccept();
-            this.followingNick = follow.getFollowing().getNickname();
-            this.followingPhoto = follow.getFollowing().getPhoto();
+        // 친구 입장 (확인용)
+        private Long userId2;
+        private Long friendId2;
+        private String friendNick2;
+        private String friendPhoto2;
+        private Boolean accept2;
+
+        public FollowGgamfRespDto(Follow myFollow, Follow yourFollow) {
+            this.userId = myFollow.getFollower().getId();
+            this.friendId = myFollow.getFollowing().getId();
+            this.friendNick = myFollow.getFollowing().getNickname();
+            this.friendPhoto = myFollow.getFollowing().getPhoto();
+            this.accept = myFollow.getAccept();
+            this.userId2 = yourFollow.getFollower().getId();
+            this.friendId2 = yourFollow.getFollowing().getId();
+            this.friendNick2 = yourFollow.getFollowing().getNickname();
+            this.friendPhoto2 = yourFollow.getFollowing().getPhoto();
+            this.accept2 = yourFollow.getAccept();
         }
     }
 

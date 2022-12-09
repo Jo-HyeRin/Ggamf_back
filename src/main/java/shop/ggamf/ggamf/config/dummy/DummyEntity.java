@@ -88,11 +88,22 @@ public abstract class DummyEntity {
         return enter;
     }
 
-    protected Follow newFollow(User follower, User following) {
+    protected Follow newFollowing(User user, User following, Boolean accept) {
         Follow follow = Follow.builder()
-                .follower(follower)
+                .user(user)
+                .follower(user)
                 .following(following)
-                .accept(false)
+                .accept(accept)
+                .build();
+        return follow;
+    }
+
+    protected Follow newFollower(User user, User follower, Boolean accept) {
+        Follow follow = Follow.builder()
+                .user(user)
+                .follower(follower)
+                .following(user)
+                .accept(accept)
                 .build();
         return follow;
     }
@@ -106,15 +117,6 @@ public abstract class DummyEntity {
                 .build();
         return starRate;
 
-    }
-
-    protected Follow newFriend(User follower, User following) {
-        Follow follow = Follow.builder()
-                .follower(follower)
-                .following(following)
-                .accept(true)
-                .build();
-        return follow;
     }
 
     protected ReasonCode newReasonCode(String reason) {

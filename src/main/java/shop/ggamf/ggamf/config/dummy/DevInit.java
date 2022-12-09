@@ -73,12 +73,12 @@ public class DevInit extends DummyEntity {
             Enter endEnter9 = enterRepository.save(endEnter(bu, endRoom4));
             Enter endEnter10 = enterRepository.save(endEnter(vovo, endRoom4));
             // Follow : 겜프
-            Follow follow1 = followRepository.save(newFollow(cos, lala));
-            Follow follow2 = followRepository.save(newFollow(cos, kaka));
-            Follow follow3 = followRepository.save(newFollow(dada, cos));
-            Follow follow4 = followRepository.save(newFollow(nana, cos));
-            Follow friend5 = followRepository.save(newFriend(cos, vovo));
-            Follow friend6 = followRepository.save(newFriend(toto, cos));
+            // Follow follow1 = followRepository.save(newFollow(cos, lala, false));
+            // Follow follow2 = followRepository.save(newFollow(cos, kaka, false));
+            // Follow follow3 = followRepository.save(newFollow(dada, cos, false));
+            // Follow follow4 = followRepository.save(newFollow(nana, cos, false));
+            // Follow friend5 = followRepository.save(newFriend(cos, vovo, true));
+            // Follow friend6 = followRepository.save(newFriend(toto, cos, true));
             // ReasonCode : 신고카테고리
             ReasonCode reason1 = reasonCodeRepository.save(newReasonCode("욕설"));
             ReasonCode reason2 = reasonCodeRepository.save(newReasonCode("탈주"));

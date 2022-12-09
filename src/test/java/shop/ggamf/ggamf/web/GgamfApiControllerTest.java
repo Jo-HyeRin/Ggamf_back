@@ -64,20 +64,22 @@ public class GgamfApiControllerTest extends DummyEntity {
     @BeforeEach
     public void setUp() {
         // User : 유저
-        User ssar = userRepository.save(newUser("ssar"));
-        User cos = userRepository.save(newUser("cos"));
-        User lala = userRepository.save(newUser("lala"));
-        User dada = userRepository.save(newUser("dada"));
-        User kaka = userRepository.save(newUser("kaka"));
-        User vovo = userRepository.save(newUser("vovo"));
-        User toto = userRepository.save(newUser("toto"));
+        User ssar1 = userRepository.save(newUser("ssar1"));
+        User cos2 = userRepository.save(newUser("cos2"));
+        User lala3 = userRepository.save(newUser("lala3"));
+        User dada4 = userRepository.save(newUser("dada4"));
+        User kaka5 = userRepository.save(newUser("kaka5"));
+        User vovo6 = userRepository.save(newUser("vovo6"));
+        User toto7 = userRepository.save(newUser("toto7"));
         // Follow : 겜프
-        Follow follow1 = followRepository.save(newFollow(ssar, cos));
-        Follow follow2 = followRepository.save(newFollow(ssar, lala));
-        Follow follow3 = followRepository.save(newFollow(dada, ssar));
-        Follow follow4 = followRepository.save(newFollow(kaka, ssar));
-        Follow friend5 = followRepository.save(newFriend(ssar, vovo));
-        Follow friend6 = followRepository.save(newFriend(toto, ssar));
+        Follow f1 = followRepository.save(newFollowing(ssar1, cos2, false));
+        Follow f2 = followRepository.save(newFollower(cos2, ssar1, false));
+        Follow f3 = followRepository.save(newFollowing(lala3, ssar1, false));
+        Follow f4 = followRepository.save(newFollower(ssar1, lala3, false));
+        Follow f5 = followRepository.save(newFollowing(ssar1, dada4, true));
+        Follow f6 = followRepository.save(newFollower(dada4, ssar1, true));
+        Follow f7 = followRepository.save(newFollowing(kaka5, ssar1, true));
+        Follow f8 = followRepository.save(newFollower(ssar1, kaka5, true));
         // ReasonCode : 신고카테고리
         ReasonCode reason1 = reasonCodeRepository.save(newReasonCode("욕설"));
         ReasonCode reason2 = reasonCodeRepository.save(newReasonCode("탈주"));
@@ -86,34 +88,34 @@ public class GgamfApiControllerTest extends DummyEntity {
         GameCode etc = gameCodeRepository.save(newGameCode("etc"));
         GameCode LoL = gameCodeRepository.save(newGameCode("LoL"));
         // Room : 파티방
-        Room endroom1 = roomRepository.save(endRoom("roomname1", ssar, LoL));
-        Room room2 = roomRepository.save(newRoom("roomname2", ssar, etc));
-        Room room3 = roomRepository.save(newRoom("roomname3", cos, LoL));
-        Room endroom4 = roomRepository.save(endRoom("roomname4", lala, etc));
+        Room endroom1 = roomRepository.save(endRoom("roomname1", ssar1, LoL));
+        Room room2 = roomRepository.save(newRoom("roomname2", ssar1, etc));
+        Room room3 = roomRepository.save(newRoom("roomname3", cos2, LoL));
+        Room endroom4 = roomRepository.save(endRoom("roomname4", lala3, etc));
         // Enter : 방 참여 정보
-        Enter enter1 = enterRepository.save(endEnter(lala, endroom1));
-        Enter enter11 = enterRepository.save(endEnter(dada, endroom1));
-        Enter enter111 = enterRepository.save(endEnter(kaka, endroom1));
-        Enter enter2 = enterRepository.save(newEnter(cos, room2));
-        Enter enter3 = enterRepository.save(newEnter(ssar, room3));
-        Enter endEnter1 = enterRepository.save(endEnter(ssar, endroom4));
+        Enter enter1 = enterRepository.save(endEnter(lala3, endroom1));
+        Enter enter11 = enterRepository.save(endEnter(dada4, endroom1));
+        Enter enter111 = enterRepository.save(endEnter(kaka5, endroom1));
+        Enter enter2 = enterRepository.save(newEnter(cos2, room2));
+        Enter enter3 = enterRepository.save(newEnter(ssar1, room3));
+        Enter endEnter1 = enterRepository.save(endEnter(ssar1, endroom4));
     }
 
-    @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @WithUserDetails(value = "ssar1", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
     public void followGgamf_test() throws Exception {
         // given
         Long userId = 1L;
-        Long followingId = 3L;
+        Long friendId = 6L;
         FollowGgamfReqDto followGgamfReqDto = new FollowGgamfReqDto();
-        followGgamfReqDto.setFollowerId(userId);
-        followGgamfReqDto.setFollowingId(followingId);
+        followGgamfReqDto.setUserId(userId);
+        followGgamfReqDto.setFriendId(friendId);
         String requestBody = om.writeValueAsString(followGgamfReqDto);
         System.out.println("테스트 : " + requestBody);
 
         // when
         ResultActions resultActions = mvc
-                .perform(MockMvcRequestBuilders.post("/s/api/ggamf/user/" + userId + "/follow/" + followingId)
+                .perform(MockMvcRequestBuilders.post("/s/api/ggamf/user/" + userId + "/follow/" + friendId)
                         .content(requestBody)
                         .contentType(APPLICATION_JSON_UTF8));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
@@ -121,7 +123,7 @@ public class GgamfApiControllerTest extends DummyEntity {
 
         // then
         resultActions.andExpect(MockMvcResultMatchers.status().isCreated());
-        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.accept").value(false));
+        // resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.accept").value(false));
     }
 
     @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
