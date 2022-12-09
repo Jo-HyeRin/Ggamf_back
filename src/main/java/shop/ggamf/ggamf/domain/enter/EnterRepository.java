@@ -13,7 +13,7 @@ public interface EnterRepository extends JpaRepository<Enter, Long> {
     Optional<Enter> findByRoomIdAndUserId(@Param("roomId") Long roomId, @Param("userId") Long userId);
 
     // roomId로 찾기
-    @Query("select e from Enter e join fetch e.room r where e.room.id = :roomId")
+    @Query("select e from Enter e join fetch e.room r where e.room.id = :roomId and stay=true")
     List<Enter> findByRoomId(@Param("roomId") Long roomId);
 
     // userId로 찾기

@@ -1,5 +1,8 @@
 package shop.ggamf.ggamf.domain.enter;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -35,12 +38,28 @@ public class Enter extends AuditingTime {
     @Column(nullable = false)
     private Boolean stay;
 
+    @Column(nullable = false)
+    private Boolean stayUntilEnd;
+
     @Builder
-    public Enter(Long id, User user, Room room, Boolean stay) {
+    public Enter(Long id, User user, Room room, Boolean stay, Boolean stayUntilEnd) {
         this.id = id;
         this.user = user;
         this.room = room;
         this.stay = stay;
+        this.stayUntilEnd = stayUntilEnd;
+    }
+
+    @Builder
+    public Enter(Long id, User user, Room room, Boolean stay, Boolean stayUntilEnd, LocalDateTime createdAt,
+            LocalDateTime updatedAt) {
+        this.id = id;
+        this.user = user;
+        this.room = room;
+        this.stay = stay;
+        this.stayUntilEnd = stayUntilEnd;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
     // 파티방 나가기

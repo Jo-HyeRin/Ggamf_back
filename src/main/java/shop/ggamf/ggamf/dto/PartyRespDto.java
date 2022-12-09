@@ -98,12 +98,14 @@ public class PartyRespDto {
             private Long userId;
             private Long roomId;
             private Boolean stay;
+            private Boolean stayUntilEnd;
 
             public EnterDto(Enter enter) {
                 this.id = enter.getId();
                 this.userId = enter.getUser().getId();
                 this.roomId = enter.getRoom().getId();
                 this.stay = enter.getStay();
+                this.stayUntilEnd = enter.getStayUntilEnd();
             }
         }
     }

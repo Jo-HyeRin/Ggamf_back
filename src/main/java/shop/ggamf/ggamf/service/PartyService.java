@@ -1,5 +1,6 @@
 package shop.ggamf.ggamf.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -118,12 +119,12 @@ public class PartyService {
         }
         roomPS.endRoom();
 
-        // Enter roomId = endRoomReqDto.getRoomId() 찾아서 stay = false 변경
+        // Enter roomId = endRoomReqDto.getRoomId(), stay=true 찾아서 stay = false 변경
         List<Enter> enterListPS = enterRepository.findByRoomId(endRoomReqDto.getRoomId());
 
         List<Enter> enterList = enterListPS.stream()
                 .map((enter) -> new Enter(enter.getId(), enter.getUser(),
-                        enter.getRoom(), false))
+                        enter.getRoom(), false, true, enter.getCreatedAt(), LocalDateTime.now()))
                 .collect(Collectors.toList());
         List<Enter> enterListUpdate = enterRepository.saveAll(enterList);
 

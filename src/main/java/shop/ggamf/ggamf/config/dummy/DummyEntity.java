@@ -73,6 +73,7 @@ public abstract class DummyEntity {
                 .user(user)
                 .room(room)
                 .stay(true)
+                .stayUntilEnd(false)
                 .build();
         return enter;
     }
@@ -82,6 +83,7 @@ public abstract class DummyEntity {
                 .user(user)
                 .room(room)
                 .stay(false)
+                .stayUntilEnd(true)
                 .build();
         return enter;
     }
