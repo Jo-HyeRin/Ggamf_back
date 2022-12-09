@@ -58,7 +58,6 @@ public class UserApiController {
 
     @GetMapping("/user/{userId}/detail")
     public ResponseEntity<?> detail(@PathVariable Long userId) {
-        log.debug("디버그 : controller id : "+ userId);
         return new ResponseEntity<>(new ResponseDto<>("유저 상세보기 성공", userService.유저상세보기(userId)), HttpStatus.OK);
     }
 

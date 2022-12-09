@@ -108,7 +108,7 @@ public class UserRespDto {
         private String photo;
         private String nickname;
         private String intro;
-        private BigInteger receiverId;
+        // private BigInteger receiverId;
         private BigDecimal rate;
 
         public ReturnRespDto(DetailRespDto detailRespDto, StarRateRespDto starRateRespDto) {
@@ -116,7 +116,7 @@ public class UserRespDto {
             this.photo = detailRespDto.getPhoto();
             this.nickname = detailRespDto.getNickname();
             this.intro = detailRespDto.getIntro();
-            this.receiverId = starRateRespDto.getReceiverId();
+            // this.receiverId = starRateRespDto.getReceiverId();
             this.rate = starRateRespDto.getRate();
         }
     }

@@ -13,6 +13,6 @@ import lombok.Setter;
 @Setter
 @Getter
 public class StarRateRespDto {
-    private BigInteger receiverId;
+    // private BigInteger receiverId;
     private BigDecimal rate;
 }

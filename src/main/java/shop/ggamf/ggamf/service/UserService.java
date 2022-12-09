@@ -60,11 +60,8 @@ public class UserService {
              userRepository.findById(id)
                      .orElseThrow(() -> (new CustomApiException("해당유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST)));
          }
-         log.debug("디버그 : service id : "+id);
         DetailRespDto detailRespDto = userRepositoryQuery.findDetailById(id);
-        log.debug("디버그 : 불러오긴했어~!");
         StarRateRespDto starRateRespDto = starRateRepositoryQuery.caculateStaRateById(id);
-        log.debug("디버그 : 불러오긴했어~11");
 
         return new ReturnRespDto(detailRespDto, starRateRespDto);
     }
