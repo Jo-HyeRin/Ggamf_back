@@ -39,6 +39,9 @@ public class DevInit extends DummyEntity {
             User nana = userRepository.save(newUser("nana"));
             User vovo = userRepository.save(newUser("vovo"));
             User toto = userRepository.save(newUser("toto"));
+            User bu = userRepository.save(newUser("bu"));
+            User ki = userRepository.save(newUser("ki"));
+            User qqq = userRepository.save(newUser("qqq"));
             // GameCode : 게임코드
             GameCode etc = gameCodeRepository.save(newGameCode("etc"));
             GameCode LoL = gameCodeRepository.save(newGameCode("LoL"));
@@ -51,16 +54,20 @@ public class DevInit extends DummyEntity {
             Room room4 = roomRepository.save(newRoom("초보만요4", cos, LoL));
             Room endRoom1 = roomRepository.save(endRoom("종료된방1", cos, LoL));
             Room endRoom2 = roomRepository.save(endRoom("종료된방2", lala, starcraft));
+            Room endRoom3 = roomRepository.save(endRoom("종료된방3", cos, battleground));
             // Enter : 파티방, 참여유저
             Enter enter1 = enterRepository.save(newEnter(lala, room1));
             Enter enter11 = enterRepository.save(newEnter(dada, room1));
             Enter enter111 = enterRepository.save(newEnter(kaka, room1));
             Enter enter2 = enterRepository.save(newEnter(cos, room2));
             Enter enter3 = enterRepository.save(newEnter(cos, room3));
-            Enter endEnter1 = enterRepository.save(endEnter(lala, endRoom1));
-            Enter endEnter2 = enterRepository.save(endEnter(dada, endRoom1));
+            Enter endEnter1 = enterRepository.save(endEnter(vovo, endRoom1));
+            Enter endEnter2 = enterRepository.save(endEnter(bu, endRoom1));
             Enter endEnter3 = enterRepository.save(endEnter(cos, endRoom2));
-            Enter endEnter4 = enterRepository.save(endEnter(dada, endRoom2));
+            Enter endEnter4 = enterRepository.save(endEnter(ki, endRoom2));
+            Enter endEnter5 = enterRepository.save(endEnter(toto, endRoom2));
+            Enter endEnter6 = enterRepository.save(endEnter(vovo, endRoom3));
+            Enter endEnter7 = enterRepository.save(endEnter(qqq, endRoom3));
             // Follow : 겜프
             Follow follow1 = followRepository.save(newFollow(cos, lala));
             Follow follow2 = followRepository.save(newFollow(cos, kaka));

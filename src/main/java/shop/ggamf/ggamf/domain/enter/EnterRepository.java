@@ -19,12 +19,4 @@ public interface EnterRepository extends JpaRepository<Enter, Long> {
     // userId로 찾기
     @Query("select e from Enter e join fetch e.user u where e.user.id = :userId and e.stay = true")
     List<Enter> findByUserId(@Param("userId") Long userId);
-
-    // 추천 겜프 목록 - 참여했던 방
-    @Query("select e from Enter e join fetch e.user u join fetch e.room r where e.user.id = :userId and e.room.active = false and e.room.updatedAt = e.updatedAt")
-    List<Enter> findRecommendByUserId(@Param("userId") Long userId);
-
-    // 추천 겜프 목록 - 내가 닫은 가장 최근 방 멤버를 roomId로 찾기
-    @Query("select e from Enter e join fetch e.room r where e.room.id = :roomId and e.updatedAt = e.room.updatedAt")
-    List<Enter> findByLatestRoomId(@Param("roomId") Long roomId);
 }
