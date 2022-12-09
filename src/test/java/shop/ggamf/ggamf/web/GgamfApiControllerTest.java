@@ -71,6 +71,8 @@ public class GgamfApiControllerTest extends DummyEntity {
         User kaka = userRepository.save(newUser("kaka"));
         User vovo = userRepository.save(newUser("vovo"));
         User toto = userRepository.save(newUser("toto"));
+        User oh = userRepository.save(newUser("oh"));
+        User ye = userRepository.save(newUser("ye"));
         // Follow : 겜프
         Follow follow1 = followRepository.save(newFollow(ssar, cos));
         Follow follow2 = followRepository.save(newFollow(ssar, lala));
@@ -92,11 +94,14 @@ public class GgamfApiControllerTest extends DummyEntity {
         Room endroom4 = roomRepository.save(endRoom("roomname4", lala, etc));
         // Enter : 방 참여 정보
         Enter enter1 = enterRepository.save(endEnter(lala, endroom1));
-        Enter enter11 = enterRepository.save(endEnter(dada, endroom1));
-        Enter enter111 = enterRepository.save(endEnter(kaka, endroom1));
-        Enter enter2 = enterRepository.save(newEnter(cos, room2));
-        Enter enter3 = enterRepository.save(newEnter(ssar, room3));
+        Enter enter2 = enterRepository.save(endEnter(oh, endroom1));
+        Enter enter3 = enterRepository.save(newEnter(cos, room2));
+        Enter enter4 = enterRepository.save(newEnter(ssar, room3));
+        Enter enter5 = enterRepository.save(newEnter(vovo, room3));
+        Enter enter6 = enterRepository.save(newEnter(oh, room3));
         Enter endEnter1 = enterRepository.save(endEnter(ssar, endroom4));
+        Enter endEnter2 = enterRepository.save(endEnter(toto, endroom4));
+        Enter endEnter3 = enterRepository.save(endEnter(ye, endroom4));
     }
 
     @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
@@ -248,4 +253,23 @@ public class GgamfApiControllerTest extends DummyEntity {
         resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.followers.[0].nickName").value("nickvovo"));
         resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.followings.[0].nickName").value("nicktoto"));
     }
+
+    @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    public void recommendGgamfList_test() throws Exception {
+        // given
+        Long userId = 1L;
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(MockMvcRequestBuilders.get("/s/api/ggamf/user/" + userId + "/recommend"));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+        resultActions.andExpect(MockMvcResultMatchers.status().isOk());
+        // resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.followers.[0].nickName").value("nickvovo"));
+        // resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.followings.[0].nickName").value("nicktoto"));
+    }
+
 }
