@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import shop.ggamf.ggamf.config.auth.LoginUser;
+import shop.ggamf.ggamf.config.exception.CustomApiException;
 import shop.ggamf.ggamf.dto.PartyReqDto.CreateRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.EndRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.ExitRoomReqDto;
@@ -41,12 +42,15 @@ public class PartyApiController {
     private final PartyService partyService;
 
     // 파티방 생성
-    @PostMapping("/party/create/{gameCodeId}")
-    public ResponseEntity<?> createRoom(@RequestBody CreateRoomReqDto createRoomReqDto, @PathVariable Long gameCodeId,
+    @PostMapping("/party/user/{userId}/create/{gameCodeId}")
+    public ResponseEntity<?> createRoom(@RequestBody CreateRoomReqDto createRoomReqDto, @PathVariable Long userId,
+            @PathVariable Long gameCodeId,
             @AuthenticationPrincipal LoginUser loginUser) {
         log.debug("디버그 : 파티방 생성 컨트롤러 호출");
-        log.debug("디버그 : userId : " + loginUser.getUser().getId());
-        createRoomReqDto.setUserId(loginUser.getUser().getId());
+        if (loginUser.getUser().getId() != userId) {
+            throw new CustomApiException("로그인 유저와 요청 유저가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
+        }
+        createRoomReqDto.setUserId(userId);
         createRoomReqDto.setGameCodeId(gameCodeId);
         log.debug("디버그 : userId : " + loginUser.getUser().getId());
         CreateRoomRespDto createRoomRespDto = partyService.파티방생성(createRoomReqDto);
@@ -54,74 +58,103 @@ public class PartyApiController {
     }
 
     // 파티방 참가
-    @PostMapping("/party/join/{roomId}")
-    public ResponseEntity<?> joinRoom(@RequestBody JoinRoomReqDto joinRoomReqDto, @PathVariable Long roomId,
+    @PostMapping("/party/user/{userId}/join/{roomId}")
+    public ResponseEntity<?> joinRoom(@RequestBody JoinRoomReqDto joinRoomReqDto, @PathVariable Long userId,
+            @PathVariable Long roomId,
             @AuthenticationPrincipal LoginUser loginUser) {
         log.debug("디버그 : 파티방 참가 컨트롤러 호출");
-        joinRoomReqDto.setUserId(loginUser.getUser().getId());
+        if (loginUser.getUser().getId() != userId) {
+            throw new CustomApiException("로그인 유저와 요청 유저가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
+        }
+        joinRoomReqDto.setUserId(userId);
         joinRoomReqDto.setRoomId(roomId);
         JoinRoomRespDto joinRoomRespDto = partyService.파티방참가(joinRoomReqDto);
         return new ResponseEntity<>(new ResponseDto<>("파티방 참가 완료", joinRoomRespDto), HttpStatus.CREATED);
     }
 
     // 파티방 나가기 (본인)
-    @PutMapping("/party/exit/{roomId}")
-    public ResponseEntity<?> exitRoom(@RequestBody ExitRoomReqDto exitRoomReqDto, @PathVariable Long roomId,
+    @PutMapping("/party/user/{userId}/exit/{roomId}")
+    public ResponseEntity<?> exitRoom(@RequestBody ExitRoomReqDto exitRoomReqDto, @PathVariable Long userId,
+            @PathVariable Long roomId,
             @AuthenticationPrincipal LoginUser loginUser) {
         log.debug("디버그 : 파티방 나가기 컨트롤러 호출");
+        if (loginUser.getUser().getId() != userId) {
+            throw new CustomApiException("로그인 유저와 요청 유저가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
+        }
         exitRoomReqDto.setRoomId(roomId);
-        exitRoomReqDto.setUserId(loginUser.getUser().getId());
+        exitRoomReqDto.setUserId(userId);
         ExitRoomRespDto exitRoomRespDto = partyService.파티방나가기(exitRoomReqDto);
         return new ResponseEntity<>(new ResponseDto<>("파티방 나가기 완료", exitRoomRespDto), HttpStatus.OK);
     }
 
     // 파티방 종료(방장)
-    @PutMapping("/party/end/{roomId}")
-    public ResponseEntity<?> endRoom(@RequestBody EndRoomReqDto endRoomReqDto, @PathVariable Long roomId,
+    @PutMapping("/party/user/{userId}/end/{roomId}")
+    public ResponseEntity<?> endRoom(@RequestBody EndRoomReqDto endRoomReqDto, @PathVariable Long userId,
+            @PathVariable Long roomId,
             @AuthenticationPrincipal LoginUser loginUser) {
         log.debug("디버그 : 파티방 종료 컨트롤러 호출");
+        if (loginUser.getUser().getId() != userId) {
+            throw new CustomApiException("로그인 유저와 요청 유저가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
+        }
         endRoomReqDto.setRoomId(roomId);
-        endRoomReqDto.setUserId(loginUser.getUser().getId());
+        endRoomReqDto.setUserId(userId);
         EndRoomRespDto endRoomRespDto = partyService.파티방종료(endRoomReqDto);
         return new ResponseEntity<>(new ResponseDto<>("파티방 종료 완료", endRoomRespDto), HttpStatus.OK);
     }
 
     // 파티원 추방(방장)
-    @PutMapping("/party/kick/{roomId}")
-    public ResponseEntity<?> kickUser(@RequestBody KickUserReqDto kickUserReqDto, @PathVariable Long roomId,
+    @PutMapping("/party/user/{userId}/kick/{roomId}")
+    public ResponseEntity<?> kickUser(@RequestBody KickUserReqDto kickUserReqDto, @PathVariable Long userId,
+            @PathVariable Long roomId,
             @AuthenticationPrincipal LoginUser loginUser) {
         log.debug("디버그 : 파티원 추방 컨트롤러 호출");
-        kickUserReqDto.setUserId(loginUser.getUser().getId());
+        if (loginUser.getUser().getId() != userId) {
+            throw new CustomApiException("로그인 유저와 요청 유저가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
+        }
+        kickUserReqDto.setUserId(userId);
         kickUserReqDto.setRoomId(roomId);
         KickUserRespDto kickUserRespDto = partyService.파티원추방(kickUserReqDto);
         return new ResponseEntity<>(new ResponseDto<>("파티원 추방 완료", kickUserRespDto), HttpStatus.OK);
     }
 
     // 나의 모집 파티 목록
-    @GetMapping("/party/myrooms")
-    public ResponseEntity<?> findByMyIdRoom(@AuthenticationPrincipal LoginUser loginUser) {
-        RoomListByMyIdRespDto roomListByMyIdRespDto = partyService.나의모집파티목록(loginUser.getUser().getId());
+    @GetMapping("/party/user/{userId}/myrooms")
+    public ResponseEntity<?> findByMyIdRoom(@PathVariable Long userId, @AuthenticationPrincipal LoginUser loginUser) {
+        if (loginUser.getUser().getId() != userId) {
+            throw new CustomApiException("로그인 유저와 요청 유저가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
+        }
+        RoomListByMyIdRespDto roomListByMyIdRespDto = partyService.나의모집파티목록(userId);
         return new ResponseEntity<>(new ResponseDto<>("나의 모집 파티 목록 보기 완료", roomListByMyIdRespDto), HttpStatus.OK);
     }
 
     // 파티방 상세보기
-    @GetMapping("/party/{roomId}")
-    public ResponseEntity<?> detailRoom(@PathVariable Long roomId) {
+    @GetMapping("/party/user/{userId}/detail/{roomId}")
+    public ResponseEntity<?> detailRoom(@PathVariable Long userId, @PathVariable Long roomId,
+            @AuthenticationPrincipal LoginUser loginUser) {
+        if (loginUser.getUser().getId() != userId) {
+            throw new CustomApiException("로그인 유저와 요청 유저가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
+        }
         DetailRoomRespDto detailRoomRespDto = partyService.파티방상세보기(roomId);
         return new ResponseEntity<>(new ResponseDto<>("파티방 상세보기 완료", detailRoomRespDto), HttpStatus.OK);
     }
 
     // 전체 파티방 목록 보기 -> 카테고리별, 페이징, 검색 필요
-    @GetMapping("/party/list")
-    public ResponseEntity<?> findAllRoom() {
+    @GetMapping("/party/user/{userId}/list")
+    public ResponseEntity<?> findAllRoom(@PathVariable Long userId, @AuthenticationPrincipal LoginUser loginUser) {
+        if (loginUser.getUser().getId() != userId) {
+            throw new CustomApiException("로그인 유저와 요청 유저가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
+        }
         RoomListRespDto roomListRespDto = partyService.전체파티방목록보기();
         return new ResponseEntity<>(new ResponseDto<>("전체 파티방 목록 보기 완료", roomListRespDto), HttpStatus.OK);
     }
 
     // 참가중인 파티방 목록 보기
-    @GetMapping("/party/joins")
-    public ResponseEntity<?> findJoinRooms(@AuthenticationPrincipal LoginUser loginUser) {
-        RoomListByIdRespDto roomListByIdRespDto = partyService.참가중인파티방목록보기(loginUser.getUser().getId());
+    @GetMapping("/party/user/{userId}/joins")
+    public ResponseEntity<?> findJoinRooms(@PathVariable Long userId, @AuthenticationPrincipal LoginUser loginUser) {
+        if (loginUser.getUser().getId() != userId) {
+            throw new CustomApiException("로그인 유저와 요청 유저가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
+        }
+        RoomListByIdRespDto roomListByIdRespDto = partyService.참가중인파티방목록보기(userId);
         return new ResponseEntity<>(new ResponseDto<>("참가중인 파티방 목록 보기 완료",
                 roomListByIdRespDto), HttpStatus.OK);
     }

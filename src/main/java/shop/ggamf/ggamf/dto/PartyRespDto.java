@@ -1,5 +1,7 @@
 package shop.ggamf.ggamf.dto;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -98,12 +100,14 @@ public class PartyRespDto {
             private Long userId;
             private Long roomId;
             private Boolean stay;
+            private Boolean stayUntilEnd;
 
             public EnterDto(Enter enter) {
                 this.id = enter.getId();
                 this.userId = enter.getUser().getId();
                 this.roomId = enter.getRoom().getId();
                 this.stay = enter.getStay();
+                this.stayUntilEnd = enter.getStayUntilEnd();
             }
         }
     }

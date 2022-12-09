@@ -25,6 +25,7 @@ import shop.ggamf.ggamf.dto.GgamfRespDto.CancelGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.DeleteGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.FollowGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.GgamfListRespDto;
+import shop.ggamf.ggamf.dto.GgamfRespDto.RecommendGgamfListRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.RejectGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.ReportGgamfRespDto;
 import shop.ggamf.ggamf.dto.ResponseDto;
@@ -123,5 +124,17 @@ public class GgamfApiController {
         log.debug("디버그 : 겜프 목록 보기 컨트롤러 호출");
         GgamfListRespDto ggamfListRespDto = ggamfService.겜프목록보기(loginUser.getUser().getId());
         return new ResponseEntity<>(new ResponseDto<>("겜프목록보기 완료", ggamfListRespDto), HttpStatus.OK);
+    }
+
+    // 추천 겜프 목록 보기
+    @GetMapping("ggamf/recommend/{userId}")
+    public ResponseEntity<?> recommendGgamfList(@PathVariable Long userId,
+            @AuthenticationPrincipal LoginUser loginUser) {
+        log.debug("디버그 : 추천 겜프 목록 보기 컨트롤러 호출");
+        if (loginUser.getUser().getId() != userId) {
+            throw new CustomApiException("로그인 유저와 요청 유저가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
+        }
+        RecommendGgamfListRespDto recommendGgamfListRespDto = ggamfService.추천겜프목록보기(userId);
+        return new ResponseEntity<>(new ResponseDto<>("추천겜프목록보기 완료", recommendGgamfListRespDto), HttpStatus.OK);
     }
 }

@@ -85,6 +85,7 @@ public class PartyApiControllerTest extends DummyEntity {
     @Test
     public void createRoom_test() throws Exception {
         // given
+        Long userId = 1L;
         Long gameCodeId = 2L;
         CreateRoomReqDto createRoomReqDto = new CreateRoomReqDto();
         createRoomReqDto.setGameCodeId(gameCodeId);
@@ -95,7 +96,7 @@ public class PartyApiControllerTest extends DummyEntity {
 
         // when
         ResultActions resultActions = mvc
-                .perform(MockMvcRequestBuilders.post("/s/api/party/create/" + gameCodeId)
+                .perform(MockMvcRequestBuilders.post("/s/api/party/user/" + userId + "/create/" + gameCodeId)
                         .content(requestBody)
                         .contentType(APPLICATION_JSON_UTF8));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
@@ -110,6 +111,7 @@ public class PartyApiControllerTest extends DummyEntity {
     @Test
     public void joinRoom_test() throws Exception {
         // given
+        Long userId = 1L;
         Long roomId = 1L;
         JoinRoomReqDto joinRoomReqDto = new JoinRoomReqDto();
         joinRoomReqDto.setRoomId(roomId);
@@ -118,7 +120,7 @@ public class PartyApiControllerTest extends DummyEntity {
 
         // when
         ResultActions resultActions = mvc
-                .perform(MockMvcRequestBuilders.post("/s/api/party/join/" + roomId)
+                .perform(MockMvcRequestBuilders.post("/s/api/party/user/" + userId + "/join/" + roomId)
                         .content(requestBody)
                         .contentType(APPLICATION_JSON_UTF8));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
@@ -133,6 +135,7 @@ public class PartyApiControllerTest extends DummyEntity {
     @Test
     public void exitRoom_test() throws Exception {
         // given
+        Long userId = 1L;
         Long roomId = 3L;
         ExitRoomReqDto exitRoomReqDto = new ExitRoomReqDto();
         exitRoomReqDto.setRoomId(roomId);
@@ -141,7 +144,7 @@ public class PartyApiControllerTest extends DummyEntity {
 
         // when
         ResultActions resultActions = mvc
-                .perform(MockMvcRequestBuilders.put("/s/api/party/exit/" + roomId)
+                .perform(MockMvcRequestBuilders.put("/s/api/party/user/" + userId + "/exit/" + roomId)
                         .content(requestBody).contentType(APPLICATION_JSON_UTF8));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
@@ -155,6 +158,7 @@ public class PartyApiControllerTest extends DummyEntity {
     @Test
     public void endRoom_test() throws Exception {
         // given
+        Long userId = 1L;
         Long roomId = 1L;
         EndRoomReqDto endRoomReqDto = new EndRoomReqDto();
         endRoomReqDto.setRoomId(roomId);
@@ -163,7 +167,7 @@ public class PartyApiControllerTest extends DummyEntity {
 
         // when
         ResultActions resultActions = mvc
-                .perform(MockMvcRequestBuilders.put("/s/api/party/end/" + roomId)
+                .perform(MockMvcRequestBuilders.put("/s/api/party/user/" + userId + "/end/" + roomId)
                         .content(requestBody).contentType(APPLICATION_JSON_UTF8));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
@@ -178,6 +182,7 @@ public class PartyApiControllerTest extends DummyEntity {
     @Test
     public void kickUser_test() throws Exception {
         // given
+        Long userId = 1L;
         Long roomId = 1L;
         KickUserReqDto kickUserReqDto = new KickUserReqDto();
         kickUserReqDto.setRoomId(roomId);
@@ -187,7 +192,7 @@ public class PartyApiControllerTest extends DummyEntity {
 
         // when
         ResultActions resultActions = mvc
-                .perform(MockMvcRequestBuilders.put("/s/api/party/kick/" + roomId)
+                .perform(MockMvcRequestBuilders.put("/s/api/party/user/" + userId + "/kick/" + roomId)
                         .content(requestBody).contentType(APPLICATION_JSON_UTF8));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
@@ -203,10 +208,11 @@ public class PartyApiControllerTest extends DummyEntity {
     @Test
     public void findByMyIdRoom_test() throws Exception {
         // given
+        Long userId = 1L;
 
         // when
         ResultActions resultActions = mvc
-                .perform(MockMvcRequestBuilders.get("/s/api/party/myrooms"));
+                .perform(MockMvcRequestBuilders.get("/s/api/party/user/" + userId + "/myrooms"));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
 
@@ -219,11 +225,12 @@ public class PartyApiControllerTest extends DummyEntity {
     @Test
     public void detailRoom_test() throws Exception {
         // given
+        Long userId = 1L;
         Long roomId = 1L;
 
         // when
         ResultActions resultActions = mvc
-                .perform(MockMvcRequestBuilders.get("/s/api/party/" + roomId));
+                .perform(MockMvcRequestBuilders.get("/s/api/party/user/" + userId + "/detail/" + roomId));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
 
@@ -236,10 +243,11 @@ public class PartyApiControllerTest extends DummyEntity {
     @Test
     public void findAllRoom() throws Exception {
         // given
+        Long userId = 1L;
 
         // when
         ResultActions resultActions = mvc
-                .perform(MockMvcRequestBuilders.get("/s/api/party/list"));
+                .perform(MockMvcRequestBuilders.get("/s/api/party/user/" + userId + "/list"));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
 
@@ -252,10 +260,11 @@ public class PartyApiControllerTest extends DummyEntity {
     @Test
     public void findJoinRooms_test() throws Exception {
         // given
+        Long userId = 1L;
 
         // when
         ResultActions resultActions = mvc
-                .perform(MockMvcRequestBuilders.get("/s/api/party/joins"));
+                .perform(MockMvcRequestBuilders.get("/s/api/party/user/" + userId + "/joins"));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
 
