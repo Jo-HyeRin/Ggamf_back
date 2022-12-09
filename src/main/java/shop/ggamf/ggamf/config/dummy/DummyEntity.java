@@ -1,12 +1,17 @@
 package shop.ggamf.ggamf.config.dummy;
 
+import java.util.Random;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import shop.ggamf.ggamf.config.enums.UserEnum;
 import shop.ggamf.ggamf.config.enums.UserStateEnum;
 import shop.ggamf.ggamf.domain.enter.Enter;
+import shop.ggamf.ggamf.domain.follow.Follow;
 import shop.ggamf.ggamf.domain.gameCode.GameCode;
+import shop.ggamf.ggamf.domain.reasonCode.ReasonCode;
 import shop.ggamf.ggamf.domain.room.Room;
+import shop.ggamf.ggamf.domain.starRate.StarRate;
 import shop.ggamf.ggamf.domain.user.User;
 
 public abstract class DummyEntity {
@@ -26,6 +31,7 @@ public abstract class DummyEntity {
                 .intro("안녕하세여 유저입니다")
                 .state(UserStateEnum.NORMAL)
                 .role(UserEnum.USER)
+                .agree(true)
                 .build();
         return user;
     }
@@ -57,5 +63,41 @@ public abstract class DummyEntity {
                 .stay(true)
                 .build();
         return enter;
+    }
+
+    protected Follow newFollow(User follower, User following) {
+        Follow follow = Follow.builder()
+                .follower(follower)
+                .following(following)
+                .accept(false)
+                .build();
+        return follow;
+    }
+
+    protected StarRate newStarRate(User giver, User receiver) {
+        Random random = new Random();
+        StarRate starRate = StarRate.builder()
+                .giver(giver)
+                .receiver(receiver)
+                .rate(random.nextLong())
+                .build();
+        return starRate;
+
+    }
+
+    protected Follow newFriend(User follower, User following) {
+        Follow follow = Follow.builder()
+                .follower(follower)
+                .following(following)
+                .accept(true)
+                .build();
+        return follow;
+    }
+
+    protected ReasonCode newReasonCode(String reason) {
+        ReasonCode reasonCode = ReasonCode.builder()
+                .reason(reason)
+                .build();
+        return reasonCode;
     }
 }
