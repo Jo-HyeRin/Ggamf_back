@@ -147,11 +147,31 @@ public class GgamfRespDto {
     public static class RecommendGgamfListRespDto {
 
         List<EnterDto> latests; // 내가 최근에 닫은 방 유저들
-        List<EnterDto> enters; // 내가 참여했던 방 유저들
+        List<EnterDto> enters1; // 내가 참여했던 방1 유저들
+        List<EnterDto> enters2; // 내가 참여했던 방2 유저들
+        List<EnterDto> enters3; // 내가 참여했던 방3 유저들
 
-        public RecommendGgamfListRespDto(List<Enter> latests, List<Enter> enters) {
+        public RecommendGgamfListRespDto(List<Enter> latests) {
             this.latests = latests.stream().map((enter) -> new EnterDto(enter)).collect(Collectors.toList());
-            this.enters = enters.stream().map((enter) -> new EnterDto(enter)).collect(Collectors.toList());
+        }
+
+        public RecommendGgamfListRespDto(List<Enter> latests, List<Enter> enters1) {
+            this.latests = latests.stream().map((enter) -> new EnterDto(enter)).collect(Collectors.toList());
+            this.enters1 = enters1.stream().map((enter) -> new EnterDto(enter)).collect(Collectors.toList());
+        }
+
+        public RecommendGgamfListRespDto(List<Enter> latests, List<Enter> enters1, List<Enter> enters2) {
+            this.latests = latests.stream().map((enter) -> new EnterDto(enter)).collect(Collectors.toList());
+            this.enters1 = enters1.stream().map((enter) -> new EnterDto(enter)).collect(Collectors.toList());
+            this.enters2 = enters2.stream().map((enter) -> new EnterDto(enter)).collect(Collectors.toList());
+        }
+
+        public RecommendGgamfListRespDto(List<Enter> latests, List<Enter> enters1, List<Enter> enters2,
+                List<Enter> enters3) {
+            this.latests = latests.stream().map((enter) -> new EnterDto(enter)).collect(Collectors.toList());
+            this.enters1 = enters1.stream().map((enter) -> new EnterDto(enter)).collect(Collectors.toList());
+            this.enters2 = enters2.stream().map((enter) -> new EnterDto(enter)).collect(Collectors.toList());
+            this.enters3 = enters3.stream().map((enter) -> new EnterDto(enter)).collect(Collectors.toList());
         }
 
         @Setter

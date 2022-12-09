@@ -153,17 +153,31 @@ public class GgamfService {
     public RecommendGgamfListRespDto 추천겜프목록보기(Long userId) {
         // 내가 방장일 때
         // 가장 최근 방 찾기
-        List<Room> roomListPS = roomRepository.findByUserIdEnd(userId, 1);
-        log.debug("디버그 : roomPS" + roomListPS.get(0).getId());
+        List<Room> roomListPS = roomRepository.findByUserIdEnd(userId);
+        log.debug("디버그 : 최근종료방 사이즈 : " + roomListPS.size());
+        log.debug("디버그 : 최근종료방 id : " + roomListPS.get(0).getId());
         // 방 종료까지 함께한 인원 셀렉하기
-        List<Enter> latestPS = enterRepository.findByRoomIdEnd(roomListPS.get(0).getId());
+        List<Enter> latestPS = enterRepository.findByRoomIdEnd(roomListPS.get(0).getId(), userId);
 
         // 내가 참여했을 때
-        // 내가 참여했던 최근 방
-        List<Enter> enterListPS = enterRepository.findTogether(userId);
-        Enter enterPS = enterRepository.findFirstByOrderByUpdatedAtDesc();
-        log.debug("디버그 : roomPS" + enterPS.getRoom().getId());
-
-        return new RecommendGgamfListRespDto(latestPS, enterListPS);
+        // 내가 참여했던 최근 3개의 방
+        List<Enter> enterList = enterRepository.findTogether(userId);
+        log.debug("디버그 : 참여방 사이즈 : " + enterList.size());
+        log.debug("디버그 : 참여방 0번지 id : " + enterList.get(0).getRoom().getId());
+        if (enterList.size() == 0) {
+            return new RecommendGgamfListRespDto(latestPS);
+        } else if (enterList.size() == 1) {
+            List<Enter> enterListPS0 = enterRepository.findByRoomIdEnd(enterList.get(0).getRoom().getId(), userId);
+            return new RecommendGgamfListRespDto(latestPS, enterListPS0);
+        } else if (enterList.size() == 2) {
+            List<Enter> enterListPS0 = enterRepository.findByRoomIdEnd(enterList.get(0).getRoom().getId(), userId);
+            List<Enter> enterListPS1 = enterRepository.findByRoomIdEnd(enterList.get(1).getRoom().getId(), userId);
+            return new RecommendGgamfListRespDto(latestPS, enterListPS0, enterListPS1);
+        } else {
+            List<Enter> enterListPS0 = enterRepository.findByRoomIdEnd(enterList.get(0).getRoom().getId(), userId);
+            List<Enter> enterListPS1 = enterRepository.findByRoomIdEnd(enterList.get(1).getRoom().getId(), userId);
+            List<Enter> enterListPS2 = enterRepository.findByRoomIdEnd(enterList.get(2).getRoom().getId(), userId);
+            return new RecommendGgamfListRespDto(latestPS, enterListPS0, enterListPS1, enterListPS2);
+        }
     }
 }
