@@ -1,12 +1,15 @@
 package shop.ggamf.ggamf.dto;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
 import shop.ggamf.ggamf.config.enums.UserEnum;
 import shop.ggamf.ggamf.config.enums.UserStateEnum;
+import shop.ggamf.ggamf.domain.user.DetailRespDto;
+import shop.ggamf.ggamf.domain.user.StarRateRespDto;
 import shop.ggamf.ggamf.domain.user.User;
 
 public class UserRespDto {
@@ -78,13 +81,43 @@ public class UserRespDto {
         }
     }
 
+    // @AllArgsConstructor
+    // @NoArgsConstructor
+    // @Setter
+    // @Getter
+    // public static class DetailRespDto {
+    //     private BigInteger id;
+    //     private String photo;
+    //     private String nickname;
+    //     private String intro;
+    // }
+
+    // @AllArgsConstructor
+    // @NoArgsConstructor
+    // @Setter
+    // @Getter
+    // public static class StarRateRespDto {
+    //     private BigInteger receiverId;
+    //     private BigInteger rate;
+    // }
+
     @Setter
     @Getter
-    public static class DetailRespDto {
-        private Long id;
+    public static class ReturnRespDto {
+        private BigInteger id;
         private String photo;
         private String nickname;
-        private List<Integer> statics;
-        private float starRate;
+        private String intro;
+        // private BigInteger receiverId;
+        private BigDecimal rate;
+
+        public ReturnRespDto(DetailRespDto detailRespDto, StarRateRespDto starRateRespDto) {
+            this.id = detailRespDto.getId();
+            this.photo = detailRespDto.getPhoto();
+            this.nickname = detailRespDto.getNickname();
+            this.intro = detailRespDto.getIntro();
+            // this.receiverId = starRateRespDto.getReceiverId();
+            this.rate = starRateRespDto.getRate();
+        }
     }
 }
