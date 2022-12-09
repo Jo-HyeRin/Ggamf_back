@@ -19,24 +19,9 @@ public class UserRepositoryQuery {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
-    // public HelloDto findHelloDto() {
-    //     StringBuffer sb = new StringBuffer();
-    //     sb.append("SELECT 1.31 rating from dual");
-
-    //     // 쿼리 완성
-    //     Query query = em.createNativeQuery(sb.toString());
-
-    //     // 쿼리 실행 (qlrm 라이브러리 필요 = DTO에 DB결과를 매핑하기 위해서)
-    //     JpaResultMapper result = new JpaResultMapper();
-    //     HelloDto helloDto = result.uniqueResult(query, HelloDto.class);
-    //     return helloDto;
-    // }
-
-
-
     public DetailRespDto findDetailById(Long id) {
         StringBuffer sb = new StringBuffer();
-        sb.append("SELECT id, photo, nickname, intro from users where id = :id");
+        sb.append("SELECT id, photo, nickname, intro, role from users where id = :id");
         
         Query query = em.createNativeQuery(sb.toString())
                 .setParameter("id", id); //setParameter 해주기

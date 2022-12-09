@@ -104,4 +104,8 @@ public class User extends AuditingTime {
         this.state = state.WITHDRAW;
     }
 
+    public void 역할변경(UserEnum role) {
+        this.role = role.ADMIN;
+    }
+
 }

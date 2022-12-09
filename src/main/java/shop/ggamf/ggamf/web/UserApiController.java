@@ -18,9 +18,11 @@ import shop.ggamf.ggamf.config.auth.LoginUser;
 import shop.ggamf.ggamf.dto.ResponseDto;
 import shop.ggamf.ggamf.dto.UserReqDto.JoinReqDto;
 import shop.ggamf.ggamf.dto.UserReqDto.UpdateReqDto;
+import shop.ggamf.ggamf.dto.UserReqDto.UpdateRoleReqDto;
 import shop.ggamf.ggamf.dto.UserReqDto.UpdateStateReqDto;
 import shop.ggamf.ggamf.dto.UserRespDto.JoinRespDto;
 import shop.ggamf.ggamf.dto.UserRespDto.UpdateRespDto;
+import shop.ggamf.ggamf.dto.UserRespDto.UpdateRoleRespDto;
 import shop.ggamf.ggamf.dto.UserRespDto.UpdateStateRespDto;
 import shop.ggamf.ggamf.service.UserService;
 
@@ -54,6 +56,13 @@ public class UserApiController {
         updateStateReqDto.setId(userId);
         UpdateStateRespDto updateStateRespDto = userService.회원탈퇴(updateStateReqDto);
         return new ResponseEntity<>(new ResponseDto<>("회원탈퇴성공", updateStateRespDto), HttpStatus.OK);
+    }
+
+    @PutMapping("/user/{userId}/changeRole")
+    public ResponseEntity<?> changeRole(@PathVariable Long userId, @RequestBody UpdateRoleReqDto updateRoleReqDto) {
+        updateRoleReqDto.setId(userId);
+        UpdateRoleRespDto updateRoleRespDto = userService.역할변경(updateRoleReqDto);
+        return new ResponseEntity<>(new ResponseDto<>("역할변경성공", updateRoleRespDto), HttpStatus.OK);
     }
 
     @GetMapping("/user/{userId}/detail")

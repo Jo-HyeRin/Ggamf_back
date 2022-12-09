@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import shop.ggamf.ggamf.config.enums.UserEnum;
 
 @AllArgsConstructor
     @NoArgsConstructor
@@ -16,4 +17,5 @@ public class DetailRespDto {
         private String photo;
         private String nickname;
         private String intro;
+        private UserEnum role;
 }

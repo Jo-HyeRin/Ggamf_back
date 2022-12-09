@@ -81,6 +81,18 @@ public class UserRespDto {
         }
     }
 
+    @Setter
+    @Getter
+    public static class UpdateRoleRespDto {
+        private Long id; //서비스로직
+        private UserEnum role;
+
+        public UpdateRoleRespDto(User user) {
+            this.id = user.getId();
+            this.role = user.getRole();
+        }
+    }
+
     // @AllArgsConstructor
     // @NoArgsConstructor
     // @Setter
@@ -108,6 +120,7 @@ public class UserRespDto {
         private String photo;
         private String nickname;
         private String intro;
+        private UserEnum role;
         // private BigInteger receiverId;
         private BigDecimal rate;
 
@@ -116,6 +129,7 @@ public class UserRespDto {
             this.photo = detailRespDto.getPhoto();
             this.nickname = detailRespDto.getNickname();
             this.intro = detailRespDto.getIntro();
+            this.role = detailRespDto.getRole();
             // this.receiverId = starRateRespDto.getReceiverId();
             this.rate = starRateRespDto.getRate();
         }
