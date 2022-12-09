@@ -50,17 +50,18 @@ public class Enter extends AuditingTime {
         this.stayUntilEnd = stayUntilEnd;
     }
 
-    @Builder
-    public Enter(Long id, User user, Room room, Boolean stay, Boolean stayUntilEnd, LocalDateTime createdAt,
-            LocalDateTime updatedAt) {
-        this.id = id;
-        this.user = user;
-        this.room = room;
-        this.stay = stay;
-        this.stayUntilEnd = stayUntilEnd;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
+    // @Builder
+    // public Enter(Long id, User user, Room room, Boolean stay, Boolean
+    // stayUntilEnd, LocalDateTime createdAt,
+    // LocalDateTime updatedAt) {
+    // this.id = id;
+    // this.user = user;
+    // this.room = room;
+    // this.stay = stay;
+    // this.stayUntilEnd = stayUntilEnd;
+    // this.createdAt = createdAt;
+    // this.updatedAt = updatedAt;
+    // }
 
     // 파티방 나가기
     public void notStayRoom() {

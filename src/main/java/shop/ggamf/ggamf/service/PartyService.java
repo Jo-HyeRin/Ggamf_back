@@ -124,7 +124,7 @@ public class PartyService {
 
         List<Enter> enterList = enterListPS.stream()
                 .map((enter) -> new Enter(enter.getId(), enter.getUser(),
-                        enter.getRoom(), false, true, enter.getCreatedAt(), LocalDateTime.now()))
+                        enter.getRoom(), false, true))
                 .collect(Collectors.toList());
         List<Enter> enterListUpdate = enterRepository.saveAll(enterList);
 
