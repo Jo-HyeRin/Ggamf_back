@@ -14,6 +14,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import shop.ggamf.ggamf.domain.AuditingTime;
+import shop.ggamf.ggamf.domain.follow.Follow;
 import shop.ggamf.ggamf.domain.room.Room;
 import shop.ggamf.ggamf.domain.user.User;
 

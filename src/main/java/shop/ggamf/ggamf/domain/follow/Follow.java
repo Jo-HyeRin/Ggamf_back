@@ -13,6 +13,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import shop.ggamf.ggamf.domain.AuditingTime;
+import shop.ggamf.ggamf.domain.enter.Enter;
 import shop.ggamf.ggamf.domain.user.User;
 
 @NoArgsConstructor
@@ -29,6 +30,9 @@ public class Follow extends AuditingTime {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     User users;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    Enter usersEnter;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "follower_id")

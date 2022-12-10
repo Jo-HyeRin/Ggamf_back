@@ -21,7 +21,7 @@ public interface EnterRepository extends JpaRepository<Enter, Long> {
     List<Enter> findByUserId(@Param("userId") Long userId);
 
     // 추천친구목록 - 방장일 때
-    @Query("select distinct e from Enter e join fetch e.room r join fetch e.user u where e.room.id = :roomId and e.stayUntilEnd=true and e.user.id <> :userId")
+    @Query("select e from Enter e join fetch e.room r join fetch e.user u where e.room.id = :roomId and e.stayUntilEnd=true and e.user.id <> :userId")
     List<Enter> findByRoomIdEnd(@Param("roomId") Long roomId, @Param("userId") Long userId);
 
     // 추천친구목록 - 참여 했을 때

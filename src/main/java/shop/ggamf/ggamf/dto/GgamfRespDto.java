@@ -3,6 +3,7 @@ package shop.ggamf.ggamf.dto;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import shop.ggamf.ggamf.domain.enter.Enter;

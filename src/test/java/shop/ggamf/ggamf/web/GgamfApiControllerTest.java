@@ -97,10 +97,13 @@ public class GgamfApiControllerTest extends DummyEntity {
         // Enter : 방 참여 정보
         Enter enter1 = enterRepository.save(endEnter(lala, endroom1));
         Enter enter11 = enterRepository.save(endEnter(dada, endroom1));
-        Enter enter111 = enterRepository.save(endEnter(kaka, endroom1));
+        Enter enter111 = enterRepository.save(endEnter(oh, endroom1));
         Enter enter2 = enterRepository.save(newEnter(cos, room2));
         Enter enter3 = enterRepository.save(newEnter(ssar, room3));
         Enter endEnter1 = enterRepository.save(endEnter(ssar, endroom4));
+        Enter endEnter2 = enterRepository.save(endEnter(cos, endroom4));
+        Enter endEnter3 = enterRepository.save(endEnter(kaka, endroom4));
+        Enter endEnter4 = enterRepository.save(endEnter(ye, endroom4));
     }
 
     @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
@@ -125,7 +128,7 @@ public class GgamfApiControllerTest extends DummyEntity {
 
         // then
         resultActions.andExpect(MockMvcResultMatchers.status().isCreated());
-        // resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.accept").value(false));
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.accept").value(false));
     }
 
     @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
@@ -266,8 +269,7 @@ public class GgamfApiControllerTest extends DummyEntity {
 
         // then
         resultActions.andExpect(MockMvcResultMatchers.status().isOk());
-        // resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.followers.[0].nickName").value("nickvovo"));
-        // resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.followings.[0].nickName").value("nicktoto"));
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.latests.[0].photo").value("내사진입니다"));
     }
 
 }
