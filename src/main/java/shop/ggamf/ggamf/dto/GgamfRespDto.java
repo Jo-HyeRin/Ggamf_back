@@ -3,45 +3,49 @@ package shop.ggamf.ggamf.dto;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import shop.ggamf.ggamf.domain.enter.Enter;
 import shop.ggamf.ggamf.domain.follow.Follow;
 import shop.ggamf.ggamf.domain.report.Report;
+import shop.ggamf.ggamf.domain.user.User;
 
 public class GgamfRespDto {
 
     @Setter
     @Getter
     public static class FollowGgamfRespDto {
+        // 내가 요청한 정보를 본다.
         private Long followerId;
         private Long followingId;
         private Boolean accept;
         private String followingNick;
         private String followingPhoto;
 
-        public FollowGgamfRespDto(Follow follow) {
-            this.followerId = follow.getFollower().getId();
-            this.followingId = follow.getFollowing().getId();
-            this.accept = follow.getAccept();
-            this.followingNick = follow.getFollowing().getNickname();
-            this.followingPhoto = follow.getFollowing().getPhoto();
+        public FollowGgamfRespDto(Follow follower, Follow following) {
+            this.followerId = follower.getFollower().getId();
+            this.followingId = follower.getFollowing().getId();
+            this.accept = follower.getAccept();
+            this.followingNick = follower.getFollowing().getNickname();
+            this.followingPhoto = follower.getFollowing().getPhoto();
         }
     }
 
     @Setter
     @Getter
     public static class AcceptGgamfRespDto {
+        // 수락하는 입장에서
         private Long followId;
         private Long userId;
         private Long ggamfId;
         private Boolean accept;
 
-        public AcceptGgamfRespDto(Follow follow) {
-            this.followId = follow.getId();
-            this.userId = follow.getFollowing().getId();
-            this.ggamfId = follow.getFollower().getId();
-            this.accept = follow.getAccept();
+        public AcceptGgamfRespDto(Follow follower, Follow folloing) {
+            this.followId = follower.getId();
+            this.userId = follower.getFollowing().getId();
+            this.ggamfId = follower.getFollower().getId();
+            this.accept = follower.getAccept();
         }
     }
 
@@ -146,29 +150,27 @@ public class GgamfRespDto {
     @Getter
     public static class RecommendGgamfListRespDto {
 
-        List<EnterDto> latests; // 내가 최근에 닫은 방 유저들
-        List<EnterDto> enters; // 내가 참여했던 방 유저들
+        List<UserDto> recommendUserList;
 
-        public RecommendGgamfListRespDto(List<Enter> latests, List<Enter> enters) {
-            this.latests = latests.stream().map((enter) -> new EnterDto(enter)).collect(Collectors.toList());
-            this.enters = enters.stream().map((enter) -> new EnterDto(enter)).collect(Collectors.toList());
+        public RecommendGgamfListRespDto(List<User> recommendUserList) {
+            this.recommendUserList = recommendUserList.stream().map((user) -> new UserDto(user))
+                    .collect(Collectors.toList());
         }
 
         @Setter
         @Getter
-        public class EnterDto {
-            private Long friendId;
+        public class UserDto {
+            private Long userId;
             private String photo;
             private String nickName;
             private String intro;
 
-            public EnterDto(Enter enter) {
-                this.friendId = enter.getUser().getId();
-                this.photo = enter.getUser().getPhoto();
-                this.nickName = enter.getUser().getNickname();
-                this.intro = enter.getUser().getIntro();
+            public UserDto(User user) {
+                this.userId = user.getId();
+                this.photo = user.getPhoto();
+                this.nickName = user.getNickname();
+                this.intro = user.getIntro();
             }
         }
     }
-
 }

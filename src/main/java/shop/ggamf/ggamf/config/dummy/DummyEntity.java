@@ -14,6 +14,7 @@ import shop.ggamf.ggamf.domain.report.Report;
 import shop.ggamf.ggamf.domain.room.Room;
 import shop.ggamf.ggamf.domain.starRate.StarRate;
 import shop.ggamf.ggamf.domain.user.User;
+import shop.ggamf.ggamf.service.UserService;
 
 public abstract class DummyEntity {
 
@@ -109,11 +110,11 @@ public abstract class DummyEntity {
         return enter;
     }
 
-    protected Follow newFollow(User follower, User following) {
+    protected Follow newFollow(User users, User friend, Boolean accept) {
         Follow follow = Follow.builder()
-                .follower(follower)
-                .following(following)
-                .accept(false)
+                .follower(users)
+                .following(friend)
+                .accept(accept)
                 .build();
         return follow;
     }
@@ -126,16 +127,6 @@ public abstract class DummyEntity {
                 .rate(random.nextLong())
                 .build();
         return starRate;
-
-    }
-
-    protected Follow newFriend(User follower, User following) {
-        Follow follow = Follow.builder()
-                .follower(follower)
-                .following(following)
-                .accept(true)
-                .build();
-        return follow;
     }
 
     protected ReasonCode newReasonCode(String reason) {

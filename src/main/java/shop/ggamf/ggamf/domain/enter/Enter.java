@@ -1,8 +1,5 @@
 package shop.ggamf.ggamf.domain.enter;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -17,6 +14,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import shop.ggamf.ggamf.domain.AuditingTime;
+import shop.ggamf.ggamf.domain.follow.Follow;
 import shop.ggamf.ggamf.domain.room.Room;
 import shop.ggamf.ggamf.domain.user.User;
 
@@ -49,19 +47,6 @@ public class Enter extends AuditingTime {
         this.stay = stay;
         this.stayUntilEnd = stayUntilEnd;
     }
-
-    // @Builder
-    // public Enter(Long id, User user, Room room, Boolean stay, Boolean
-    // stayUntilEnd, LocalDateTime createdAt,
-    // LocalDateTime updatedAt) {
-    // this.id = id;
-    // this.user = user;
-    // this.room = room;
-    // this.stay = stay;
-    // this.stayUntilEnd = stayUntilEnd;
-    // this.createdAt = createdAt;
-    // this.updatedAt = updatedAt;
-    // }
 
     // 파티방 나가기
     public void notStayRoom() {
