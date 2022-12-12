@@ -128,8 +128,7 @@ public class GgamfApiControllerTest extends DummyEntity {
         // when
         ResultActions resultActions = mvc
                 .perform(MockMvcRequestBuilders.post("/s/api/ggamf/user/" + userId + "/follow/" + friendId)
-                        .content(requestBody)
-                        .contentType(APPLICATION_JSON_UTF8));
+                        .content(requestBody).contentType(APPLICATION_JSON_UTF8));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
 
@@ -144,6 +143,7 @@ public class GgamfApiControllerTest extends DummyEntity {
         // given
         Long userId = 1L;
         Long followId = 4L;
+
         // when
         ResultActions resultActions = mvc
                 .perform(MockMvcRequestBuilders.put("/s/api/ggamf/user/" + userId + "/accept/" + followId)
@@ -254,6 +254,7 @@ public class GgamfApiControllerTest extends DummyEntity {
 
         // then
         resultActions.andExpect(MockMvcResultMatchers.status().isOk());
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.followers.[0].nickName").value("nickdada"));
         resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.followers.[0].nickName").value("nickdada"));
     }
 

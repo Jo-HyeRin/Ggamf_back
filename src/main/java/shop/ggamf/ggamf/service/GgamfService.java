@@ -1,7 +1,9 @@
 package shop.ggamf.ggamf.service;
 
 import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -163,25 +165,25 @@ public class GgamfService {
     public RecommendGgamfListRespDto 추천겜프목록보기(Long userId) {
         // <내가 방장일 때>
         // 가장 최근 종료한 방 찾기
-        List<Room> roomListPS = roomRepository.findByUserIdEnd(userId);
+        List<Room> roomList = roomRepository.findByUserIdEnd(userId);
         // 방 종료까지 함께한 인원 셀렉하기
-        List<Enter> latestPS = enterRepository.findByRoomIdEnd(roomListPS.get(0).getId());
+        List<Enter> latestList = enterRepository.findByRoomIdEnd(roomList.get(0).getId());
         List<Long> latestIdList = new ArrayList<>();
-        for (int i = 0; i < latestPS.size(); i++) {
-            latestIdList.add(latestPS.get(i).getUser().getId());
+        for (int i = 0; i < latestList.size(); i++) {
+            latestIdList.add(latestList.get(i).getUser().getId());
         }
         // <내가 참여했을 때>
         // 내가 참여했던 방
-        List<Enter> enterRoomListPS = enterRepository.findEnterRoom(userId);
+        List<Enter> enterRoomList = enterRepository.findEnterRoom(userId);
         List<Long> enterRoomIdList = new ArrayList<>();
-        for (int i = 0; i < enterRoomListPS.size(); i++) {
-            enterRoomIdList.add(enterRoomListPS.get(i).getRoom().getId());
+        for (int i = 0; i < enterRoomList.size(); i++) {
+            enterRoomIdList.add(enterRoomList.get(i).getRoom().getId());
         }
         // 방 출입 유저 id 목록
-        List<Enter> enterListPS = enterRepository.findTogether(userId, enterRoomIdList);
+        List<Enter> enterUserList = enterRepository.findTogether(userId, enterRoomIdList);
         List<Long> enterUserIdList = new ArrayList<>();
-        for (int i = 0; i < enterListPS.size(); i++) {
-            enterUserIdList.add(enterListPS.get(i).getUser().getId());
+        for (int i = 0; i < enterUserList.size(); i++) {
+            enterUserIdList.add(enterUserList.get(i).getUser().getId());
         }
         // 두 리스트 합치기
         List<Long> recommendFriendList = new ArrayList<>();
