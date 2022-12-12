@@ -30,7 +30,6 @@ import shop.ggamf.ggamf.domain.room.Room;
 import shop.ggamf.ggamf.domain.room.RoomRepository;
 import shop.ggamf.ggamf.domain.user.User;
 import shop.ggamf.ggamf.domain.user.UserRepository;
-import shop.ggamf.ggamf.dto.GgamfReqDto.AcceptGgamfReqDto;
 import shop.ggamf.ggamf.dto.GgamfReqDto.FollowGgamfReqDto;
 import shop.ggamf.ggamf.dto.GgamfReqDto.ReportGgamfReqDto;
 
@@ -145,15 +144,10 @@ public class GgamfApiControllerTest extends DummyEntity {
         // given
         Long userId = 1L;
         Long followId = 4L;
-        AcceptGgamfReqDto acceptGgamfReqDto = new AcceptGgamfReqDto();
-        acceptGgamfReqDto.setUserId(userId);
-        acceptGgamfReqDto.setFollowId(followId);
-        String requestBody = om.writeValueAsString(acceptGgamfReqDto);
-        System.out.println("테스트 : " + requestBody);
         // when
         ResultActions resultActions = mvc
                 .perform(MockMvcRequestBuilders.put("/s/api/ggamf/user/" + userId + "/accept/" + followId)
-                        .content(requestBody).contentType(APPLICATION_JSON_UTF8));
+                        .contentType(APPLICATION_JSON_UTF8));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
 

@@ -3,10 +3,8 @@ package shop.ggamf.ggamf.dto;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import shop.ggamf.ggamf.domain.enter.Enter;
 import shop.ggamf.ggamf.domain.follow.Follow;
 import shop.ggamf.ggamf.domain.report.Report;
 import shop.ggamf.ggamf.domain.user.User;
@@ -16,7 +14,6 @@ public class GgamfRespDto {
     @Setter
     @Getter
     public static class FollowGgamfRespDto {
-        // 내가 요청한 정보를 본다.
         private Long followerId;
         private Long followingId;
         private Boolean accept;
@@ -35,7 +32,6 @@ public class GgamfRespDto {
     @Setter
     @Getter
     public static class AcceptGgamfRespDto {
-        // 수락하는 입장에서
         private Long followId;
         private Long userId;
         private String userNick;
