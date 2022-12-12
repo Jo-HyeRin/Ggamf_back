@@ -178,22 +178,6 @@ public class GgamfService {
         // 중복제거
         List<Long> latestIdListPS = latestIdList.stream().distinct().collect(Collectors.toList());
 
-        // 친구, 친구 신청 여부 확인 팔로잉=친구 or 팔로워=친구
-        List<Follow> friendFollowingLatest = followRepository.findByRecommendFollowing(userId, latestIdListPS);
-        List<Follow> friendFollowerLatest = followRepository.findByRecommendFollower(userId, latestIdListPS);
-        for (int i = 0; i < friendFollowingLatest.size(); i++) {
-            if (latestIdListPS.contains(friendFollowingLatest.get(i).getFollowing().getId())) {
-                latestIdListPS.remove(friendFollowingLatest.get(i).getFollowing().getId());
-            }
-        }
-        for (int i = 0; i < friendFollowerLatest.size(); i++) {
-            if (latestIdListPS.contains(friendFollowerLatest.get(i).getFollower().getId())) {
-                latestIdListPS.remove(friendFollowerLatest.get(i).getFollower().getId());
-            }
-        }
-        // 친구 추천하기
-        List<User> recommendLatest = userRepository.findByIdForRecommend(latestIdListPS);
-
         // <내가 참여했을 때>
         // 내가 참여했던 방
         List<Enter> enterRoomListPS = enterRepository.findEnterRoom(userId);
@@ -209,23 +193,28 @@ public class GgamfService {
         }
         // 중복 제거
         List<Long> enterUserIdListPS = enterUserIdList.stream().distinct().collect(Collectors.toList());
-        // 친구, 친구 신청 여부 확인 팔로잉=친구 or 팔로워=친구
-        List<Follow> friendFollowingEnter = followRepository.findByRecommendFollowing(userId, enterUserIdListPS);
-        List<Follow> friendFollowerEnter = followRepository.findByRecommendFollower(userId, enterUserIdListPS);
-        for (int i = 0; i < friendFollowingEnter.size(); i++) {
-            if (enterUserIdListPS.contains(friendFollowingEnter.get(i).getFollowing().getId())) {
-                enterUserIdListPS.remove(friendFollowingEnter.get(i).getFollowing().getId());
-            }
-        }
-        for (int i = 0; i < friendFollowerEnter.size(); i++) {
-            if (enterUserIdListPS.contains(friendFollowerEnter.get(i).getFollower().getId())) {
-                enterUserIdListPS.remove(friendFollowerEnter.get(i).getFollower().getId());
-            }
-        }
 
+        // 두 리스트 합치기
+        List<Long> recommendFriendList = new ArrayList<>();
+        recommendFriendList.addAll(latestIdListPS);
+        recommendFriendList.addAll(enterUserIdListPS);
+
+        // 합친 리스트 친구, 친구 신청 여부 확인 팔로잉=친구 or 팔로워=친구
+        List<Follow> friendFollowingLatest = followRepository.findByRecommendFollowing(userId, recommendFriendList);
+        List<Follow> friendFollowerLatest = followRepository.findByRecommendFollower(userId, recommendFriendList);
+        for (int i = 0; i < friendFollowingLatest.size(); i++) {
+            if (recommendFriendList.contains(friendFollowingLatest.get(i).getFollowing().getId())) {
+                recommendFriendList.remove(friendFollowingLatest.get(i).getFollowing().getId());
+            }
+        }
+        for (int i = 0; i < friendFollowerLatest.size(); i++) {
+            if (recommendFriendList.contains(friendFollowerLatest.get(i).getFollower().getId())) {
+                recommendFriendList.remove(friendFollowerLatest.get(i).getFollower().getId());
+            }
+        }
         // 친구 추천하기
-        List<User> recommendEnter = userRepository.findByIdForRecommend(enterUserIdListPS);
+        List<User> recommendUserList = userRepository.findByIdForRecommend(recommendFriendList);
 
-        return new RecommendGgamfListRespDto(recommendLatest, recommendEnter);
+        return new RecommendGgamfListRespDto(recommendUserList);
     }
 }

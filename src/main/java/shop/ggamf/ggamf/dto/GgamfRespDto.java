@@ -150,12 +150,11 @@ public class GgamfRespDto {
     @Getter
     public static class RecommendGgamfListRespDto {
 
-        List<UserDto> latests; // 내가 최근에 닫은 방 유저들
-        List<UserDto> enters; // 내가 참여했던 방 유저들
+        List<UserDto> recommendUserList;
 
-        public RecommendGgamfListRespDto(List<User> latests, List<User> enters) {
-            this.latests = latests.stream().map((user) -> new UserDto(user)).collect(Collectors.toList());
-            this.enters = enters.stream().map((user) -> new UserDto(user)).collect(Collectors.toList());
+        public RecommendGgamfListRespDto(List<User> recommendUserList) {
+            this.recommendUserList = recommendUserList.stream().map((user) -> new UserDto(user))
+                    .collect(Collectors.toList());
         }
 
         @Setter
