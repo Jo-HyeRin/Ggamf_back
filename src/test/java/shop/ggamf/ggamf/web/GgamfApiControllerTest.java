@@ -74,14 +74,10 @@ public class GgamfApiControllerTest extends DummyEntity {
         User oh = userRepository.save(newUser("oh"));
         User ye = userRepository.save(newUser("ye"));
         // Follow : 겜프
-        // Follow f1 = followRepository.save(newFollowing(ssar, cos, false));
-        // Follow f2 = followRepository.save(newFollower(cos, ssar, false));
-        // Follow f3 = followRepository.save(newFollowing(lala, ssar, false));
-        // Follow f4 = followRepository.save(newFollower(ssar, lala, false));
-        // Follow f5 = followRepository.save(newFollowing(ssar, dada, true));
-        // Follow f6 = followRepository.save(newFollower(dada, ssar, true));
-        // Follow f7 = followRepository.save(newFollowing(kaka, ssar, true));
-        // Follow f8 = followRepository.save(newFollower(ssar, kaka, true));
+        Follow f1 = followRepository.save(newFollow(ssar, cos, false));
+        Follow f2 = followRepository.save(newFollow(lala, ssar, false));
+        Follow f3 = followRepository.save(newFollow(ssar, dada, true));
+        Follow f4 = followRepository.save(newFollow(kaka, ssar, true));
         // ReasonCode : 신고카테고리
         ReasonCode reason1 = reasonCodeRepository.save(newReasonCode("욕설"));
         ReasonCode reason2 = reasonCodeRepository.save(newReasonCode("탈주"));
