@@ -84,7 +84,7 @@ public class PartyService {
             throw new CustomApiException("이미 종료되어 참가할 수 없는 방입니다", HttpStatus.BAD_REQUEST);
         }
         if (roomPS.getUser().getId() == joinRoomReqDto.getUserId()) {
-            throw new CustomApiException("당신이 방장인 방입니다", HttpStatus.BAD_REQUEST);
+            throw new CustomApiException("당신이 방장인 방입니다 참가할 수 없습니다", HttpStatus.BAD_REQUEST);
         }
         // 현재 이 방에 참가 중이면 throw
         List<Enter> enterList = enterRepository.findByUserId(joinRoomReqDto.getUserId());
@@ -109,9 +109,9 @@ public class PartyService {
         // 검증
         Enter enterPS = enterRepository.findByRoomIdAndUserId(roomId, userId)
                 .orElseThrow(
-                        () -> new CustomApiException("나갈 수 없는 방입니다", HttpStatus.FORBIDDEN));
+                        () -> new CustomApiException("당신이 나갈 수 없는 방입니다", HttpStatus.FORBIDDEN));
         if (enterPS.getStay() == false) {
-            throw new CustomApiException("이미 종료된 방입니다", HttpStatus.BAD_REQUEST);
+            throw new CustomApiException("이미 방에서 나온 상태입니다", HttpStatus.BAD_REQUEST);
         }
         if (enterPS.getRoom().getUser().getId() == userId) {
             throw new CustomApiException("당신이 방장입니다 나갈 수 없습니다 방을 종료하세요", HttpStatus.BAD_REQUEST);
@@ -127,7 +127,6 @@ public class PartyService {
         log.debug("디버그 : 파티방 종료 서비스 호출");
         // Room active = false로 변경
         // Enter roomId = endRoomReqDto.getRoomId(), stay=true 찾아서 stay = false 변경
-
         // 방 존재 여부 확인
         Room roomPS = roomRepository.findById(roomId)
                 .orElseThrow(
@@ -164,6 +163,12 @@ public class PartyService {
                 .findByRoomIdAndUserId(kickUserReqDto.getRoomId(), kickUserReqDto.getKickUserId())
                 .orElseThrow(
                         () -> new CustomApiException("해당 파티원은 추방할 수 없습니다", HttpStatus.FORBIDDEN));
+        if (enterPS.getRoom().getId() != kickUserReqDto.getUserId()) {
+            throw new CustomApiException("당신은 방장이 아닙니다. 추방 권한이 없습니다", HttpStatus.BAD_REQUEST);
+        }
+        if (enterPS.getStay() == false) {
+            throw new CustomApiException("이 방에 존재하는 유저가 아닙니다", HttpStatus.BAD_REQUEST);
+        }
         enterPS.notStayRoom();
         return new KickUserRespDto(enterPS);
     }
@@ -176,7 +181,7 @@ public class PartyService {
     public DetailRoomRespDto 파티방상세보기(Long userId, Long roomId) {
         Room roomPS = roomRepository.findById(roomId)
                 .orElseThrow(
-                        () -> new CustomApiException("해당 파티방을 찾을 수 없습니다", HttpStatus.FORBIDDEN));
+                        () -> new CustomApiException("존재하지 않는 파티방입니다", HttpStatus.FORBIDDEN));
         if (roomPS.getActive() == false) {
             throw new CustomApiException("종료된 방입니다.", HttpStatus.BAD_REQUEST);
         }
