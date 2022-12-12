@@ -49,20 +49,6 @@ public class PartyReqDto {
 
     @Setter
     @Getter
-    public static class ExitRoomReqDto {
-        private Long userId;
-        private Long roomId;
-    }
-
-    @Setter
-    @Getter
-    public static class EndRoomReqDto {
-        private Long userId;
-        private Long roomId;
-    }
-
-    @Setter
-    @Getter
     public static class KickUserReqDto {
         private Long userId;
         private Long roomId;
