@@ -22,7 +22,6 @@ import shop.ggamf.ggamf.domain.user.User;
 import shop.ggamf.ggamf.domain.user.UserRepository;
 import shop.ggamf.ggamf.dto.PartyReqDto.CreateRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.EndRoomReqDto;
-import shop.ggamf.ggamf.dto.PartyReqDto.ExitRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.JoinRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.KickUserReqDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.CreateRoomRespDto;
@@ -87,16 +86,16 @@ public class PartyService {
     }
 
     @Transactional
-    public ExitRoomRespDto 파티방나가기(ExitRoomReqDto exitRoomReqDto) { // 나의 enter.stay = false 변경하기
+    public ExitRoomRespDto 파티방나가기(Long userId, Long roomId) { // 나의 enter.stay = false 변경하기
         log.debug("디버그 : 파티방 나가기 서비스 호출");
         // 검증
-        Enter enterPS = enterRepository.findByRoomIdAndUserId(exitRoomReqDto.getRoomId(), exitRoomReqDto.getUserId())
+        Enter enterPS = enterRepository.findByRoomIdAndUserId(roomId, userId)
                 .orElseThrow(
                         () -> new CustomApiException("나갈 수 없는 방입니다", HttpStatus.FORBIDDEN));
         if (enterPS.getStay() == false) {
             throw new CustomApiException("이미 종료된 방입니다", HttpStatus.BAD_REQUEST);
         }
-        if (enterPS.getRoom().getUser().getId() == exitRoomReqDto.getUserId()) {
+        if (enterPS.getRoom().getUser().getId() == userId) {
             throw new CustomApiException("당신이 방장입니다 나갈 수 없습니다 종료하세요", HttpStatus.BAD_REQUEST);
         }
         // 실행

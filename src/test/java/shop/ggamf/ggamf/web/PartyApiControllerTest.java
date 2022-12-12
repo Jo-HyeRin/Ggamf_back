@@ -28,7 +28,6 @@ import shop.ggamf.ggamf.domain.user.User;
 import shop.ggamf.ggamf.domain.user.UserRepository;
 import shop.ggamf.ggamf.dto.PartyReqDto.CreateRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.EndRoomReqDto;
-import shop.ggamf.ggamf.dto.PartyReqDto.ExitRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.JoinRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.KickUserReqDto;
 
@@ -151,15 +150,11 @@ public class PartyApiControllerTest extends DummyEntity {
         // given
         Long userId = 1L;
         Long roomId = 3L;
-        ExitRoomReqDto exitRoomReqDto = new ExitRoomReqDto();
-        exitRoomReqDto.setRoomId(roomId);
-        String requestBody = om.writeValueAsString(exitRoomReqDto);
-        System.out.println("테스트 : " + requestBody);
 
         // when
         ResultActions resultActions = mvc
                 .perform(MockMvcRequestBuilders.put("/s/api/party/user/" + userId + "/exit/" + roomId)
-                        .content(requestBody).contentType(APPLICATION_JSON_UTF8));
+                        .contentType(APPLICATION_JSON_UTF8));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
 
@@ -181,7 +176,7 @@ public class PartyApiControllerTest extends DummyEntity {
 
         // when
         ResultActions resultActions = mvc
-                .perform(MockMvcRequestBuilders.put("/s/api/party/user/" + userId + "/end/" + roomId)
+                .perform(MockMvcRequestBuilders.put("/s/api/party/user/" + userId + "/room/" + roomId + "/end")
                         .content(requestBody).contentType(APPLICATION_JSON_UTF8));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);

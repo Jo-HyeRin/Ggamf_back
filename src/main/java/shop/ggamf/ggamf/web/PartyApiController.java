@@ -18,7 +18,6 @@ import shop.ggamf.ggamf.config.auth.LoginUser;
 import shop.ggamf.ggamf.config.exception.CustomApiException;
 import shop.ggamf.ggamf.dto.PartyReqDto.CreateRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.EndRoomReqDto;
-import shop.ggamf.ggamf.dto.PartyReqDto.ExitRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.JoinRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.KickUserReqDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.CreateRoomRespDto;
@@ -74,21 +73,18 @@ public class PartyApiController {
 
     // 파티방 나가기 (본인)
     @PutMapping("/party/user/{userId}/exit/{roomId}")
-    public ResponseEntity<?> exitRoom(@RequestBody ExitRoomReqDto exitRoomReqDto, @PathVariable Long userId,
-            @PathVariable Long roomId,
+    public ResponseEntity<?> exitRoom(@PathVariable Long userId, @PathVariable Long roomId,
             @AuthenticationPrincipal LoginUser loginUser) {
         log.debug("디버그 : 파티방 나가기 컨트롤러 호출");
         if (loginUser.getUser().getId() != userId) {
             throw new CustomApiException("로그인 유저와 요청 유저가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
-        exitRoomReqDto.setRoomId(roomId);
-        exitRoomReqDto.setUserId(userId);
-        ExitRoomRespDto exitRoomRespDto = partyService.파티방나가기(exitRoomReqDto);
+        ExitRoomRespDto exitRoomRespDto = partyService.파티방나가기(userId, roomId);
         return new ResponseEntity<>(new ResponseDto<>("파티방 나가기 완료", exitRoomRespDto), HttpStatus.OK);
     }
 
     // 파티방 종료(방장)
-    @PutMapping("/party/user/{userId}/end/{roomId}")
+    @PutMapping("/party/user/{userId}/room/{roomId}/end")
     public ResponseEntity<?> endRoom(@RequestBody EndRoomReqDto endRoomReqDto, @PathVariable Long userId,
             @PathVariable Long roomId,
             @AuthenticationPrincipal LoginUser loginUser) {
