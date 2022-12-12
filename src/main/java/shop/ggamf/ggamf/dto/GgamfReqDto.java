@@ -12,23 +12,24 @@ public class GgamfReqDto {
     @Setter
     @Getter
     public static class FollowGgamfReqDto {
-        private Long followerId;
-        private Long followingId;
+        private Long userId;
+        private Long friendId;
 
-        public Follow toEntity(User follower, User following) {
+        public Follow toSendEntity(User users, User friend) {
             return Follow.builder()
-                    .follower(follower)
-                    .following(following)
+                    .follower(users)
+                    .following(friend)
                     .accept(false)
                     .build();
         }
-    }
 
-    @Setter
-    @Getter
-    public static class AcceptGgamfReqDto {
-        private Long followId;
-        private Long userId;
+        public Follow toAcceptEntity(User users, User friend) {
+            return Follow.builder()
+                    .follower(friend)
+                    .following(users)
+                    .accept(false)
+                    .build();
+        }
     }
 
     @Setter

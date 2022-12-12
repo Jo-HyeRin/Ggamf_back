@@ -12,13 +12,14 @@ import javax.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import shop.ggamf.ggamf.domain.AuditingTime;
 import shop.ggamf.ggamf.domain.user.User;
 
 @NoArgsConstructor
 @Getter
 @Table(name = "follow")
 @Entity
-public class Follow {
+public class Follow extends AuditingTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
