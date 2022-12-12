@@ -22,17 +22,17 @@ public class AdminRespDto {
     // u.state userState from report r inner join reason_code rs on rs.id =
     // r.reason_code_id inner join users u on u.id = r.submit_User_id;
 
-    @Setter
-    @Getter
-    public static class DetailReportRespDto {
-        private Long id;
-        private String badUser;
-        private Timestamp createdAt;
-        private String reason;
-        private String detail;
-        private String submitUser;
-        private Integer count;
-    }
+    // @Setter
+    // @Getter
+    // public static class DetailReportRespDto {
+    //     private Long id;
+    //     private String badUser;
+    //     private Timestamp createdAt;
+    //     private String reason;
+    //     private String detail;
+    //     private String submitUser;
+    //     private Integer count;
+    // }
 
     // select r.id, u.name badUsername, r.created_At, rs.reason, r.detail, u.name
     // submitUsername, (select count r.bad_user_id) form report r where bad_user_id

@@ -1,4 +1,4 @@
-package shop.ggamf.ggamf.web;
+package shop.ggamf.ggamf.domain;
 
 import javax.persistence.EntityManager;
 
@@ -13,6 +13,7 @@ import org.springframework.test.context.ActiveProfiles;
 import shop.ggamf.ggamf.config.dummy.DummyEntity;
 import shop.ggamf.ggamf.domain.reasonCode.ReasonCode;
 import shop.ggamf.ggamf.domain.reasonCode.ReasonCodeRepository;
+import shop.ggamf.ggamf.domain.report.DetailReportRespDto;
 import shop.ggamf.ggamf.domain.report.Report;
 import shop.ggamf.ggamf.domain.report.ReportRepository;
 import shop.ggamf.ggamf.domain.report.ReportRepositoryQuery;
@@ -55,6 +56,17 @@ public class ReportRepositoryQueryTest extends DummyEntity {
 
         // then
         Assertions.assertThat(reportRespDto.getReason()).isEqualTo("잘못1");
+    }
+
+    @Test
+    public void findDetailReport_test () {
+        // given
+        Long id = 1L;
+        // when
+        DetailReportRespDto detailReportRespDto = reportRepositoryQuery.findDetailReport(id);
+
+        // then
+        Assertions.assertThat(detailReportRespDto.getDetail());
     }
 
     private void dummy_init() {

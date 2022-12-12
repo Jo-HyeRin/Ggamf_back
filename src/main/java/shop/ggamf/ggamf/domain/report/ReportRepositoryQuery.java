@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import shop.ggamf.ggamf.dto.AdminRespDto.DetailReportRespDto;
+
 
 @Repository
 public class ReportRepositoryQuery {
@@ -42,12 +42,13 @@ public class ReportRepositoryQuery {
         }
     }
 
-    public DetailReportRespDto findDetailReport () {
+    public DetailReportRespDto findDetailReport (Long id) {
         StringBuffer sb = new StringBuffer();
         sb.append(
                 "select r.id, u.name badUser, r.created_at, rs.reason, r.detail, u.name submitUser, count(r.bad_user_id) from report r inner join reason_code rs on rs.id = r.reason_code_id inner join users u on u.id = r.submit_ser_id where r.id = :id");
 
-        Query query = em.createNativeQuery(sb.toString());
+        Query query = em.createNativeQuery(sb.toString())
+        .setParameter("id", id);
 
         JpaResultMapper result = new JpaResultMapper();
         try {
