@@ -102,14 +102,18 @@ public class PartyRespDto {
         public class EnterDto {
             private Long id;
             private Long userId;
+            private String userNick;
             private Long roomId;
+            private String roomName;
             private Boolean stay;
             private Boolean stayUntilEnd;
 
             public EnterDto(Enter enter) {
                 this.id = enter.getId();
                 this.userId = enter.getUser().getId();
+                this.userNick = enter.getUser().getNickname();
                 this.roomId = enter.getRoom().getId();
+                this.roomName = enter.getRoom().getRoomName();
                 this.stay = enter.getStay();
                 this.stayUntilEnd = enter.getStayUntilEnd();
             }
@@ -170,14 +174,13 @@ public class PartyRespDto {
     public static class DetailRoomRespDto {
         private Long roomId;
         private String roomName;
-        private String userNickName;
+        private String roomOwnerNickName;
         private String gameName;
-        // 채팅내용
 
         public DetailRoomRespDto(Room room) {
             this.roomId = room.getId();
             this.roomName = room.getRoomName();
-            this.userNickName = room.getUser().getNickname();
+            this.roomOwnerNickName = room.getUser().getNickname();
             this.gameName = room.getGameName();
         }
     }

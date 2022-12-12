@@ -1,5 +1,6 @@
 package shop.ggamf.ggamf.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import shop.ggamf.ggamf.config.exception.CustomApiException;
 import shop.ggamf.ggamf.domain.enter.Enter;
 import shop.ggamf.ggamf.domain.enter.EnterRepository;
-import shop.ggamf.ggamf.domain.follow.FollowRepository;
 import shop.ggamf.ggamf.domain.gameCode.GameCode;
 import shop.ggamf.ggamf.domain.gameCode.GameCodeRepository;
 import shop.ggamf.ggamf.domain.room.Room;
@@ -21,7 +21,6 @@ import shop.ggamf.ggamf.domain.room.RoomRepository;
 import shop.ggamf.ggamf.domain.user.User;
 import shop.ggamf.ggamf.domain.user.UserRepository;
 import shop.ggamf.ggamf.dto.PartyReqDto.CreateRoomReqDto;
-import shop.ggamf.ggamf.dto.PartyReqDto.EndRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.JoinRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.KickUserReqDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.CreateRoomRespDto;
@@ -44,7 +43,6 @@ public class PartyService {
     private final UserRepository userRepository;
     private final GameCodeRepository gameCodeRepository;
     private final EnterRepository enterRepository;
-    private final FollowRepository followRepository;
 
     @Transactional
     public CreateRoomRespDto 파티방생성(CreateRoomReqDto createRoomReqDto) {
@@ -56,7 +54,11 @@ public class PartyService {
         GameCode gameCodePS = gameCodeRepository.findById(createRoomReqDto.getGameCodeId())
                 .orElseThrow(
                         () -> new CustomApiException("게임 카테고리에 존재하지 않습니다", HttpStatus.FORBIDDEN));
-
+        // 현재 생성한 방이 3개 초과 시 throw
+        List<Room> roomListPS = roomRepository.findByUserId(createRoomReqDto.getUserId());
+        if (roomListPS.size() > 2) {
+            throw new CustomApiException("방은 인당 최대 3개 운영 가능합니다", HttpStatus.BAD_REQUEST);
+        }
         // 기타(1번)가 아닐 때 카테고리 게임 이름 입력해주기
         if (createRoomReqDto.getGameCodeId() != 1L) {
             createRoomReqDto.setGameName(gameCodePS.getGameName());
@@ -78,6 +80,22 @@ public class PartyService {
         Room roomPS = roomRepository.findById(joinRoomReqDto.getRoomId())
                 .orElseThrow(
                         () -> new CustomApiException("해당 파티방이 없습니다", HttpStatus.FORBIDDEN));
+        if (roomPS.getActive() == false) {
+            throw new CustomApiException("이미 종료되어 참가할 수 없는 방입니다", HttpStatus.BAD_REQUEST);
+        }
+        if (roomPS.getUser().getId() == joinRoomReqDto.getUserId()) {
+            throw new CustomApiException("당신이 방장인 방입니다", HttpStatus.BAD_REQUEST);
+        }
+        // 현재 이 방에 참가 중이면 throw
+        List<Enter> enterList = enterRepository.findByUserId(joinRoomReqDto.getUserId());
+        List<Long> enterRoomIdList = new ArrayList<>();
+        for (int i = 0; i < enterList.size(); i++) {
+            enterRoomIdList.add(enterList.get(i).getRoom().getId());
+        }
+        if (enterRoomIdList.contains(joinRoomReqDto.getRoomId())) {
+            throw new CustomApiException("이미 참가 중인 방입니다", HttpStatus.BAD_REQUEST);
+        }
+
         // 실행
         Enter enter = joinRoomReqDto.toEntity(userPS, roomPS);
         Enter enterPS = enterRepository.save(enter);
@@ -96,7 +114,7 @@ public class PartyService {
             throw new CustomApiException("이미 종료된 방입니다", HttpStatus.BAD_REQUEST);
         }
         if (enterPS.getRoom().getUser().getId() == userId) {
-            throw new CustomApiException("당신이 방장입니다 나갈 수 없습니다 종료하세요", HttpStatus.BAD_REQUEST);
+            throw new CustomApiException("당신이 방장입니다 나갈 수 없습니다 방을 종료하세요", HttpStatus.BAD_REQUEST);
         }
         // 실행
         enterPS.notStayRoom();
@@ -105,27 +123,34 @@ public class PartyService {
     }
 
     @Transactional
-    public EndRoomRespDto 파티방종료(EndRoomReqDto endRoomReqDto) {
+    public EndRoomRespDto 파티방종료(Long userId, Long roomId) {
         log.debug("디버그 : 파티방 종료 서비스 호출");
         // Room active = false로 변경
-        Room roomPS = roomRepository.findById(endRoomReqDto.getRoomId())
+        // Enter roomId = endRoomReqDto.getRoomId(), stay=true 찾아서 stay = false 변경
+
+        // 방 존재 여부 확인
+        Room roomPS = roomRepository.findById(roomId)
                 .orElseThrow(
                         () -> new CustomApiException("해당 방을 찾을 수 없습니다", HttpStatus.FORBIDDEN));
-        if (endRoomReqDto.getUserId() != roomPS.getUser().getId()) {
+        // 방장 유무 확인
+        if (userId != roomPS.getUser().getId()) {
             throw new CustomApiException("당신은 방장이 아닙니다", HttpStatus.BAD_REQUEST);
         }
+        // 활성화 유무 확인
         if (roomPS.getActive() == false) {
             throw new CustomApiException("이미 종료된 방입니다", HttpStatus.BAD_REQUEST);
         }
+        // 실행
         roomPS.endRoom();
 
-        // Enter roomId = endRoomReqDto.getRoomId(), stay=true 찾아서 stay = false 변경
-        List<Enter> enterListPS = enterRepository.findByRoomId(endRoomReqDto.getRoomId());
-
+        // 방에 끝까지 남은 유저 확인
+        List<Enter> enterListPS = enterRepository.findByRoomId(roomId);
+        // stay = false 변경
         List<Enter> enterList = enterListPS.stream()
                 .map((enter) -> new Enter(enter.getId(), enter.getUser(),
                         enter.getRoom(), false, true))
                 .collect(Collectors.toList());
+        // 실행
         List<Enter> enterListUpdate = enterRepository.saveAll(enterList);
 
         // 응답
@@ -148,11 +173,24 @@ public class PartyService {
         return new RoomListByMyIdRespDto(roomListPS);
     }
 
-    public DetailRoomRespDto 파티방상세보기(Long roomId) {
+    public DetailRoomRespDto 파티방상세보기(Long userId, Long roomId) {
         Room roomPS = roomRepository.findById(roomId)
                 .orElseThrow(
                         () -> new CustomApiException("해당 파티방을 찾을 수 없습니다", HttpStatus.FORBIDDEN));
-        return new DetailRoomRespDto(roomPS);
+        if (roomPS.getActive() == false) {
+            throw new CustomApiException("종료된 방입니다.", HttpStatus.BAD_REQUEST);
+        }
+        List<Enter> enterListPS = enterRepository.findByUserId(userId);
+        List<Long> enterRoomIdList = new ArrayList<>();
+        for (int i = 0; i < enterListPS.size(); i++) {
+            enterRoomIdList.add(enterListPS.get(i).getRoom().getId());
+        }
+        // 내가 방장이거나 입장 중인가
+        if (roomPS.getUser().getId() == userId || enterRoomIdList.contains(roomId)) {
+            return new DetailRoomRespDto(roomPS);
+        } else {
+            throw new CustomApiException("당신은 이 방의 방장도, 이 방 입장 유저도 아닙니다", HttpStatus.BAD_REQUEST);
+        }
     }
 
     public RoomListRespDto 전체파티방목록보기() {
@@ -163,6 +201,7 @@ public class PartyService {
     public RoomListByIdRespDto 참가중인파티방목록보기(Long userId) {
         // Enter.userId == loginUser.id
         List<Enter> enterListPS = enterRepository.findByUserId(userId);
+
         return new RoomListByIdRespDto(enterListPS);
     }
 
