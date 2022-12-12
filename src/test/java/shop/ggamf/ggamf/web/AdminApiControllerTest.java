@@ -74,7 +74,7 @@ public class AdminApiControllerTest extends DummyEntity {
 
         // then
         resultActions.andExpect(status().isOk());
-        resultActions.andExpect(jsonPath("$.data.[0].reason").value("잘못했네요"));
+        resultActions.andExpect(jsonPath("$.data.[0].reason").value("잘못2"));
 
     }
 
@@ -86,8 +86,8 @@ public class AdminApiControllerTest extends DummyEntity {
         User dada = userRepository.save(newUser("dada"));
 
         // 사유
-        ReasonCode reason1 = reasonCodeRepository.save(newReason("그런이유"));
-        ReasonCode reason2 = reasonCodeRepository.save(newReason("잘못했네요"));
+        ReasonCode reason1 = reasonCodeRepository.save(newReason("잘못1"));
+        ReasonCode reason2 = reasonCodeRepository.save(newReason("잘못2"));
 
         // 리포트
         Report report1 = reportRepository.save(newReport(kaka, dada, reason2));
