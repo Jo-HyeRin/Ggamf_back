@@ -72,7 +72,7 @@ public abstract class DummyEntity {
                 .gameCode(gameCode)
                 .gameName("게임이름")
                 .roomName(roomname)
-                .totalPeople(3L)
+                .totalPeople(6L)
                 .active(true)
                 .build();
         return room;
@@ -84,7 +84,7 @@ public abstract class DummyEntity {
                 .gameCode(gameCode)
                 .gameName("게임이름" + roomname)
                 .roomName(roomname)
-                .totalPeople(5L)
+                .totalPeople(6L)
                 .active(false)
                 .build();
         return room;

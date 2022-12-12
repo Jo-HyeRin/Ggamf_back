@@ -13,16 +13,12 @@ public interface FollowRepository extends JpaRepository<Follow, Long>, Dao {
     @Query("select f from Follow f join fetch f.follower e join fetch f.following i where e.id=:userId and i.id=:friendId")
     Optional<Follow> findByBothId(@Param("userId") Long userId, @Param("friendId") Long friendId);
 
-    // 겜프 목록보기
+    // 겜프 목록보기 (내가 신청해서 겜프 된 경우)
     @Query("select f from Follow f join fetch f.follower e where e.id = :userId and f.accept=true")
     List<Follow> findByFollowerId(@Param("userId") Long userId);
 
-    // 겜프 목록보기
+    // 겜프 목록보기 (상대가 신청해서 겜프 된 경우)
     @Query("select f from Follow f join fetch f.following i where i.id = :userId and f.accept=true")
     List<Follow> findByFollowingId(@Param("userId") Long userId);
 
-    // // 겜프 목록 보기
-    // @Query("select f from Follow f join fetch f.users u where u.id = :userId and
-    // f.accept=true")
-    // List<Follow> findByUsersId(@Param("userId") Long userId);
 }
