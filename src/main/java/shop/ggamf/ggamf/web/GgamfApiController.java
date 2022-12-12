@@ -144,6 +144,6 @@ public class GgamfApiController {
             throw new CustomApiException("로그인 유저와 요청 유저가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
         RecommendGgamfListRespDto recommendGgamfListRespDto = ggamfService.추천겜프목록보기(userId);
-        return new ResponseEntity<>(new ResponseDto<>("겜프목록보기 완료", recommendGgamfListRespDto), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDto<>("추천겜프목록보기 완료", recommendGgamfListRespDto), HttpStatus.OK);
     }
 }

@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface FollowRepository extends JpaRepository<Follow, Long> {
+public interface FollowRepository extends JpaRepository<Follow, Long>, Dao {
 
     // 해당 user 겜프 요청 목록
     @Query("select f from Follow f join fetch f.follower u where u.id = :userId and f.accept = true")

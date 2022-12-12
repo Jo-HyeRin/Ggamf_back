@@ -55,6 +55,7 @@ public class DevInit extends DummyEntity {
             Room endRoom1 = roomRepository.save(endRoom("종료된방1", cos, LoL));
             Room endRoom2 = roomRepository.save(endRoom("종료된방2", lala, starcraft));
             Room endRoom3 = roomRepository.save(endRoom("종료된방3", cos, battleground));
+            Room endRoom4 = roomRepository.save(endRoom("종료된방4", dada, starcraft));
             // Enter : 파티방, 참여유저
             Enter enter1 = enterRepository.save(newEnter(lala, room1));
             Enter enter11 = enterRepository.save(newEnter(dada, room1));
@@ -68,6 +69,10 @@ public class DevInit extends DummyEntity {
             Enter endEnter5 = enterRepository.save(endEnter(toto, endRoom2));
             Enter endEnter6 = enterRepository.save(endEnter(vovo, endRoom3));
             Enter endEnter7 = enterRepository.save(endEnter(qqq, endRoom3));
+            Enter endEnter8 = enterRepository.save(endEnter(cos, endRoom4));
+            Enter endEnter9 = enterRepository.save(endEnter(kaka, endRoom4));
+            Enter endEnter10 = enterRepository.save(endEnter(toto, endRoom4));
+            Enter endEnter11 = enterRepository.save(endEnter(ki, endRoom4));
             // Follow : 겜프
             Follow follow1 = followRepository.save(newFollow(cos, lala));
             Follow follow2 = followRepository.save(newFollow(cos, kaka));
