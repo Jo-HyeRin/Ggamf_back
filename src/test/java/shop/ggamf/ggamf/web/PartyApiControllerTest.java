@@ -63,22 +63,36 @@ public class PartyApiControllerTest extends DummyEntity {
         User lala = userRepository.save(newUser("lala"));
         User dada = userRepository.save(newUser("dada"));
         User kaka = userRepository.save(newUser("kaka"));
+        User vovo = userRepository.save(newUser("vovo"));
+        User toto = userRepository.save(newUser("toto"));
+        User ohoh = userRepository.save(newUser("ohoh"));
+        User yeye = userRepository.save(newUser("yeye"));
+        User gogo = userRepository.save(newUser("gogo"));
+        User romio = userRepository.save(newUser("romio"));
         // GameCode : 게임코드
         GameCode etc = gameCodeRepository.save(newGameCode("etc"));
         GameCode LoL = gameCodeRepository.save(newGameCode("LoL"));
         GameCode starcraft = gameCodeRepository.save(newGameCode("starcraft"));
         GameCode battleground = gameCodeRepository.save(newGameCode("battleground"));
         // Room : 파티방
-        Room room1 = roomRepository.save(newRoom("roomname1", ssar, LoL));
-        Room room2 = roomRepository.save(newRoom("roomname2", ssar, starcraft));
-        Room room3 = roomRepository.save(newRoom("roomname3", cos, battleground));
-        Room room4 = roomRepository.save(newRoom("roomname4", lala, etc));
+        Room endroom1 = roomRepository.save(endRoom("roomname1", ssar, LoL));
+        Room room2 = roomRepository.save(newRoom("roomname2", ssar, etc));
+        Room room3 = roomRepository.save(newRoom("roomname3", cos, LoL));
+        Room endroom4 = roomRepository.save(endRoom("roomname4", lala, etc));
         // Enter : 방 참여 정보
-        Enter enter1 = enterRepository.save(newEnter(lala, room1));
-        Enter enter11 = enterRepository.save(newEnter(dada, room1));
-        Enter enter111 = enterRepository.save(newEnter(kaka, room1));
+        Enter enter1 = enterRepository.save(endEnter(lala, endroom1));
+        Enter enter11 = enterRepository.save(endEnter(dada, endroom1));
+        Enter enter111 = enterRepository.save(endEnter(gogo, endroom1));
         Enter enter2 = enterRepository.save(newEnter(cos, room2));
+        Enter enter22 = enterRepository.save(newEnter(kaka, room2));
+        Enter enter222 = enterRepository.save(newEnter(romio, room2));
         Enter enter3 = enterRepository.save(newEnter(ssar, room3));
+        Enter enter33 = enterRepository.save(newEnter(toto, room3));
+        Enter enter333 = enterRepository.save(newEnter(gogo, room3));
+        Enter endEnter4 = enterRepository.save(endEnter(ssar, endroom4));
+        Enter endEnter44 = enterRepository.save(endEnter(cos, endroom4));
+        Enter endEnter444 = enterRepository.save(endEnter(yeye, endroom4));
+        Enter endEnter4444 = enterRepository.save(endEnter(romio, endroom4));
     }
 
     @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
@@ -159,7 +173,7 @@ public class PartyApiControllerTest extends DummyEntity {
     public void endRoom_test() throws Exception {
         // given
         Long userId = 1L;
-        Long roomId = 1L;
+        Long roomId = 2L;
         EndRoomReqDto endRoomReqDto = new EndRoomReqDto();
         endRoomReqDto.setRoomId(roomId);
         String requestBody = om.writeValueAsString(endRoomReqDto);
@@ -253,7 +267,7 @@ public class PartyApiControllerTest extends DummyEntity {
 
         // then
         resultActions.andExpect(MockMvcResultMatchers.status().isOk());
-        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.rooms.[0].roomName").value("roomname1"));
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.rooms.[0].roomName").value("roomname2"));
     }
 
     @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)

@@ -71,13 +71,19 @@ public class GgamfApiControllerTest extends DummyEntity {
         User kaka = userRepository.save(newUser("kaka"));
         User vovo = userRepository.save(newUser("vovo"));
         User toto = userRepository.save(newUser("toto"));
-        User oh = userRepository.save(newUser("oh"));
-        User ye = userRepository.save(newUser("ye"));
+        User ohoh = userRepository.save(newUser("ohoh"));
+        User yeye = userRepository.save(newUser("yeye"));
+        User gogo = userRepository.save(newUser("gogo"));
+        User romio = userRepository.save(newUser("romio"));
         // Follow : 겜프
         Follow f1 = followRepository.save(newFollow(ssar, cos, false));
+        Follow f11 = followRepository.save(newFollow(ssar, vovo, false));
         Follow f2 = followRepository.save(newFollow(lala, ssar, false));
+        Follow f22 = followRepository.save(newFollow(toto, ssar, false));
         Follow f3 = followRepository.save(newFollow(ssar, dada, true));
+        Follow f33 = followRepository.save(newFollow(ssar, ohoh, true));
         Follow f4 = followRepository.save(newFollow(kaka, ssar, true));
+        Follow f44 = followRepository.save(newFollow(yeye, ssar, true));
         // ReasonCode : 신고카테고리
         ReasonCode reason1 = reasonCodeRepository.save(newReasonCode("욕설"));
         ReasonCode reason2 = reasonCodeRepository.save(newReasonCode("탈주"));
@@ -85,6 +91,8 @@ public class GgamfApiControllerTest extends DummyEntity {
         // GameCode : 게임카테고리
         GameCode etc = gameCodeRepository.save(newGameCode("etc"));
         GameCode LoL = gameCodeRepository.save(newGameCode("LoL"));
+        GameCode starcraft = gameCodeRepository.save(newGameCode("starcraft"));
+        GameCode battleground = gameCodeRepository.save(newGameCode("battleground"));
         // Room : 파티방
         Room endroom1 = roomRepository.save(endRoom("roomname1", ssar, LoL));
         Room room2 = roomRepository.save(newRoom("roomname2", ssar, etc));
@@ -93,13 +101,17 @@ public class GgamfApiControllerTest extends DummyEntity {
         // Enter : 방 참여 정보
         Enter enter1 = enterRepository.save(endEnter(lala, endroom1));
         Enter enter11 = enterRepository.save(endEnter(dada, endroom1));
-        Enter enter111 = enterRepository.save(endEnter(oh, endroom1));
+        Enter enter111 = enterRepository.save(endEnter(gogo, endroom1));
         Enter enter2 = enterRepository.save(newEnter(cos, room2));
+        Enter enter22 = enterRepository.save(newEnter(kaka, room2));
+        Enter enter222 = enterRepository.save(newEnter(romio, room2));
         Enter enter3 = enterRepository.save(newEnter(ssar, room3));
-        Enter endEnter1 = enterRepository.save(endEnter(ssar, endroom4));
-        Enter endEnter2 = enterRepository.save(endEnter(cos, endroom4));
-        Enter endEnter3 = enterRepository.save(endEnter(kaka, endroom4));
-        Enter endEnter4 = enterRepository.save(endEnter(ye, endroom4));
+        Enter enter33 = enterRepository.save(newEnter(toto, room3));
+        Enter enter333 = enterRepository.save(newEnter(gogo, room3));
+        Enter endEnter4 = enterRepository.save(endEnter(ssar, endroom4));
+        Enter endEnter44 = enterRepository.save(endEnter(cos, endroom4));
+        Enter endEnter444 = enterRepository.save(endEnter(yeye, endroom4));
+        Enter endEnter4444 = enterRepository.save(endEnter(romio, endroom4));
     }
 
     @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
@@ -107,7 +119,7 @@ public class GgamfApiControllerTest extends DummyEntity {
     public void followGgamf_test() throws Exception {
         // given
         Long userId = 1L;
-        Long friendId = 6L;
+        Long friendId = 10L;
         FollowGgamfReqDto followGgamfReqDto = new FollowGgamfReqDto();
         followGgamfReqDto.setUserId(userId);
         followGgamfReqDto.setFriendId(friendId);
@@ -265,7 +277,7 @@ public class GgamfApiControllerTest extends DummyEntity {
 
         // then
         resultActions.andExpect(MockMvcResultMatchers.status().isOk());
-        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.latests.[0].photo").value("내사진입니다"));
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.recommendUserList.[0].photo").value("내사진입니다"));
     }
 
 }

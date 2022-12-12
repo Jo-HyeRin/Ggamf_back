@@ -10,10 +10,10 @@ import org.springframework.data.repository.query.Param;
 import lombok.RequiredArgsConstructor;
 
 interface Dao {
-    // 추천친구 목록 중 친구이거나 친구요청중인 유저 목록 찾기
+    // 추천친구 목록 - 친구이거나 친구요청중인 유저 찾기
     List<Follow> findByRecommendFollowing(@Param("userId") Long userId, @Param("enters") List<Long> enters);
 
-    // 추천친구 목록 중 친구이거나 친구요청중인 유저 목록 찾기
+    // 추천친구 목록 - 친구이거나 친구요청중인 유저 찾기
     List<Follow> findByRecommendFollower(@Param("userId") Long userId, @Param("enters") List<Long> enters);
 }
 
