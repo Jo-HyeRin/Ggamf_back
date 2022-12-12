@@ -40,16 +40,16 @@ public class GgamfApiController {
     private final GgamfService ggamfService;
 
     // 겜프 요청
-    @PostMapping("/ggamf/user/{userId}/follow/{followingId}")
+    @PostMapping("/ggamf/user/{userId}/follow/{friendId}")
     public ResponseEntity<?> followGgamf(@RequestBody FollowGgamfReqDto followGgamfReqDto,
-            @PathVariable Long userId, @PathVariable Long followingId,
+            @PathVariable Long userId, @PathVariable Long friendId,
             @AuthenticationPrincipal LoginUser loginUser) {
         log.debug("디버그 : 겜프 요청 컨트롤러 호출");
         if (loginUser.getUser().getId() != userId) {
             throw new CustomApiException("로그인 유저와 요청 유저가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
-        followGgamfReqDto.setFollowerId(userId);
-        followGgamfReqDto.setFollowingId(followingId);
+        followGgamfReqDto.setUserId(userId);
+        followGgamfReqDto.setFriendId(friendId);
         FollowGgamfRespDto followGgamfRespDto = ggamfService.겜프요청(followGgamfReqDto);
         return new ResponseEntity<>(new ResponseDto<>("겜프 요청 완료", followGgamfRespDto), HttpStatus.CREATED);
     }
@@ -126,13 +126,16 @@ public class GgamfApiController {
 
     // 겜프 목록 보기
     @GetMapping("/ggamf/user/{userId}/list")
-    public ResponseEntity<?> findGgamfList(@PathVariable Long userId, @AuthenticationPrincipal LoginUser loginUser) {
+    public ResponseEntity<?> findGgamfList(@PathVariable Long userId,
+            @AuthenticationPrincipal LoginUser loginUser) {
         log.debug("디버그 : 겜프 목록 보기 컨트롤러 호출");
         if (loginUser.getUser().getId() != userId) {
-            throw new CustomApiException("로그인 유저와 요청 유저가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
+            throw new CustomApiException("로그인 유저와 요청 유저가 일치하지 않습니다.",
+                    HttpStatus.BAD_REQUEST);
         }
         GgamfListRespDto ggamfListRespDto = ggamfService.겜프목록보기(userId);
-        return new ResponseEntity<>(new ResponseDto<>("겜프목록보기 완료", ggamfListRespDto), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDto<>("겜프목록보기 완료", ggamfListRespDto),
+                HttpStatus.OK);
     }
 
     // 추천 겜프 목록 보기

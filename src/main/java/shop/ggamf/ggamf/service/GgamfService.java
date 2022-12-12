@@ -53,35 +53,48 @@ public class GgamfService {
     public FollowGgamfRespDto 겜프요청(FollowGgamfReqDto followGgamfReqDto) {
         log.debug("디버그 : 겜프요청 서비스 호출");
         // 나
-        User follower = userRepository.findById(followGgamfReqDto.getFollowerId())
+        User user = userRepository.findById(followGgamfReqDto.getUserId())
                 .orElseThrow(() -> new CustomApiException("내 유저 정보가 없습니다", HttpStatus.FORBIDDEN));
         // 요청받은사람
-        User following = userRepository.findById(followGgamfReqDto.getFollowingId())
+        User friend = userRepository.findById(followGgamfReqDto.getFriendId())
                 .orElseThrow(() -> new CustomApiException("해당 유저가 없습니다", HttpStatus.FORBIDDEN));
-        // // 검증 - 고민중
-        // if (followRepository.findFollow(followGgamfReqDto.getFollowerId(),
-        // followGgamfReqDto.getFollowingId()) != null) {
-        // throw new CustomApiException("당신은 이미 요청했습니다. 기다리세요.",
-        // HttpStatus.BAD_REQUEST);
-        // } else if (followRepository.findFollow(followGgamfReqDto.getFollowingId(),
-        // followGgamfReqDto.getFollowerId()) != null) {
-        // throw new CustomApiException("상대가 이미 요청했습니다.", HttpStatus.BAD_REQUEST);
-        // }
-        Follow follow = followGgamfReqDto.toEntity(follower, following);
-        Follow followPS = followRepository.save(follow);
-        return new FollowGgamfRespDto(followPS);
+        log.debug("디버그 : " + user.getNickname());
+        log.debug("디버그 : " + friend.getNickname());
+        if (!followRepository.findByBothId(followGgamfReqDto.getUserId(), followGgamfReqDto.getFriendId()).isEmpty()
+                || !followRepository.findByBothId(followGgamfReqDto.getFriendId(),
+                        followGgamfReqDto.getUserId()).isEmpty()) {
+            throw new CustomApiException("상대방과 이미 겜프이거나 이미 겜프 신청이 되어있는 상태입니다.",
+                    HttpStatus.BAD_REQUEST);
+        }
+        Follow myFollow = followGgamfReqDto.toSendEntity(user, friend);
+        Follow myFollowPS = followRepository.save(myFollow);
+        Follow yourFollow = followGgamfReqDto.toAcceptEntity(friend, user);
+        Follow yourFollowPS = followRepository.save(yourFollow);
+        return new FollowGgamfRespDto(myFollowPS, yourFollowPS);
     }
 
     @Transactional
     public AcceptGgamfRespDto 겜프수락(AcceptGgamfReqDto acceptGgamfReqDto) {
         log.debug("디버그 : 겜프수락 서비스 호출");
-        Follow followPS = followRepository.findById(acceptGgamfReqDto.getFollowId())
+        // 내가 받은 신청 true (나 친구 나 y)
+        log.debug("디버그 : acceptGgamfReqDto.getFollowId()" + acceptGgamfReqDto.getFollowId());
+        Follow followerPS = followRepository.findById(acceptGgamfReqDto.getFollowId())
                 .orElseThrow(() -> new CustomApiException("겜프 신청 중이 아닙니다", HttpStatus.FORBIDDEN));
-        if (followPS.getFollowing().getId() != acceptGgamfReqDto.getUserId()) {
+        log.debug("디버그 : friendId" + followerPS.getFollower().getId());
+        log.debug("디버그 : userId" + followerPS.getFollowing().getId());
+        if (followerPS.getFollowing().getId() != acceptGgamfReqDto.getUserId()) {
             throw new CustomApiException("당신은 수락 권한이 없습니다.", HttpStatus.BAD_REQUEST);
         }
-        followPS.acceptGgamf();
-        return new AcceptGgamfRespDto(followPS);
+        followerPS.acceptGgamf();
+
+        // 상대가 한 신청 true (친구 친구 나 y)
+        Follow followingPS = followRepository
+                .findByBothId(followerPS.getFollower().getId(), acceptGgamfReqDto.getUserId())
+                .orElseThrow(() -> new CustomApiException("겜프 신청 중이 아닙니다", HttpStatus.FORBIDDEN));
+        followingPS.acceptGgamf();
+        log.debug("디버그 : followingPS.getFollower().getId()" + followingPS.getFollower().getId());
+        log.debug("디버그 : followingPS.getFollowing().getId()" + followingPS.getFollowing().getId());
+        return new AcceptGgamfRespDto(followerPS, followingPS);
     }
 
     @Transactional
@@ -165,14 +178,17 @@ public class GgamfService {
             latestIdList.add(latestPS.get(i).getUser().getId());
         }
         log.debug("디버그 : latestIdList : " + latestIdList.size());
-        log.debug("디버그 : latestIdList : " + latestIdList.size());
         // 중복제거
         List<Long> latestIdListPS = latestIdList.stream().distinct().collect(Collectors.toList());
         log.debug("디버그 : latestIdListPS.size() : " + latestIdListPS.size());
+        log.debug("디버그 : latestIdListPS.size() : " + latestIdListPS.get(0));
+        log.debug("디버그 : latestIdListPS.size() : " + latestIdListPS.get(1));
 
         // 친구, 친구 신청 여부 확인 팔로잉=친구 or 팔로워=친구
         List<Follow> friendFollowingLatest = followRepository.findByRecommendFollowing(userId, latestIdListPS);
+        log.debug("디버그 : friendFollowingLatest : " + friendFollowingLatest.size());
         List<Follow> friendFollowerLatest = followRepository.findByRecommendFollower(userId, latestIdListPS);
+        log.debug("디버그 : friendFollowerLatest : " + friendFollowerLatest.size());
         for (int i = 0; i < friendFollowingLatest.size(); i++) {
             if (latestIdListPS.contains(friendFollowingLatest.get(i).getFollowing().getId())) {
                 latestIdListPS.remove(friendFollowingLatest.get(i).getFollowing().getId());
@@ -211,10 +227,8 @@ public class GgamfService {
         // 친구, 친구 신청 여부 확인 팔로잉=친구 or 팔로워=친구
         List<Follow> friendFollowingEnter = followRepository.findByRecommendFollowing(userId, enterUserIdListPS);
         log.debug("디버그 : friendFollowingEnter : " + friendFollowingEnter.size());
-        log.debug("디버그 : friendFollowingEnter : " + friendFollowingEnter.get(0).getFollowing().getUsername());
         List<Follow> friendFollowerEnter = followRepository.findByRecommendFollower(userId, enterUserIdListPS);
         log.debug("디버그 : friendFollowerEnter : " + friendFollowerEnter.size());
-        log.debug("디버그 : friendFollowerEnter : " + friendFollowerEnter.get(0).getFollower().getUsername());
         for (int i = 0; i < friendFollowingEnter.size(); i++) {
             if (enterUserIdListPS.contains(friendFollowingEnter.get(i).getFollowing().getId())) {
                 enterUserIdListPS.remove(friendFollowingEnter.get(i).getFollowing().getId());

@@ -71,13 +71,17 @@ public class GgamfApiControllerTest extends DummyEntity {
         User kaka = userRepository.save(newUser("kaka"));
         User vovo = userRepository.save(newUser("vovo"));
         User toto = userRepository.save(newUser("toto"));
+        User oh = userRepository.save(newUser("oh"));
+        User ye = userRepository.save(newUser("ye"));
         // Follow : 겜프
-        Follow follow1 = followRepository.save(newFollow(ssar, cos));
-        Follow follow2 = followRepository.save(newFollow(ssar, lala));
-        Follow follow3 = followRepository.save(newFollow(dada, ssar));
-        Follow follow4 = followRepository.save(newFollow(kaka, ssar));
-        Follow friend5 = followRepository.save(newFriend(ssar, vovo));
-        Follow friend6 = followRepository.save(newFriend(toto, ssar));
+        // Follow f1 = followRepository.save(newFollowing(ssar, cos, false));
+        // Follow f2 = followRepository.save(newFollower(cos, ssar, false));
+        // Follow f3 = followRepository.save(newFollowing(lala, ssar, false));
+        // Follow f4 = followRepository.save(newFollower(ssar, lala, false));
+        // Follow f5 = followRepository.save(newFollowing(ssar, dada, true));
+        // Follow f6 = followRepository.save(newFollower(dada, ssar, true));
+        // Follow f7 = followRepository.save(newFollowing(kaka, ssar, true));
+        // Follow f8 = followRepository.save(newFollower(ssar, kaka, true));
         // ReasonCode : 신고카테고리
         ReasonCode reason1 = reasonCodeRepository.save(newReasonCode("욕설"));
         ReasonCode reason2 = reasonCodeRepository.save(newReasonCode("탈주"));
@@ -93,10 +97,13 @@ public class GgamfApiControllerTest extends DummyEntity {
         // Enter : 방 참여 정보
         Enter enter1 = enterRepository.save(endEnter(lala, endroom1));
         Enter enter11 = enterRepository.save(endEnter(dada, endroom1));
-        Enter enter111 = enterRepository.save(endEnter(kaka, endroom1));
+        Enter enter111 = enterRepository.save(endEnter(oh, endroom1));
         Enter enter2 = enterRepository.save(newEnter(cos, room2));
         Enter enter3 = enterRepository.save(newEnter(ssar, room3));
         Enter endEnter1 = enterRepository.save(endEnter(ssar, endroom4));
+        Enter endEnter2 = enterRepository.save(endEnter(cos, endroom4));
+        Enter endEnter3 = enterRepository.save(endEnter(kaka, endroom4));
+        Enter endEnter4 = enterRepository.save(endEnter(ye, endroom4));
     }
 
     @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
@@ -104,16 +111,16 @@ public class GgamfApiControllerTest extends DummyEntity {
     public void followGgamf_test() throws Exception {
         // given
         Long userId = 1L;
-        Long followingId = 3L;
+        Long friendId = 6L;
         FollowGgamfReqDto followGgamfReqDto = new FollowGgamfReqDto();
-        followGgamfReqDto.setFollowerId(userId);
-        followGgamfReqDto.setFollowingId(followingId);
+        followGgamfReqDto.setUserId(userId);
+        followGgamfReqDto.setFriendId(friendId);
         String requestBody = om.writeValueAsString(followGgamfReqDto);
         System.out.println("테스트 : " + requestBody);
 
         // when
         ResultActions resultActions = mvc
-                .perform(MockMvcRequestBuilders.post("/s/api/ggamf/user/" + userId + "/follow/" + followingId)
+                .perform(MockMvcRequestBuilders.post("/s/api/ggamf/user/" + userId + "/follow/" + friendId)
                         .content(requestBody)
                         .contentType(APPLICATION_JSON_UTF8));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
@@ -245,7 +252,24 @@ public class GgamfApiControllerTest extends DummyEntity {
 
         // then
         resultActions.andExpect(MockMvcResultMatchers.status().isOk());
-        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.followers.[0].nickName").value("nickvovo"));
-        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.followings.[0].nickName").value("nicktoto"));
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.followers.[0].nickName").value("nickdada"));
     }
+
+    @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    public void recommendGgamfList_test() throws Exception {
+        // given
+        Long userId = 1L;
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(MockMvcRequestBuilders.get("/s/api/ggamf/user/" + userId + "/recommend"));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+        resultActions.andExpect(MockMvcResultMatchers.status().isOk());
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.latests.[0].photo").value("내사진입니다"));
+    }
+
 }
