@@ -3,10 +3,8 @@ package shop.ggamf.ggamf.dto;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import shop.ggamf.ggamf.domain.enter.Enter;
 import shop.ggamf.ggamf.domain.follow.Follow;
 import shop.ggamf.ggamf.domain.report.Report;
 import shop.ggamf.ggamf.domain.user.User;
@@ -16,7 +14,6 @@ public class GgamfRespDto {
     @Setter
     @Getter
     public static class FollowGgamfRespDto {
-        // 내가 요청한 정보를 본다.
         private Long followerId;
         private Long followingId;
         private Boolean accept;
@@ -35,17 +32,20 @@ public class GgamfRespDto {
     @Setter
     @Getter
     public static class AcceptGgamfRespDto {
-        // 수락하는 입장에서
         private Long followId;
         private Long userId;
-        private Long ggamfId;
+        private String userNick;
+        private Long friendId;
+        private String friendNick;
         private Boolean accept;
 
-        public AcceptGgamfRespDto(Follow follower, Follow folloing) {
-            this.followId = follower.getId();
-            this.userId = follower.getFollowing().getId();
-            this.ggamfId = follower.getFollower().getId();
-            this.accept = follower.getAccept();
+        public AcceptGgamfRespDto(Follow follow) {
+            this.followId = follow.getId();
+            this.userId = follow.getFollowing().getId();
+            this.userNick = follow.getFollowing().getNickname();
+            this.friendId = follow.getFollower().getId();
+            this.friendNick = follow.getFollower().getNickname();
+            this.accept = follow.getAccept();
         }
     }
 
@@ -53,10 +53,13 @@ public class GgamfRespDto {
     @Getter
     public static class DeleteGgamfRespDto {
         private Long followId;
-        // 나중에 친구 목록 보여주기
+        private Long friendId;
+        private String friendNick;
 
-        public DeleteGgamfRespDto(Long followId) {
+        public DeleteGgamfRespDto(Long followId, User friend) {
             this.followId = followId;
+            this.friendId = friend.getId();
+            this.friendNick = friend.getNickname();
         }
     }
 
@@ -64,10 +67,13 @@ public class GgamfRespDto {
     @Getter
     public static class RejectGgamfRespDto {
         private Long followId;
-        // 나중에 내가받은겜프요청 목록 보여주기
+        private Long friendId;
+        private String friendNick;
 
-        public RejectGgamfRespDto(Long followId) {
+        public RejectGgamfRespDto(Long followId, User friend) {
             this.followId = followId;
+            this.friendId = friend.getId();
+            this.friendNick = friend.getNickname();
         }
     }
 
@@ -75,10 +81,13 @@ public class GgamfRespDto {
     @Getter
     public static class CancelGgamfRespDto {
         private Long followId;
-        // 나중에 내가보낸겜프요청 목록 보여주기
+        private Long friendId;
+        private String friendNick;
 
-        public CancelGgamfRespDto(Long followId) {
+        public CancelGgamfRespDto(Long followId, User friend) {
             this.followId = followId;
+            this.friendId = friend.getId();
+            this.friendNick = friend.getNickname();
         }
     }
 

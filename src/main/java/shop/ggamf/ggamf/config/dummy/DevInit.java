@@ -32,57 +32,54 @@ public class DevInit extends DummyEntity {
 
         return (args) -> {
             // User : 유저
+            User ssar = userRepository.save(newUser("ssar"));
             User cos = userRepository.save(newUser("cos"));
             User lala = userRepository.save(newUser("lala"));
             User dada = userRepository.save(newUser("dada"));
             User kaka = userRepository.save(newUser("kaka"));
-            User nana = userRepository.save(newUser("nana"));
             User vovo = userRepository.save(newUser("vovo"));
             User toto = userRepository.save(newUser("toto"));
-            User bu = userRepository.save(newUser("bu"));
-            User ki = userRepository.save(newUser("ki"));
-            User qqq = userRepository.save(newUser("qqq"));
-            // GameCode : 게임코드
+            User ohoh = userRepository.save(newUser("ohoh"));
+            User yeye = userRepository.save(newUser("yeye"));
+            User gogo = userRepository.save(newUser("gogo"));
+            User romio = userRepository.save(newUser("romio"));
+            // Follow : 겜프
+            Follow f1 = followRepository.save(newFollow(ssar, cos, false));
+            Follow f11 = followRepository.save(newFollow(ssar, vovo, false));
+            Follow f2 = followRepository.save(newFollow(lala, ssar, false));
+            Follow f22 = followRepository.save(newFollow(toto, ssar, false));
+            Follow f3 = followRepository.save(newFollow(ssar, dada, true));
+            Follow f33 = followRepository.save(newFollow(ssar, ohoh, true));
+            Follow f4 = followRepository.save(newFollow(kaka, ssar, true));
+            Follow f44 = followRepository.save(newFollow(yeye, ssar, true));
+            // ReasonCode : 신고카테고리
+            ReasonCode reason1 = reasonCodeRepository.save(newReasonCode("욕설"));
+            ReasonCode reason2 = reasonCodeRepository.save(newReasonCode("탈주"));
+            ReasonCode reason3 = reasonCodeRepository.save(newReasonCode("기타"));
+            // GameCode : 게임카테고리
             GameCode etc = gameCodeRepository.save(newGameCode("etc"));
             GameCode LoL = gameCodeRepository.save(newGameCode("LoL"));
             GameCode starcraft = gameCodeRepository.save(newGameCode("starcraft"));
             GameCode battleground = gameCodeRepository.save(newGameCode("battleground"));
             // Room : 파티방
-            Room room1 = roomRepository.save(newRoom("초보만요1", cos, etc));
-            Room room2 = roomRepository.save(newRoom("초보만요2", lala, starcraft));
-            Room room3 = roomRepository.save(newRoom("초보만요3", lala, battleground));
-            Room room4 = roomRepository.save(newRoom("초보만요4", cos, LoL));
-            Room endRoom1 = roomRepository.save(endRoom("종료된방1", cos, LoL));
-            Room endRoom2 = roomRepository.save(endRoom("종료된방2", lala, starcraft));
-            Room endRoom3 = roomRepository.save(endRoom("종료된방3", cos, battleground));
-            Room endRoom4 = roomRepository.save(endRoom("종료된방4", dada, starcraft));
-            // Enter : 파티방, 참여유저
-            Enter enter1 = enterRepository.save(newEnter(lala, room1));
-            Enter enter11 = enterRepository.save(newEnter(dada, room1));
-            Enter enter111 = enterRepository.save(newEnter(kaka, room1));
+            Room endroom1 = roomRepository.save(endRoom("roomname1", ssar, LoL));
+            Room room2 = roomRepository.save(newRoom("roomname2", ssar, etc));
+            Room room3 = roomRepository.save(newRoom("roomname3", cos, LoL));
+            Room endroom4 = roomRepository.save(endRoom("roomname4", lala, etc));
+            // Enter : 방 참여 정보
+            Enter enter1 = enterRepository.save(endEnter(lala, endroom1));
+            Enter enter11 = enterRepository.save(endEnter(dada, endroom1));
+            Enter enter111 = enterRepository.save(endEnter(gogo, endroom1));
             Enter enter2 = enterRepository.save(newEnter(cos, room2));
-            Enter enter3 = enterRepository.save(newEnter(cos, room3));
-            Enter endEnter1 = enterRepository.save(endEnter(vovo, endRoom1));
-            Enter endEnter2 = enterRepository.save(endEnter(bu, endRoom1));
-            Enter endEnter3 = enterRepository.save(endEnter(cos, endRoom2));
-            Enter endEnter4 = enterRepository.save(endEnter(ki, endRoom2));
-            Enter endEnter5 = enterRepository.save(endEnter(toto, endRoom2));
-            Enter endEnter6 = enterRepository.save(endEnter(vovo, endRoom3));
-            Enter endEnter7 = enterRepository.save(endEnter(qqq, endRoom3));
-            Enter endEnter8 = enterRepository.save(endEnter(cos, endRoom4));
-            Enter endEnter9 = enterRepository.save(endEnter(kaka, endRoom4));
-            Enter endEnter10 = enterRepository.save(endEnter(toto, endRoom4));
-            Enter endEnter11 = enterRepository.save(endEnter(ki, endRoom4));
-            // Follow : 겜프
-            Follow follow1 = followRepository.save(newFollow(cos, lala, false));
-            Follow follow2 = followRepository.save(newFollow(dada, cos, false));
-            Follow follow3 = followRepository.save(newFollow(cos, vovo, true));
-            Follow follow4 = followRepository.save(newFollow(cos, toto, true));
-
-            // ReasonCode : 신고카테고리
-            ReasonCode reason1 = reasonCodeRepository.save(newReasonCode("욕설"));
-            ReasonCode reason2 = reasonCodeRepository.save(newReasonCode("탈주"));
-            ReasonCode reason3 = reasonCodeRepository.save(newReasonCode("기타"));
+            Enter enter22 = enterRepository.save(newEnter(kaka, room2));
+            Enter enter222 = enterRepository.save(newEnter(romio, room2));
+            Enter enter3 = enterRepository.save(newEnter(ssar, room3));
+            Enter enter33 = enterRepository.save(newEnter(toto, room3));
+            Enter enter333 = enterRepository.save(newEnter(gogo, room3));
+            Enter endEnter4 = enterRepository.save(endEnter(ssar, endroom4));
+            Enter endEnter44 = enterRepository.save(endEnter(cos, endroom4));
+            Enter endEnter444 = enterRepository.save(endEnter(yeye, endroom4));
+            Enter endEnter4444 = enterRepository.save(endEnter(romio, endroom4));
         };
     }
 }

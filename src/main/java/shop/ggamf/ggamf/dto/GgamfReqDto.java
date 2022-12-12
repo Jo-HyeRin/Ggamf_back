@@ -34,13 +34,6 @@ public class GgamfReqDto {
 
     @Setter
     @Getter
-    public static class AcceptGgamfReqDto {
-        private Long followId;
-        private Long userId;
-    }
-
-    @Setter
-    @Getter
     public static class ReportGgamfReqDto {
         private String detail;
         private Long userId;

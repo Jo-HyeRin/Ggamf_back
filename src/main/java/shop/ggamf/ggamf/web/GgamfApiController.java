@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import shop.ggamf.ggamf.config.auth.LoginUser;
 import shop.ggamf.ggamf.config.exception.CustomApiException;
-import shop.ggamf.ggamf.dto.GgamfReqDto.AcceptGgamfReqDto;
 import shop.ggamf.ggamf.dto.GgamfReqDto.FollowGgamfReqDto;
 import shop.ggamf.ggamf.dto.GgamfReqDto.ReportGgamfReqDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.AcceptGgamfRespDto;
@@ -50,22 +49,24 @@ public class GgamfApiController {
         }
         followGgamfReqDto.setUserId(userId);
         followGgamfReqDto.setFriendId(friendId);
+        if (loginUser.getUser().getId() != userId) {
+            throw new CustomApiException("로그인 유저와 요청 유저가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
+        }
+        followGgamfReqDto.setUserId(userId);
+        followGgamfReqDto.setFriendId(friendId);
         FollowGgamfRespDto followGgamfRespDto = ggamfService.겜프요청(followGgamfReqDto);
         return new ResponseEntity<>(new ResponseDto<>("겜프 요청 완료", followGgamfRespDto), HttpStatus.CREATED);
     }
 
     // 겜프 수락
     @PutMapping("/ggamf/user/{userId}/accept/{followId}")
-    public ResponseEntity<?> acceptGgamf(@RequestBody AcceptGgamfReqDto acceptGgamfReqDto, @PathVariable Long userId,
-            @PathVariable Long followId,
+    public ResponseEntity<?> acceptGgamf(@PathVariable Long userId, @PathVariable Long followId,
             @AuthenticationPrincipal LoginUser loginUser) {
         log.debug("디버그 : 겜프 수락 컨트롤러 호출");
         if (loginUser.getUser().getId() != userId) {
             throw new CustomApiException("로그인 유저와 요청 유저가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
-        acceptGgamfReqDto.setFollowId(followId);
-        acceptGgamfReqDto.setUserId(userId);
-        AcceptGgamfRespDto acceptGgamfRespDto = ggamfService.겜프수락(acceptGgamfReqDto);
+        AcceptGgamfRespDto acceptGgamfRespDto = ggamfService.겜프수락(userId, followId);
         return new ResponseEntity<>(new ResponseDto<>("겜프 수락 완료", acceptGgamfRespDto), HttpStatus.CREATED);
     }
 

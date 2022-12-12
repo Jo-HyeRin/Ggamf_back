@@ -13,7 +13,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import shop.ggamf.ggamf.domain.AuditingTime;
-import shop.ggamf.ggamf.domain.enter.Enter;
 import shop.ggamf.ggamf.domain.user.User;
 
 @NoArgsConstructor
