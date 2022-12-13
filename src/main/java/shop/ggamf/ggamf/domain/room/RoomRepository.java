@@ -13,6 +13,10 @@ public interface RoomRepository extends JpaRepository<Room, Long>, Dao {
     List<Room> findByUserId(@Param("userId") Long userId);
 
     // 활성화 된 방 찾기
-    @Query("select r from Room r where active = true")
+    @Query("select r from Room r where r.active = true")
     List<Room> findByActive();
+
+    // 검색 적용
+    @Query("select r from Room r where r.roomName LIKE %:keyword% and r.active = true")
+    List<Room> searchByTitleLike(@Param("keyword") String keyword);
 }
