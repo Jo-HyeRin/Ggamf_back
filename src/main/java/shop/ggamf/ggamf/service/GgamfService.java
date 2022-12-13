@@ -31,6 +31,7 @@ import shop.ggamf.ggamf.dto.GgamfRespDto.CancelGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.DeleteGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.FollowGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.GgamfListRespDto;
+import shop.ggamf.ggamf.dto.GgamfRespDto.ReceiveGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.RecommendGgamfListRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.RejectGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.ReportGgamfRespDto;
@@ -165,6 +166,11 @@ public class GgamfService {
         // 내가 보낸 요청 중에서 아직 수락되지 않은 요청 목록
         List<Follow> followListPS = followRepository.findByUserIdFollower(userId);
         return new SendGgamfRespDto(followListPS);
+    }
+
+    public ReceiveGgamfRespDto 받은겜프요청목록보기(Long userId) {
+        List<Follow> followListPS = followRepository.findByUserIdFollowing(userId);
+        return new ReceiveGgamfRespDto(followListPS);
     }
 
     public RecommendGgamfListRespDto 추천겜프목록보기(Long userId) {
