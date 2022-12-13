@@ -212,10 +212,6 @@ public class PartyService {
                             () -> new CustomApiException("존재하지 않는 게임코드입니다", HttpStatus.FORBIDDEN));
         }
         List<Room> roomListPS = roomRepository.findAll(gameCodeId, keyword, page);
-        // 목록보다 더 큰 페이지 요청 시
-        if (roomListPS.size() < page * 10) {
-            throw new CustomApiException("이 페이지에는 파티방 목록이 없습니다", HttpStatus.BAD_REQUEST);
-        }
         return new RoomListRespDto(roomListPS);
     }
 
