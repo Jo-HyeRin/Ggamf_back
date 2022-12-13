@@ -157,6 +157,62 @@ public class GgamfRespDto {
 
     @Setter
     @Getter
+    public static class SendGgamfRespDto {
+
+        List<FollowingDto> followings;
+
+        public SendGgamfRespDto(List<Follow> followings) {
+            this.followings = followings.stream().map((follow) -> new FollowingDto(follow))
+                    .collect(Collectors.toList());
+        }
+
+        @Setter
+        @Getter
+        public class FollowingDto {
+            private Long friendId;
+            private String photo;
+            private String nickName;
+            private String intro;
+
+            public FollowingDto(Follow follow) {
+                this.friendId = follow.getFollowing().getId();
+                this.photo = follow.getFollowing().getPhoto();
+                this.nickName = follow.getFollowing().getNickname();
+                this.intro = follow.getFollowing().getIntro();
+            }
+        }
+    }
+
+    @Setter
+    @Getter
+    public static class ReceiveGgamfRespDto {
+
+        List<FollowerDto> followers;
+
+        public ReceiveGgamfRespDto(List<Follow> followers) {
+            this.followers = followers.stream().map((follow) -> new FollowerDto(follow))
+                    .collect(Collectors.toList());
+        }
+
+        @Setter
+        @Getter
+        public class FollowerDto {
+            private Long friendId;
+            private String photo;
+            private String nickName;
+            private String intro;
+
+            public FollowerDto(Follow follow) {
+                this.friendId = follow.getFollower().getId();
+                this.photo = follow.getFollower().getPhoto();
+                this.nickName = follow.getFollower().getNickname();
+                this.intro = follow.getFollower().getIntro();
+            }
+        }
+    }
+
+    @Setter
+    @Getter
     public static class RecommendGgamfListRespDto {
 
         List<UserDto> recommendUserList;

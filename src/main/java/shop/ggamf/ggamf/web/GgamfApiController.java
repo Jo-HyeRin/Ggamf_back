@@ -24,9 +24,11 @@ import shop.ggamf.ggamf.dto.GgamfRespDto.CancelGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.DeleteGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.FollowGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.GgamfListRespDto;
+import shop.ggamf.ggamf.dto.GgamfRespDto.ReceiveGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.RecommendGgamfListRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.RejectGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.ReportGgamfRespDto;
+import shop.ggamf.ggamf.dto.GgamfRespDto.SendGgamfRespDto;
 import shop.ggamf.ggamf.dto.ResponseDto;
 import shop.ggamf.ggamf.service.GgamfService;
 
@@ -136,6 +138,32 @@ public class GgamfApiController {
         }
         GgamfListRespDto ggamfListRespDto = ggamfService.겜프목록보기(userId);
         return new ResponseEntity<>(new ResponseDto<>("겜프목록보기 완료", ggamfListRespDto),
+                HttpStatus.OK);
+    }
+
+    // 내가 보낸 겜프 요청 목록 보기
+    @GetMapping("/ggamf/user/{userId}/sendggamf")
+    public ResponseEntity<?> sendGgamfList(@PathVariable Long userId, @AuthenticationPrincipal LoginUser loginUser) {
+        log.debug("디버그 : 보낸 겜프 요청 목록 보기 컨트롤러 호출");
+        if (loginUser.getUser().getId() != userId) {
+            throw new CustomApiException("로그인 유저와 요청 유저가 일치하지 않습니다.",
+                    HttpStatus.BAD_REQUEST);
+        }
+        SendGgamfRespDto sendGgamfRespDto = ggamfService.보낸겜프요청목록보기(userId);
+        return new ResponseEntity<>(new ResponseDto<>("보낸겜프요청목록보기 완료", sendGgamfRespDto),
+                HttpStatus.OK);
+    }
+
+    // 내가 받은 겜프 요청 목록 보기
+    @GetMapping("/ggamf/user/{userId}/receiveggamf")
+    public ResponseEntity<?> receiveGgamfList(@PathVariable Long userId, @AuthenticationPrincipal LoginUser loginUser) {
+        log.debug("디버그 : 받은 겜프 요청 목록 보기 컨트롤러 호출");
+        if (loginUser.getUser().getId() != userId) {
+            throw new CustomApiException("로그인 유저와 요청 유저가 일치하지 않습니다.",
+                    HttpStatus.BAD_REQUEST);
+        }
+        ReceiveGgamfRespDto receiveGgamfRespDto = ggamfService.받은겜프요청목록보기(userId);
+        return new ResponseEntity<>(new ResponseDto<>("받은겜프요청목록보기 완료", receiveGgamfRespDto),
                 HttpStatus.OK);
     }
 

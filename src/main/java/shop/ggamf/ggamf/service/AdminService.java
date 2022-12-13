@@ -11,8 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import shop.ggamf.ggamf.config.auth.LoginUser;
-import shop.ggamf.ggamf.config.enums.UserEnum;
 import shop.ggamf.ggamf.config.exception.CustomApiException;
+import shop.ggamf.ggamf.domain.report.DetailReportRespDto;
 import shop.ggamf.ggamf.domain.report.ReportRepositoryQuery;
 import shop.ggamf.ggamf.domain.report.ReportRespDto;
 import shop.ggamf.ggamf.domain.user.User;
@@ -39,5 +39,10 @@ public class AdminService {
         }
         List<ReportRespDto> reportRespDto = reportRepositoryQuery.findReportList();
         return reportRespDto;
+    }
+
+    public DetailReportRespDto 리포트상세내용보기(Long id, Long badUserId) {
+        DetailReportRespDto detailReportRespDto = reportRepositoryQuery.findDetailReport(id, badUserId);
+        return detailReportRespDto;
     }
 }
