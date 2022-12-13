@@ -83,8 +83,8 @@ public class RoomRepositoryImpl implements Dao {
                 query = query.setParameter("keyword", keyword);
             }
         }
-        query.setFirstResult(page * 10); // page부터
-        query.setMaxResults(10); // 3개만 볼거다
+        query.setFirstResult(page * 10);
+        query.setMaxResults(10);
         return query.getResultList();
     }
 
