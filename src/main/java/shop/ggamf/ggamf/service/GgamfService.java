@@ -1,9 +1,7 @@
 package shop.ggamf.ggamf.service;
 
 import java.util.ArrayList;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -36,6 +34,7 @@ import shop.ggamf.ggamf.dto.GgamfRespDto.GgamfListRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.RecommendGgamfListRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.RejectGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.ReportGgamfRespDto;
+import shop.ggamf.ggamf.dto.GgamfRespDto.SendGgamfRespDto;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -79,7 +78,7 @@ public class GgamfService {
         Follow followPS = followRepository.findById(followId)
                 .orElseThrow(() -> new CustomApiException("겜프 신청 중이 아닙니다", HttpStatus.FORBIDDEN));
         if (followPS.getFollowing().getId() != userId) {
-            throw new CustomApiException("당신이 받은 겜프 요청 이력이 없습니다.", HttpStatus.BAD_REQUEST);
+            throw new CustomApiException("당신은 해당 요청을 수락할 권한이 없습니다.", HttpStatus.BAD_REQUEST);
         }
         followPS.acceptGgamf();
         return new AcceptGgamfRespDto(followPS);
@@ -162,6 +161,12 @@ public class GgamfService {
         return new GgamfListRespDto(followerListPS, followingListPS);
     }
 
+    public SendGgamfRespDto 보낸겜프요청목록보기(Long userId) {
+        // 내가 보낸 요청 중에서 아직 수락되지 않은 요청 목록
+        List<Follow> followListPS = followRepository.findByUserIdFollower(userId);
+        return new SendGgamfRespDto(followListPS);
+    }
+
     public RecommendGgamfListRespDto 추천겜프목록보기(Long userId) {
         // <내가 방장일 때>
         // 가장 최근 종료한 방 찾기
@@ -192,13 +197,13 @@ public class GgamfService {
         List<Long> recommendFriendListPS = recommendFriendList.stream().distinct().collect(Collectors.toList());
 
         // 합친 리스트 친구, 친구 신청 여부 확인 팔로잉=친구 or 팔로워=친구
-        List<Follow> friendFollowingLatest = followRepository.findByRecommendFollowing(userId, recommendFriendList);
+        List<Follow> friendFollowingLatest = followRepository.findByRecommendFollowing(userId, recommendFriendListPS);
         for (int i = 0; i < friendFollowingLatest.size(); i++) {
             if (recommendFriendList.contains(friendFollowingLatest.get(i).getFollowing().getId())) {
                 recommendFriendList.remove(friendFollowingLatest.get(i).getFollowing().getId());
             }
         }
-        List<Follow> friendFollowerLatest = followRepository.findByRecommendFollower(userId, recommendFriendList);
+        List<Follow> friendFollowerLatest = followRepository.findByRecommendFollower(userId, recommendFriendListPS);
         for (int i = 0; i < friendFollowerLatest.size(); i++) {
             if (recommendFriendList.contains(friendFollowerLatest.get(i).getFollower().getId())) {
                 recommendFriendList.remove(friendFollowerLatest.get(i).getFollower().getId());
@@ -208,4 +213,5 @@ public class GgamfService {
         List<User> recommendUserList = userRepository.findByIdForRecommend(recommendFriendList);
         return new RecommendGgamfListRespDto(recommendUserList);
     }
+
 }
