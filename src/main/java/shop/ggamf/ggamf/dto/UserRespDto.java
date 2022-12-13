@@ -140,7 +140,7 @@ public class UserRespDto {
         private String photo;
         private String nickname;
         private String intro;
-        private UserEnum role;
+        private String role;
         // private BigInteger receiverId;
         private BigDecimal rate;
 

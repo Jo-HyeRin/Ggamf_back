@@ -1,5 +1,6 @@
 package shop.ggamf.ggamf.web;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -23,11 +24,14 @@ import org.springframework.test.web.servlet.ResultActions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import shop.ggamf.ggamf.config.dummy.DummyEntity;
+import shop.ggamf.ggamf.config.enums.UserEnum;
+import shop.ggamf.ggamf.config.enums.UserStateEnum;
 import shop.ggamf.ggamf.domain.user.User;
 import shop.ggamf.ggamf.domain.user.UserRepository;
 import shop.ggamf.ggamf.domain.user.UserRepositoryQuery;
 import shop.ggamf.ggamf.dto.UserReqDto.JoinReqDto;
 import shop.ggamf.ggamf.dto.UserReqDto.UpdateReqDto;
+import shop.ggamf.ggamf.dto.UserReqDto.UpdateStateReqDto;
 
 @Sql("classpath:db/truncate.sql")
 @ActiveProfiles("test")
@@ -105,6 +109,46 @@ public class UserApiControllerTest extends DummyEntity {
         // then
         resultActions.andExpect(status().isOk());
         resultActions.andExpect(jsonPath("$.data.nickname").value("asdf"));
+    }
+
+    @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    public void withdraw_test() throws Exception {
+        // given
+        Long id = 1L;
+        UpdateStateReqDto updateStateReqDto = new UpdateStateReqDto();
+        updateStateReqDto.setState(UserStateEnum.WITHDRAW);
+        String requestBody = om.writeValueAsString(updateStateReqDto);
+        System.out.println("테스트 : " + requestBody);
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(
+                        put("/s/api/user/" + id + "/withdraw").content(requestBody).contentType(APPLICATION_JSON_UTF8));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+        resultActions.andExpect(status().isOk());
+        resultActions.andExpect(jsonPath("$.data.state").value("WITHDRAW"));
+    }
+
+    @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    public void userdetail_test() throws Exception {
+        // given
+        Long id = 1L;
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(
+                        get("/s/api/user/" + id + "/detail"));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+        resultActions.andExpect(status().isOk());
+        resultActions.andExpect(jsonPath("$.data.nickname").value("nickssar"));
     }
 
     private void dummy_init() {

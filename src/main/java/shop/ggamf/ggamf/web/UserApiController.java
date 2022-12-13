@@ -58,12 +58,14 @@ public class UserApiController {
         return new ResponseEntity<>(new ResponseDto<>("회원탈퇴성공", updateStateRespDto), HttpStatus.OK);
     }
 
-    @PutMapping("/user/{userId}/changeRole")
-    public ResponseEntity<?> changeRole(@PathVariable Long userId, @RequestBody UpdateRoleReqDto updateRoleReqDto) {
-        updateRoleReqDto.setId(userId);
-        UpdateRoleRespDto updateRoleRespDto = userService.역할변경(updateRoleReqDto);
-        return new ResponseEntity<>(new ResponseDto<>("역할변경성공", updateRoleRespDto), HttpStatus.OK);
-    }
+    // @PutMapping("/user/{userId}/changeRole")
+    // public ResponseEntity<?> changeRole(@PathVariable Long userId, @RequestBody
+    // UpdateRoleReqDto updateRoleReqDto) {
+    // updateRoleReqDto.setId(userId);
+    // UpdateRoleRespDto updateRoleRespDto = userService.역할변경(updateRoleReqDto);
+    // return new ResponseEntity<>(new ResponseDto<>("역할변경성공", updateRoleRespDto),
+    // HttpStatus.OK);
+    // }
 
     @GetMapping("/user/{userId}/detail")
     public ResponseEntity<?> detail(@PathVariable Long userId) {
