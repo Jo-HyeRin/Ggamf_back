@@ -94,7 +94,6 @@ public class DevInit extends DummyEntity {
             Room room23 = roomRepository.save(newRoom("roomname23", power, etc));
             Room room24 = roomRepository.save(newRoom("roomname24", power, etc));
             Room room25 = roomRepository.save(newRoom("roomname25", power, etc));
-
             // Enter : 방 참여 정보
             Enter enter1 = enterRepository.save(endEnter(lala, endroom1));
             Enter enter11 = enterRepository.save(endEnter(dada, endroom1));

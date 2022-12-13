@@ -44,21 +44,44 @@ public class RoomRepositoryImpl implements Dao {
     @Override
     public List<Room> findAll(Long gameCodeId, String keyword) {
         String sql = "";
-        sql += "select r from Room r join fetch r.gameCode g ";
-        sql += "where r.active = true ";
-
-        if (keyword == null || keyword.isEmpty()) {
-            sql += "and g.id = :gameCodeId";
+        if (gameCodeId == null) {
+            if (keyword == null || keyword.isEmpty()) {
+                sql += "select r from Room r left join r.gameCode g ";
+                sql += "where r.active = true ";
+            } else {
+                sql += "select r from Room r left join r.gameCode g ";
+                sql += "where r.active = true ";
+                sql += "and r.roomName LIKE CONCAT('%', :keyword, '%')";
+            }
         } else {
-            sql += "and g.id = :gameCodeId";
-            sql += "and r.roomName LIKE %:keyword% ";
+            if (keyword == null || keyword.isEmpty()) {
+                sql += "select r from Room r left join r.gameCode g ";
+                sql += "where r.active = true ";
+                sql += "and g.id = :gameCodeId";
+            } else {
+                sql += "select r from Room r left join r.gameCode g ";
+                sql += "where r.active = true ";
+                sql += "and g.id = :gameCodeId ";
+                sql += "and r.roomName LIKE CONCAT('%', :keyword, '%')";
+            }
         }
 
         // 파라미터 바인딩
         TypedQuery<Room> query = em.createQuery(sql, Room.class);
-        query = query.setParameter("gameCodeId", gameCodeId);
-        query = query.setParameter("keyword", keyword);
+        if (gameCodeId == null) {
+            if (keyword == null || keyword.isEmpty()) {
 
+            } else {
+                query = query.setParameter("keyword", keyword);
+            }
+        } else {
+            if (keyword == null || keyword.isEmpty()) {
+                query = query.setParameter("gameCodeId", gameCodeId);
+            } else {
+                query = query.setParameter("gameCodeId", gameCodeId);
+                query = query.setParameter("keyword", keyword);
+            }
+        }
         return query.getResultList();
     }
 
