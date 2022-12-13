@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import shop.ggamf.ggamf.config.auth.LoginUser;
-import shop.ggamf.ggamf.config.enums.UserEnum;
 import shop.ggamf.ggamf.config.exception.CustomApiException;
 import shop.ggamf.ggamf.domain.report.ReportRepositoryQuery;
 import shop.ggamf.ggamf.domain.report.ReportRespDto;

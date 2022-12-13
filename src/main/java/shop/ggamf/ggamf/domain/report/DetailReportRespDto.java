@@ -6,13 +6,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Setter
-    @Getter
+@Getter
 public class DetailReportRespDto {
-        private Long id;
-        private String badUser;
-        private Timestamp createdAt;
-        private String reason;
-        private String detail;
-        private String submitUser;
-        private Integer count;
+    private Long id;
+    private Long badUserId;
+    private String badUser;
+    private Timestamp createdAt;
+    private String reason;
+    private String detail;
+    private String submitUser;
+    private Integer count;
 }
