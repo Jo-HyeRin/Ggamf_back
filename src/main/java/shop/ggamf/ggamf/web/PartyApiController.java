@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
@@ -133,12 +134,13 @@ public class PartyApiController {
     // 전체 파티방 목록 보기 -> 카테고리별, 페이징, 검색 필요
     @GetMapping("/party/user/{userId}/list")
     public ResponseEntity<?> findAllRoom(@PathVariable Long userId, @AuthenticationPrincipal LoginUser loginUser,
-            String keyword) {
+            String keyword, Long gameCodeId) {
         if (loginUser.getUser().getId() != userId) {
             throw new CustomApiException("로그인 유저와 요청 유저가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
+        log.debug("디버그 : gameCodeId : " + gameCodeId);
         log.debug("디버그 : keyword : " + keyword);
-        RoomListRespDto roomListRespDto = partyService.전체파티방목록보기(keyword);
+        RoomListRespDto roomListRespDto = partyService.전체파티방목록보기(gameCodeId, keyword);
         return new ResponseEntity<>(new ResponseDto<>("전체 파티방 목록 보기 완료", roomListRespDto), HttpStatus.OK);
     }
 

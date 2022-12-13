@@ -295,7 +295,7 @@ public class PartyApiControllerTest extends DummyEntity {
 
     @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
-    public void searchRoom_test() throws Exception {
+    public void searchRoom_test() throws Exception { // 검색
         // given
         Long userId = 1L;
         String keyword = "2";
@@ -309,6 +309,26 @@ public class PartyApiControllerTest extends DummyEntity {
         // then
         resultActions.andExpect(MockMvcResultMatchers.status().isOk());
         resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.rooms.[0].roomName").value("roomname2"));
+    }
+
+    @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    public void roomByGameCode_test() throws Exception { // 검색+카테고리
+        // given
+        Long userId = 1L;
+        String keyword = "2";
+        Long gameCodeId = 2L;
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(MockMvcRequestBuilders
+                        .get("/s/api/party/user/" + userId + "/list?keyword=" + keyword + "&gameCodeId=" + gameCodeId));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+        resultActions.andExpect(MockMvcResultMatchers.status().isOk());
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.rooms.[0].roomName").value("roomname12"));
     }
 
     @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
