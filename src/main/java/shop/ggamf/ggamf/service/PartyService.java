@@ -110,6 +110,9 @@ public class PartyService {
         Enter enterPS = enterRepository.findByRoomIdAndUserId(roomId, userId)
                 .orElseThrow(
                         () -> new CustomApiException("당신이 나갈 수 없는 방입니다", HttpStatus.FORBIDDEN));
+        if (enterPS.getRoom().getActive() == false) {
+            throw new CustomApiException("이미 종료된 방입니다", HttpStatus.BAD_REQUEST);
+        }
         if (enterPS.getStay() == false) {
             throw new CustomApiException("이미 방에서 나온 상태입니다", HttpStatus.BAD_REQUEST);
         }
@@ -163,7 +166,10 @@ public class PartyService {
                 .findByRoomIdAndUserId(kickUserReqDto.getRoomId(), kickUserReqDto.getKickUserId())
                 .orElseThrow(
                         () -> new CustomApiException("해당 파티원은 추방할 수 없습니다", HttpStatus.FORBIDDEN));
-        if (enterPS.getRoom().getId() != kickUserReqDto.getUserId()) {
+        if (enterPS.getRoom().getActive() == false) {
+            throw new CustomApiException("이미 종료된 방입니다", HttpStatus.BAD_REQUEST);
+        }
+        if (enterPS.getRoom().getUser().getId() != kickUserReqDto.getUserId()) {
             throw new CustomApiException("당신은 방장이 아닙니다. 추방 권한이 없습니다", HttpStatus.BAD_REQUEST);
         }
         if (enterPS.getStay() == false) {
@@ -183,7 +189,7 @@ public class PartyService {
                 .orElseThrow(
                         () -> new CustomApiException("존재하지 않는 파티방입니다", HttpStatus.FORBIDDEN));
         if (roomPS.getActive() == false) {
-            throw new CustomApiException("종료된 방입니다.", HttpStatus.BAD_REQUEST);
+            throw new CustomApiException("이미 종료된 방입니다.", HttpStatus.BAD_REQUEST);
         }
         List<Enter> enterListPS = enterRepository.findByUserId(userId);
         List<Long> enterRoomIdList = new ArrayList<>();
