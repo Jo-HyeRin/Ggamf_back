@@ -49,7 +49,7 @@ public class DevInit extends DummyEntity {
             User wow = userRepository.save(newUser("wow"));
             User cash = userRepository.save(newUser("cash"));
             User power = userRepository.save(newUser("power"));
-            User house = userRepository.save(newUser("houser"));
+            User house = userRepository.save(newUser("house"));
             // Follow : 겜프
             Follow f1 = followRepository.save(newFollow(ssar, cos, false));
             Follow f11 = followRepository.save(newFollow(ssar, vovo, false));
