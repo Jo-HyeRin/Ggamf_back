@@ -18,9 +18,11 @@ import shop.ggamf.ggamf.config.auth.LoginUser;
 import shop.ggamf.ggamf.dto.ResponseDto;
 import shop.ggamf.ggamf.dto.UserReqDto.JoinReqDto;
 import shop.ggamf.ggamf.dto.UserReqDto.UpdateReqDto;
+import shop.ggamf.ggamf.dto.UserReqDto.UpdateRoleReqDto;
 import shop.ggamf.ggamf.dto.UserReqDto.UpdateStateReqDto;
 import shop.ggamf.ggamf.dto.UserRespDto.JoinRespDto;
 import shop.ggamf.ggamf.dto.UserRespDto.UpdateRespDto;
+import shop.ggamf.ggamf.dto.UserRespDto.UpdateRoleRespDto;
 import shop.ggamf.ggamf.dto.UserRespDto.UpdateStateRespDto;
 import shop.ggamf.ggamf.service.UserService;
 
@@ -46,7 +48,7 @@ public class UserApiController {
         }
         updateReqDto.setId(userId);
         UpdateRespDto updateRespDto = userService.회원정보수정(updateReqDto);
-        return new ResponseEntity<>(new ResponseDto<>("회원정보수정성공", updateRespDto), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ResponseDto<>("회원정보수정성공", updateRespDto), HttpStatus.OK);
     }
 
     @PutMapping("/user/{userId}/withdraw")
@@ -56,6 +58,15 @@ public class UserApiController {
         return new ResponseEntity<>(new ResponseDto<>("회원탈퇴성공", updateStateRespDto), HttpStatus.OK);
     }
 
+    // @PutMapping("/user/{userId}/changeRole")
+    // public ResponseEntity<?> changeRole(@PathVariable Long userId, @RequestBody
+    // UpdateRoleReqDto updateRoleReqDto) {
+    // updateRoleReqDto.setId(userId);
+    // UpdateRoleRespDto updateRoleRespDto = userService.역할변경(updateRoleReqDto);
+    // return new ResponseEntity<>(new ResponseDto<>("역할변경성공", updateRoleRespDto),
+    // HttpStatus.OK);
+    // }
+
     @GetMapping("/user/{userId}/detail")
     public ResponseEntity<?> detail(@PathVariable Long userId) {
         return new ResponseEntity<>(new ResponseDto<>("유저 상세보기 성공", userService.유저상세보기(userId)), HttpStatus.OK);
@@ -63,7 +74,8 @@ public class UserApiController {
 
     // @DeleteMapping("/user/{userId}/delete") //관리자만 가능
     // public ResponseEntity<?> delete(@PathVariable Long userId) {
-    //     userService.회원영구삭제(userId);
-    //     return new ResponseEntity<>(new ResponseDto<>("회원삭제성공", null), HttpStatus.OK);
+    // userService.회원영구삭제(userId);
+    // return new ResponseEntity<>(new ResponseDto<>("회원삭제성공", null),
+    // HttpStatus.OK);
     // }
 }

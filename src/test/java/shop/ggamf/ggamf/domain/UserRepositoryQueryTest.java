@@ -1,4 +1,4 @@
-package shop.ggamf.ggamf.web;
+package shop.ggamf.ggamf.domain;
 
 import javax.persistence.EntityManager;
 
