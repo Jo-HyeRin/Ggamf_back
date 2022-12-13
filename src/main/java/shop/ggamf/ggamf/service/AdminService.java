@@ -37,10 +37,6 @@ public class AdminService {
             userRepository.findById(id)
                     .orElseThrow(() -> (new CustomApiException("해당유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST)));
         }
-        if (!userOP.get().getRole().equals(UserEnum.ADMIN.toString())) {
-            log.debug("디버그 : getRole : " + userOP.get().getRole());
-            throw new CustomApiException("권한이 없습니다.", HttpStatus.BAD_REQUEST);
-        }
         List<ReportRespDto> reportRespDto = reportRepositoryQuery.findReportList();
         return reportRespDto;
     }

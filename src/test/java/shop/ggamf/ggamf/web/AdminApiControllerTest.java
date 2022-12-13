@@ -57,7 +57,6 @@ public class AdminApiControllerTest extends DummyEntity {
 
     @BeforeEach
     public void setUp() {
-        autoincrement_reset();
         dummy_init();
     }
 
@@ -92,11 +91,5 @@ public class AdminApiControllerTest extends DummyEntity {
         // 리포트
         Report report1 = reportRepository.save(newReport(kaka, dada, reason2));
         Report report2 = reportRepository.save(newReport(kaka, cos, reason1));
-    }
-
-    private void autoincrement_reset() {
-        this.em
-                .createNativeQuery("ALTER TABLE users ALTER COLUMN `id` RESTART WITH 1")
-                .executeUpdate();
     }
 }
