@@ -132,11 +132,13 @@ public class PartyApiController {
 
     // 전체 파티방 목록 보기 -> 카테고리별, 페이징, 검색 필요
     @GetMapping("/party/user/{userId}/list")
-    public ResponseEntity<?> findAllRoom(@PathVariable Long userId, @AuthenticationPrincipal LoginUser loginUser) {
+    public ResponseEntity<?> findAllRoom(@PathVariable Long userId, @AuthenticationPrincipal LoginUser loginUser,
+            String keyword) {
         if (loginUser.getUser().getId() != userId) {
             throw new CustomApiException("로그인 유저와 요청 유저가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
-        RoomListRespDto roomListRespDto = partyService.전체파티방목록보기();
+        log.debug("디버그 : keyword : " + keyword);
+        RoomListRespDto roomListRespDto = partyService.전체파티방목록보기(keyword);
         return new ResponseEntity<>(new ResponseDto<>("전체 파티방 목록 보기 완료", roomListRespDto), HttpStatus.OK);
     }
 

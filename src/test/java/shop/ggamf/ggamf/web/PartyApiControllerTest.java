@@ -68,6 +68,12 @@ public class PartyApiControllerTest extends DummyEntity {
         User gogo = userRepository.save(newUser("gogo"));
         User romio = userRepository.save(newUser("romio"));
         User jeje = userRepository.save(newUser("jeje"));
+        User money = userRepository.save(newUser("money"));
+        User terry = userRepository.save(newUser("terry"));
+        User wow = userRepository.save(newUser("wow"));
+        User cash = userRepository.save(newUser("cash"));
+        User power = userRepository.save(newUser("power"));
+        User house = userRepository.save(newUser("house"));
         // GameCode : 게임카테고리
         GameCode etc = gameCodeRepository.save(newGameCode("etc"));
         GameCode LoL = gameCodeRepository.save(newGameCode("LoL"));
@@ -81,6 +87,24 @@ public class PartyApiControllerTest extends DummyEntity {
         Room room5 = roomRepository.save(newRoom("roomname5", yeye, starcraft));
         Room room6 = roomRepository.save(newRoom("roomname6", ohoh, battleground));
         Room room7 = roomRepository.save(newRoom("roomname7", vovo, LoL));
+        Room room8 = roomRepository.save(newRoom("roomname8", jeje, LoL));
+        Room room9 = roomRepository.save(newRoom("roomname9", jeje, LoL));
+        Room room10 = roomRepository.save(newRoom("roomname10", jeje, LoL));
+        Room room11 = roomRepository.save(newRoom("roomname11", money, LoL));
+        Room room12 = roomRepository.save(newRoom("roomname12", money, LoL));
+        Room room13 = roomRepository.save(newRoom("roomname13", money, LoL));
+        Room room14 = roomRepository.save(newRoom("roomname14", terry, LoL));
+        Room room15 = roomRepository.save(newRoom("roomname15", terry, LoL));
+        Room room16 = roomRepository.save(newRoom("roomname16", terry, LoL));
+        Room room17 = roomRepository.save(newRoom("roomname17", wow, LoL));
+        Room room18 = roomRepository.save(newRoom("roomname18", wow, LoL));
+        Room room19 = roomRepository.save(newRoom("roomname19", wow, LoL));
+        Room room20 = roomRepository.save(newRoom("roomname20", cash, LoL));
+        Room room21 = roomRepository.save(newRoom("roomname21", cash, LoL));
+        Room room22 = roomRepository.save(newRoom("roomname22", cash, LoL));
+        Room room23 = roomRepository.save(newRoom("roomname23", power, LoL));
+        Room room24 = roomRepository.save(newRoom("roomname24", power, LoL));
+        Room room25 = roomRepository.save(newRoom("roomname25", power, LoL));
         // Enter : 방 참여 정보
         Enter enter1 = enterRepository.save(endEnter(lala, endroom1));
         Enter enter11 = enterRepository.save(endEnter(dada, endroom1));
@@ -254,13 +278,31 @@ public class PartyApiControllerTest extends DummyEntity {
 
     @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
-    public void findAllRoom() throws Exception {
+    public void findAllRoom_test() throws Exception {
         // given
         Long userId = 1L;
 
         // when
         ResultActions resultActions = mvc
                 .perform(MockMvcRequestBuilders.get("/s/api/party/user/" + userId + "/list"));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+        resultActions.andExpect(MockMvcResultMatchers.status().isOk());
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.rooms.[0].roomName").value("roomname2"));
+    }
+
+    @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    public void searchRoom_test() throws Exception {
+        // given
+        Long userId = 1L;
+        String keyword = "2";
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(MockMvcRequestBuilders.get("/s/api/party/user/" + userId + "/list?keyword=" + keyword));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
 
