@@ -16,12 +16,4 @@ public interface RoomRepository extends JpaRepository<Room, Long>, Dao {
     @Query("select r from Room r where r.active = true")
     List<Room> findByActive();
 
-    // 활성화 된 방 카테고리별 찾기 - 키워드 없는 경우
-    @Query("select r from Room r join fetch r.gameCode g where g.id = :gameCodeId and r.active = true")
-    List<Room> findByActiveCode(@Param("gameCodeId") Long gameCodeId);
-
-    // 활성화 된 방 카테고리별 찾기 - 키워드 있는 경우
-    @Query("select r from Room r join fetch r.gameCode g where g.id = :gameCodeId and r.roomName LIKE %:keyword% and r.active = true")
-    List<Room> searchByTitleLike(@Param("gameCodeId") Long gameCodeId, @Param("keyword") String keyword);
-
 }
