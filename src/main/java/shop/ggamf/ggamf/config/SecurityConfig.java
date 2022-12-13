@@ -48,6 +48,8 @@ public class SecurityConfig {
         http.apply(new MyCustomDsl());
         http.authorizeHttpRequests()
                 .antMatchers("/api/user/**").authenticated()
+                .antMatchers("/api/ggamf/**").authenticated()
+                .antMatchers("/api/party/**").authenticated()
                 .antMatchers("/api/admin/**").hasRole("" + UserEnum.ADMIN)
                 .anyRequest().permitAll();
 
