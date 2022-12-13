@@ -42,7 +42,7 @@ public class Room extends AuditingTime {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private GameCode gameCode;
 
     @Builder

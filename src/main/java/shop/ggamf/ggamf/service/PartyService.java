@@ -204,14 +204,29 @@ public class PartyService {
         }
     }
 
-    public RoomListRespDto 전체파티방목록보기(String keyword) {
-        if (keyword == null || keyword.isEmpty()) {
-            List<Room> roomListPS = roomRepository.findByActive();
-            return new RoomListRespDto(roomListPS);
-        } else {
-            List<Room> roomListPS = roomRepository.searchByTitleLike(keyword);
-            return new RoomListRespDto(roomListPS);
-        }
+    public RoomListRespDto 전체파티방목록보기(Long gameCodeId, String keyword) {
+
+        List<Room> roomListPS = roomRepository.findAll(gameCodeId, keyword);
+        return new RoomListRespDto(roomListPS);
+
+        // if (gameCodeId == null) {
+        // List<Room> roomListPS = roomRepository.findByActive();
+        // return new RoomListRespDto(roomListPS);
+        // }
+        // // 게임코드의 존재여부
+        // GameCode gameCodePS = gameCodeRepository.findById(gameCodeId)
+        // .orElseThrow(
+        // () -> new CustomApiException("존재하지 않는 게임코드입니다", HttpStatus.FORBIDDEN));
+
+        // // 게임코드가 입력되지 않은 경우 = 전체 목록
+        // if (keyword == null || keyword.isEmpty()) {
+        // List<Room> roomListPS = roomRepository.findByActiveCode(gameCodeId);
+        // return new RoomListRespDto(roomListPS);
+        // } else {
+        // List<Room> roomListPS = roomRepository.searchByTitleLike(gameCodeId,
+        // keyword);
+        // return new RoomListRespDto(roomListPS);
+        // }
     }
 
     public RoomListByIdRespDto 참가중인파티방목록보기(Long userId) {
