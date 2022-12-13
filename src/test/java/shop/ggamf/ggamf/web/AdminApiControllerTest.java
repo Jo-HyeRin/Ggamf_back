@@ -77,6 +77,24 @@ public class AdminApiControllerTest extends DummyEntity {
 
     }
 
+    @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    public void findDetailReport_Test() throws Exception {
+        // given
+        Long reportId = 1L;
+        Long badUserId = 3L;
+
+        // when
+        ResultActions resultActions = mvc.perform(get("/s/api/admin/" + reportId + "/detailReport/" + badUserId));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+        resultActions.andExpect(status().isOk());
+        resultActions.andExpect(jsonPath("$.data.reason").value("잘못2"));
+
+    }
+
     private void dummy_init() {
         // 유저
         User ssar = userRepository.save(newAdmin("ssar"));
@@ -91,5 +109,6 @@ public class AdminApiControllerTest extends DummyEntity {
         // 리포트
         Report report1 = reportRepository.save(newReport(kaka, dada, reason2));
         Report report2 = reportRepository.save(newReport(kaka, cos, reason1));
+        Report report3 = reportRepository.save(newReport(dada, kaka, reason1));
     }
 }

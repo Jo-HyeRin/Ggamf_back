@@ -59,11 +59,12 @@ public class ReportRepositoryQueryTest extends DummyEntity {
     }
 
     @Test
-    public void findDetailReport_test () {
+    public void findDetailReport_test() {
         // given
         Long id = 1L;
+        Long badUserId = 3L;
         // when
-        DetailReportRespDto detailReportRespDto = reportRepositoryQuery.findDetailReport(id);
+        DetailReportRespDto detailReportRespDto = reportRepositoryQuery.findDetailReport(id, badUserId);
 
         // then
         Assertions.assertThat(detailReportRespDto.getDetail());
