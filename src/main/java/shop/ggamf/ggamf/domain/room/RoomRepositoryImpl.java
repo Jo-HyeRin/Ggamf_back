@@ -13,8 +13,9 @@ interface Dao {
     // 추천 겜프 목록 - 내가 닫은 최근 방
     List<Room> findByUserIdEnd(@Param("userId") Long userId);
 
-    // 전체 파티방 목록 보기 - 검색, 카테고리
-    List<Room> findAll(@Param("gameCodeId") Long gameCodeId, @Param("keyword") String keyword);
+    // 전체 파티방 목록 보기 - 검색, 카테고리, 페이징
+    List<Room> findAll(@Param("gameCodeId") Long gameCodeId, @Param("keyword") String keyword,
+            @Param("page") Integer page);
 
 }
 
@@ -42,7 +43,7 @@ public class RoomRepositoryImpl implements Dao {
     }
 
     @Override
-    public List<Room> findAll(Long gameCodeId, String keyword) {
+    public List<Room> findAll(Long gameCodeId, String keyword, Integer page) {
         String sql = "";
         if (gameCodeId == null) {
             if (keyword == null || keyword.isEmpty()) {
@@ -82,6 +83,8 @@ public class RoomRepositoryImpl implements Dao {
                 query = query.setParameter("keyword", keyword);
             }
         }
+        query.setFirstResult(page * 10); // page부터
+        query.setMaxResults(10); // 3개만 볼거다
         return query.getResultList();
     }
 

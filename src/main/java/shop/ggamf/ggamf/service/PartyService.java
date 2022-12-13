@@ -204,14 +204,18 @@ public class PartyService {
         }
     }
 
-    public RoomListRespDto 전체파티방목록보기(Long gameCodeId, String keyword) {
+    public RoomListRespDto 전체파티방목록보기(Long gameCodeId, String keyword, Integer page) {
         // 게임 코드가 존재하는 지 확인
         if (gameCodeId != null) {
             GameCode gameCodePS = gameCodeRepository.findById(gameCodeId)
                     .orElseThrow(
                             () -> new CustomApiException("존재하지 않는 게임코드입니다", HttpStatus.FORBIDDEN));
         }
-        List<Room> roomListPS = roomRepository.findAll(gameCodeId, keyword);
+        List<Room> roomListPS = roomRepository.findAll(gameCodeId, keyword, page);
+        // 목록보다 더 큰 페이지 요청 시
+        if (roomListPS.size() < page * 10) {
+            throw new CustomApiException("이 페이지에는 파티방 목록이 없습니다", HttpStatus.BAD_REQUEST);
+        }
         return new RoomListRespDto(roomListPS);
     }
 
