@@ -14,6 +14,7 @@ import javax.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import shop.ggamf.ggamf.domain.AuditingTime;
 import shop.ggamf.ggamf.domain.reasonCode.ReasonCode;
 import shop.ggamf.ggamf.domain.user.User;
 
@@ -21,7 +22,7 @@ import shop.ggamf.ggamf.domain.user.User;
 @Getter
 @Table(name = "report")
 @Entity
-public class Report {
+public class Report extends AuditingTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -38,6 +39,7 @@ public class Report {
     private User badUser;
 
     @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reasonCode_id")
     private ReasonCode reasonCode;
 
     @Builder

@@ -15,7 +15,6 @@ import shop.ggamf.ggamf.config.enums.UserEnum;
 import shop.ggamf.ggamf.config.jwt.JwtAuthenticationFilter;
 import shop.ggamf.ggamf.config.jwt.JwtAuthorizationFilter;
 
-
 @Configuration
 public class SecurityConfig {
     private final Logger log = LoggerFactory.getLogger(getClass());
@@ -49,7 +48,7 @@ public class SecurityConfig {
         http.apply(new MyCustomDsl());
         http.authorizeHttpRequests()
                 .antMatchers("/api/user/**").authenticated()
-                .antMatchers("/api/admin/**").hasRole("ROLE_" + UserEnum.ADMIN)
+                .antMatchers("/api/admin/**").hasRole("" + UserEnum.ADMIN)
                 .anyRequest().permitAll();
 
         return http.build();

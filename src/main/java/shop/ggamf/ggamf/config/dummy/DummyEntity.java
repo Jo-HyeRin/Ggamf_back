@@ -10,6 +10,7 @@ import shop.ggamf.ggamf.domain.enter.Enter;
 import shop.ggamf.ggamf.domain.follow.Follow;
 import shop.ggamf.ggamf.domain.gameCode.GameCode;
 import shop.ggamf.ggamf.domain.reasonCode.ReasonCode;
+import shop.ggamf.ggamf.domain.report.Report;
 import shop.ggamf.ggamf.domain.room.Room;
 import shop.ggamf.ggamf.domain.starRate.StarRate;
 import shop.ggamf.ggamf.domain.user.User;
@@ -32,6 +33,26 @@ public abstract class DummyEntity {
                 .intro("안녕하세여 유저입니다")
                 .state(UserStateEnum.NORMAL)
                 .role(UserEnum.USER)
+                .agree(true)
+                .build();
+        return user;
+    }
+
+    protected User newAdmin(String username) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encPassword = passwordEncoder.encode("1234");
+        User user = User.builder()
+                .username(username)
+                .password(encPassword)
+                .name("관리자")
+                .phone("010-1234-5678" + username)
+                .nickname("nick" + username)
+                .email(username + "@nate.com")
+                .phoneChecked(true)
+                .photo("내사진입니다")
+                .intro("관리자입니다")
+                .state(UserStateEnum.NORMAL)
+                .role(UserEnum.ADMIN)
                 .agree(true)
                 .build();
         return user;
@@ -109,6 +130,23 @@ public abstract class DummyEntity {
     }
 
     protected ReasonCode newReasonCode(String reason) {
+        ReasonCode reasonCode = ReasonCode.builder()
+                .reason(reason)
+                .build();
+        return reasonCode;
+    }
+
+    protected Report newReport(User submitUser, User badUser, ReasonCode reasonCode) {
+        Report report = Report.builder()
+                .detail("이러저러한사유")
+                .submitUser(submitUser)
+                .badUser(badUser)
+                .reasonCode(reasonCode)
+                .build();
+        return report;
+    }
+
+    protected ReasonCode newReason(String reason) {
         ReasonCode reasonCode = ReasonCode.builder()
                 .reason(reason)
                 .build();

@@ -58,6 +58,8 @@ public class User extends AuditingTime {
 
     private Boolean agree;
 
+    private String uid; // uid추가
+
     @Builder
     public User(Long id, String username, String password, String name, String phone, String nickname, String email,
             Boolean phoneChecked, String photo, String intro, UserStateEnum state, UserEnum role, Boolean agree) {
@@ -102,6 +104,10 @@ public class User extends AuditingTime {
 
     public void 회원탈퇴(UserStateEnum state) {
         this.state = state.WITHDRAW;
+    }
+
+    public void 역할변경(UserEnum role) {
+        this.role = role.ADMIN;
     }
 
 }
