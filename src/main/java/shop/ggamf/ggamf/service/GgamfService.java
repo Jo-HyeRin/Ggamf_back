@@ -1,9 +1,7 @@
 package shop.ggamf.ggamf.service;
 
 import java.util.ArrayList;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -36,6 +34,7 @@ import shop.ggamf.ggamf.dto.GgamfRespDto.GgamfListRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.RecommendGgamfListRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.RejectGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.ReportGgamfRespDto;
+import shop.ggamf.ggamf.dto.GgamfRespDto.SendGgamfRespDto;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -162,6 +161,12 @@ public class GgamfService {
         return new GgamfListRespDto(followerListPS, followingListPS);
     }
 
+    public SendGgamfRespDto 보낸겜프요청목록보기(Long userId) {
+        // 내가 보낸 요청 중에서 아직 수락되지 않은 요청 목록
+        List<Follow> followListPS = followRepository.findByUserIdFollower(userId);
+        return new SendGgamfRespDto(followListPS);
+    }
+
     public RecommendGgamfListRespDto 추천겜프목록보기(Long userId) {
         // <내가 방장일 때>
         // 가장 최근 종료한 방 찾기
@@ -208,4 +213,5 @@ public class GgamfService {
         List<User> recommendUserList = userRepository.findByIdForRecommend(recommendFriendList);
         return new RecommendGgamfListRespDto(recommendUserList);
     }
+
 }
