@@ -25,4 +25,8 @@ public interface FollowRepository extends JpaRepository<Follow, Long>, Dao {
     @Query("select f from Follow f join fetch f.follower e where e.id = :userId and f.accept=false")
     List<Follow> findByUserIdFollower(@Param("userId") Long userId);
 
+    // 내가 받은 겜프 요청 보기
+    @Query("select f from Follow f join fetch f.following i where i.id = :userId and f.accept=false")
+    List<Follow> findByUserIdFollowing(@Param("userId") Long userId);
+
 }

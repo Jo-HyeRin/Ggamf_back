@@ -25,13 +25,13 @@ public class AdminRespDto {
     // @Setter
     // @Getter
     // public static class DetailReportRespDto {
-    //     private Long id;
-    //     private String badUser;
-    //     private Timestamp createdAt;
-    //     private String reason;
-    //     private String detail;
-    //     private String submitUser;
-    //     private Integer count;
+    // private Long id;
+    // private String badUser;
+    // private Timestamp createdAt;
+    // private String reason;
+    // private String detail;
+    // private String submitUser;
+    // private Integer count;
     // }
 
     // select r.id, u.name badUsername, r.created_At, rs.reason, r.detail, u.name
