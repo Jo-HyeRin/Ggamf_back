@@ -157,6 +157,35 @@ public class GgamfRespDto {
 
     @Setter
     @Getter
+    public static class SendGgamfRespDto {
+
+        List<FollowingDto> followings;
+
+        public SendGgamfRespDto(List<Follow> followings) {
+            this.followings = followings.stream().map((follow) -> new FollowingDto(follow))
+                    .collect(Collectors.toList());
+        }
+
+        @Setter
+        @Getter
+        public class FollowingDto {
+            private Long friendId;
+            private String photo;
+            private String nickName;
+            private String intro;
+
+            public FollowingDto(Follow follow) {
+                this.friendId = follow.getFollowing().getId();
+                this.photo = follow.getFollowing().getPhoto();
+                this.nickName = follow.getFollowing().getNickname();
+                this.intro = follow.getFollowing().getIntro();
+            }
+        }
+
+    }
+
+    @Setter
+    @Getter
     public static class RecommendGgamfListRespDto {
 
         List<UserDto> recommendUserList;
