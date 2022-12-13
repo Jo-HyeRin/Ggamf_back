@@ -21,10 +21,12 @@ import shop.ggamf.ggamf.domain.user.UserRepository;
 import shop.ggamf.ggamf.domain.user.UserRepositoryQuery;
 import shop.ggamf.ggamf.dto.UserReqDto.JoinReqDto;
 import shop.ggamf.ggamf.dto.UserReqDto.UpdateReqDto;
+import shop.ggamf.ggamf.dto.UserReqDto.UpdateRoleReqDto;
 import shop.ggamf.ggamf.dto.UserReqDto.UpdateStateReqDto;
 import shop.ggamf.ggamf.dto.UserRespDto.JoinRespDto;
 import shop.ggamf.ggamf.dto.UserRespDto.ReturnRespDto;
 import shop.ggamf.ggamf.dto.UserRespDto.UpdateRespDto;
+import shop.ggamf.ggamf.dto.UserRespDto.UpdateRoleRespDto;
 import shop.ggamf.ggamf.dto.UserRespDto.UpdateStateRespDto;
 
 @Transactional(readOnly = true)
@@ -98,6 +100,20 @@ public class UserService {
         User userPS = userOP.get();
         userPS.회원탈퇴(updateStateReqDto.getState());
         return new UpdateStateRespDto(userPS);
+    }
+
+    @Transactional
+    public UpdateRoleRespDto 역할변경(UpdateRoleReqDto updateRoleReqDto) {
+        //1. user가 본인인지 체크
+        Optional<User> userOP = userRepository.findById(updateRoleReqDto.getId());
+        if (!userOP.isPresent()) {
+            userRepository.findById(updateRoleReqDto.getId())
+                    .orElseThrow(() -> (new CustomApiException("해당유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST)));
+        }
+        //2. user의 role을 'ADMIN' 으로 바꾸기
+        User userPS = userOP.get();
+        userPS.역할변경(updateRoleReqDto.getRole());
+        return new UpdateRoleRespDto(userPS);
     }
 
 

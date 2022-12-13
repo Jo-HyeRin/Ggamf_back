@@ -196,11 +196,11 @@ public class PartyApiControllerTest extends DummyEntity {
     public void kickUser_test() throws Exception {
         // given
         Long userId = 1L;
-        Long roomId = 1L;
+        Long roomId = 2L;
         KickUserReqDto kickUserReqDto = new KickUserReqDto();
         kickUserReqDto.setUserId(userId);
         kickUserReqDto.setRoomId(roomId);
-        kickUserReqDto.setKickUserId(3L);
+        kickUserReqDto.setKickUserId(5L);
         String requestBody = om.writeValueAsString(kickUserReqDto);
         System.out.println("테스트 : " + requestBody);
 
@@ -213,8 +213,7 @@ public class PartyApiControllerTest extends DummyEntity {
 
         // then
         resultActions.andExpect(MockMvcResultMatchers.status().isOk());
-        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.kickUsername").value("lala"));
-        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.kickName").value("유저이름"));
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.kickUsername").value("kaka"));
         resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.stay").value(false));
     }
 

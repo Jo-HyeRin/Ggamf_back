@@ -78,4 +78,11 @@ public class UserReqDto {
         private Long id; //서비스로직
         private UserStateEnum state;
     }
+
+    @Setter
+    @Getter
+    public static class UpdateRoleReqDto {
+        private Long id; //서비스로직
+        private UserEnum role;
+    }
 }
