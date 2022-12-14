@@ -16,6 +16,8 @@ import shop.ggamf.ggamf.domain.reasonCode.ReasonCode;
 import shop.ggamf.ggamf.domain.reasonCode.ReasonCodeRepository;
 import shop.ggamf.ggamf.domain.recommendBanUser.RecommendBanUser;
 import shop.ggamf.ggamf.domain.recommendBanUser.RecommendBanUserRepository;
+import shop.ggamf.ggamf.domain.report.Report;
+import shop.ggamf.ggamf.domain.report.ReportRepository;
 import shop.ggamf.ggamf.domain.room.Room;
 import shop.ggamf.ggamf.domain.room.RoomRepository;
 import shop.ggamf.ggamf.domain.user.User;
@@ -30,10 +32,11 @@ public class DevInit extends DummyEntity {
     public CommandLineRunner dataSetting(UserRepository userRepository,
             RoomRepository roomRepository,
             GameCodeRepository gameCodeRepository, EnterRepository enterRepository, FollowRepository followRepository,
-            ReasonCodeRepository reasonCodeRepository, RecommendBanUserRepository recommendBanUserRepository) {
+            ReasonCodeRepository reasonCodeRepository, RecommendBanUserRepository recommendBanUserRepository, ReportRepository reportRepository) {
 
         return (args) -> {
             // User : 유저
+            User admin = userRepository.save(newAdmin("admin"));
             User ssar = userRepository.save(newUser("ssar"));
             User cos = userRepository.save(newUser("cos"));
             User lala = userRepository.save(newUser("lala"));
@@ -136,6 +139,12 @@ public class DevInit extends DummyEntity {
             Enter enter66 = enterRepository.save(newEnter(lala, room6));
             Enter enter666 = enterRepository.save(newEnter(romio, room6));
             Enter enter6666 = enterRepository.save(newEnter(house, room6));
+
+            //리포트
+            Report report1 = reportRepository.save(newReport(ssar, cos, reason3));
+            Report report2 = reportRepository.save(newReport(lala, cos, reason3));
+            Report report3 = reportRepository.save(newReport(love, cos, reason3));
+            Report report4 = reportRepository.save(newReport(ssar, house, reason3));
         };
     }
 }
