@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -75,5 +76,14 @@ public class AdminApiController {
         updateGameReqDto.setId(id);
         UpdateGameRespDto updateGameRespDto = adminService.게임정보수정(updateGameReqDto);
         return new ResponseEntity<>(new ResponseDto<>("게임정보 수정 성공", updateGameRespDto), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/admin/{id}/deleteGame")
+    public ResponseEntity<?> deleteGame(@PathVariable Long id, @AuthenticationPrincipal LoginUser loginUser) {
+        if (!loginUser.getUser().getRole().equals(UserEnum.ADMIN)) {
+            return new ResponseEntity<>(new ResponseDto<>("권한이 없습니다", null), HttpStatus.FORBIDDEN);
+        }
+        adminService.게임삭제(id);
+        return new ResponseEntity<>(new ResponseDto<>("게임 삭제 성공", null), HttpStatus.OK);
     }
 }

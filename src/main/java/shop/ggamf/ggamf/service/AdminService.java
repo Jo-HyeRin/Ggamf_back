@@ -80,4 +80,14 @@ public class AdminService {
 
         return new UpdateGameRespDto(gameCodePS);
     }
+
+    @Transactional
+    public void 게임삭제(Long id) {
+        Optional<GameCode> gameCodeOP = gameCodeRepository.findById(id);
+        if (!gameCodeOP.isPresent()) {
+            gameCodeRepository.findById(id)
+                    .orElseThrow(() -> (new CustomApiException("해당 게임이 존재하지 않습니다", HttpStatus.BAD_REQUEST)));
+        }
+        gameCodeRepository.deleteById(id);
+    }
 }

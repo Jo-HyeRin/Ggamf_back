@@ -1,5 +1,6 @@
 package shop.ggamf.ggamf.web;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -166,6 +167,20 @@ public class AdminApiControllerTest extends DummyEntity {
         resultActions.andExpect(jsonPath("$.data.gameName").value("파이널판타지14"));
     }
 
+    @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    public void deleteGame_Test() throws Exception {
+        // given
+        Long id = 5L;
+
+        // when
+        ResultActions resultActions = mvc.perform(delete("/s/api/admin/" + id + "/deleteGame"));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+
+        // then
+        resultActions.andExpect(status().isOk());
+    }
+
     private void dummy_init() {
         // 유저
         User ssar = userRepository.save(newAdmin("ssar"));
@@ -185,6 +200,7 @@ public class AdminApiControllerTest extends DummyEntity {
         GameCode LoL = gameCodeRepository.save(newGameCode("LoL"));
         GameCode starcraft = gameCodeRepository.save(newGameCode("starcraft"));
         GameCode battleground = gameCodeRepository.save(newGameCode("battleground"));
+        GameCode finalFantasy14 = gameCodeRepository.save(newGameCode("파이널판타지14"));
 
         // 방 목록
         Room endroom1 = roomRepository.save(endRoom("roomname1", ssar, LoL));
