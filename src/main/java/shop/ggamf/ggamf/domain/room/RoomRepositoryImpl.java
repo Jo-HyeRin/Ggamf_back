@@ -14,7 +14,7 @@ interface Dao {
     List<Room> findByUserIdEnd(@Param("userId") Long userId);
 
     // 전체 파티방 목록 보기 - 검색, 카테고리, 페이징
-    List<Room> findAll(@Param("gameCodeId") Long gameCodeId, @Param("keyword") String keyword,
+    List<Room> findAllRoom(@Param("gameCodeId") Long gameCodeId, @Param("keyword") String keyword,
             @Param("page") Integer page);
 
 }
@@ -43,14 +43,13 @@ public class RoomRepositoryImpl implements Dao {
     }
 
     @Override
-    public List<Room> findAll(Long gameCodeId, String keyword, Integer page) {
+    public List<Room> findAllRoom(Long gameCodeId, String keyword, Integer page) {
         String sql = "";
         if (gameCodeId == null) {
             if (keyword == null || keyword.isEmpty()) {
-                sql += "select r from Room r left join r.gameCode g ";
-                sql += "where r.active = true ";
+                sql += "select r from Room r where r.active = true";
             } else {
-                sql += "select r from Room r left join r.gameCode g ";
+                sql += "select r from Room r ";
                 sql += "where r.active = true ";
                 sql += "and r.roomName LIKE CONCAT('%', :keyword, '%')";
             }
