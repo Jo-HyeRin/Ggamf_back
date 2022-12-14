@@ -44,6 +44,7 @@ public class UserReqDto {
         @NotEmpty(message = "이메일은 필수 입력 값입니다.")
         private String email;
         private Boolean agree;
+        private String uid;
 
         public User toEntity() {
             return User.builder()
@@ -56,6 +57,7 @@ public class UserReqDto {
                     .agree(true)
                     .state(UserStateEnum.NORMAL)
                     .role(UserEnum.USER)
+                    .uid(uid)
                     .build();
         }
     }
@@ -63,7 +65,7 @@ public class UserReqDto {
     @Setter
     @Getter
     public static class UpdateReqDto {
-        private Long id; //서비스로직
+        private Long id; // 서비스로직
         private String photo;
         private String intro;
         private String nickname;
@@ -75,14 +77,14 @@ public class UserReqDto {
     @Setter
     @Getter
     public static class UpdateStateReqDto {
-        private Long id; //서비스로직
+        private Long id; // 서비스로직
         private UserStateEnum state;
     }
 
     @Setter
     @Getter
     public static class UpdateRoleReqDto {
-        private Long id; //서비스로직
+        private Long id; // 서비스로직
         private UserEnum role;
     }
 }

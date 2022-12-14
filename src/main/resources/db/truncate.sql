@@ -5,7 +5,7 @@ truncate table enter;
 truncate table follow;
 truncate table game_code;
 truncate table reason_code;
-truncate table recommend;
+truncate table recommend_ban_user;
 truncate table report;
 truncate table room;
 truncate table star_rate;
