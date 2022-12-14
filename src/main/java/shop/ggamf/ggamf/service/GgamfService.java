@@ -93,7 +93,7 @@ public class GgamfService {
         log.debug("디버그 : 겜프삭제 서비스 호출");
         Follow followPS = followRepository.findById(followId)
                 .orElseThrow(() -> new CustomApiException("요청이 오간 사이도, 겜프 사이도 아닙니다", HttpStatus.FORBIDDEN));
-        if (followPS.getFollower().getId() == userId || followPS.getFollowing().getId() == userId) {
+        if (!(followPS.getFollower().getId() == userId || followPS.getFollowing().getId() == userId)) {
             throw new CustomApiException("당신의 겜프가 아닙니다", HttpStatus.BAD_REQUEST);
         }
         if (followPS.getAccept() != true) {
@@ -112,7 +112,7 @@ public class GgamfService {
         log.debug("디버그 : 겜프거절 서비스 호출");
         Follow followPS = followRepository.findById(followId)
                 .orElseThrow(() -> new CustomApiException("요청이 오간 사이도, 겜프 사이도 아닙니다", HttpStatus.FORBIDDEN));
-        if (followPS.getFollower().getId() == userId || followPS.getFollowing().getId() == userId) {
+        if (!(followPS.getFollower().getId() == userId || followPS.getFollowing().getId() == userId)) {
             throw new CustomApiException("당신과 관련된 겜프 요청이 아닙니다", HttpStatus.BAD_REQUEST);
         }
         if (followPS.getAccept() == true) {
@@ -134,7 +134,7 @@ public class GgamfService {
         log.debug("디버그 : 겜프요청취소 서비스 호출");
         Follow followPS = followRepository.findById(followId)
                 .orElseThrow(() -> new CustomApiException("요청이 오간 사이도, 겜프 사이도 아닙니다", HttpStatus.FORBIDDEN));
-        if (followPS.getFollower().getId() == userId || followPS.getFollowing().getId() == userId) {
+        if (!(followPS.getFollower().getId() == userId || followPS.getFollowing().getId() == userId)) {
             throw new CustomApiException("당신과 관련된 겜프 요청이 아닙니다", HttpStatus.BAD_REQUEST);
         }
         if (followPS.getAccept() == true) {
