@@ -26,11 +26,14 @@ import shop.ggamf.ggamf.domain.gameCode.GameCode;
 import shop.ggamf.ggamf.domain.gameCode.GameCodeRepository;
 import shop.ggamf.ggamf.domain.reasonCode.ReasonCode;
 import shop.ggamf.ggamf.domain.reasonCode.ReasonCodeRepository;
+import shop.ggamf.ggamf.domain.recommendBanUser.RecommendBanUser;
+import shop.ggamf.ggamf.domain.recommendBanUser.RecommendBanUserRepository;
 import shop.ggamf.ggamf.domain.room.Room;
 import shop.ggamf.ggamf.domain.room.RoomRepository;
 import shop.ggamf.ggamf.domain.user.User;
 import shop.ggamf.ggamf.domain.user.UserRepository;
 import shop.ggamf.ggamf.dto.GgamfReqDto.FollowGgamfReqDto;
+import shop.ggamf.ggamf.dto.GgamfReqDto.RecommendBanReqDto;
 import shop.ggamf.ggamf.dto.GgamfReqDto.ReportGgamfReqDto;
 
 @Sql("classpath:db/truncate.sql")
@@ -59,6 +62,8 @@ public class GgamfApiControllerTest extends DummyEntity {
     private GameCodeRepository gameCodeRepository;
     @Autowired
     private EnterRepository enterRepository;
+    @Autowired
+    private RecommendBanUserRepository recommendBanUserRepository;
 
     @BeforeEach
     public void setUp() {
@@ -83,6 +88,8 @@ public class GgamfApiControllerTest extends DummyEntity {
         Follow f33 = followRepository.save(newFollow(ssar, ohoh, true));
         Follow f4 = followRepository.save(newFollow(kaka, ssar, true));
         Follow f44 = followRepository.save(newFollow(yeye, ssar, true));
+        // RecommendBanUser : 추천겜프목록에서 제외할 유저
+        RecommendBanUser banuser1 = recommendBanUserRepository.save(newBanuser(ssar, romio));
         // ReasonCode : 신고카테고리
         ReasonCode reason1 = reasonCodeRepository.save(newReasonCode("욕설"));
         ReasonCode reason2 = reasonCodeRepository.save(newReasonCode("탈주"));
@@ -97,6 +104,8 @@ public class GgamfApiControllerTest extends DummyEntity {
         Room room2 = roomRepository.save(newRoom("roomname2", ssar, etc));
         Room room3 = roomRepository.save(newRoom("roomname3", cos, LoL));
         Room endroom4 = roomRepository.save(endRoom("roomname4", lala, etc));
+        Room room5 = roomRepository.save(newRoom("roomname5", yeye, starcraft));
+        Room room6 = roomRepository.save(newRoom("roomname6", ohoh, battleground));
         // Enter : 방 참여 정보
         Enter enter1 = enterRepository.save(endEnter(lala, endroom1));
         Enter enter11 = enterRepository.save(endEnter(dada, endroom1));
@@ -111,6 +120,13 @@ public class GgamfApiControllerTest extends DummyEntity {
         Enter endEnter44 = enterRepository.save(endEnter(cos, endroom4));
         Enter endEnter444 = enterRepository.save(endEnter(yeye, endroom4));
         Enter endEnter4444 = enterRepository.save(endEnter(romio, endroom4));
+        Enter enter5 = enterRepository.save(newEnter(gogo, room5));
+        Enter enter55 = enterRepository.save(newEnter(cos, room5));
+        Enter enter555 = enterRepository.save(newEnter(dada, room5));
+        Enter enter6 = enterRepository.save(newEnter(ssar, room6));
+        Enter enter66 = enterRepository.save(newEnter(lala, room6));
+        Enter enter666 = enterRepository.save(newEnter(romio, room6));
+        Enter enter6666 = enterRepository.save(newEnter(gogo, room6));
     }
 
     @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
@@ -306,6 +322,30 @@ public class GgamfApiControllerTest extends DummyEntity {
         // then
         resultActions.andExpect(MockMvcResultMatchers.status().isOk());
         resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.recommendUserList.[0].photo").value("내사진입니다"));
+    }
+
+    @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    public void recommendBan_test() throws Exception {
+        // given
+        Long userId = 1L;
+        Long banuserId = 10L;
+        RecommendBanReqDto recommendBanReqDto = new RecommendBanReqDto();
+        recommendBanReqDto.setUserId(userId);
+        recommendBanReqDto.setBanuserId(banuserId);
+        String requestBody = om.writeValueAsString(recommendBanReqDto);
+        System.out.println("테스트 : " + requestBody);
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(MockMvcRequestBuilders.post("/s/api/ggamf/user/" + userId + "/recommendban/" + banuserId)
+                        .content(requestBody).contentType(APPLICATION_JSON_UTF8));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+        resultActions.andExpect(MockMvcResultMatchers.status().isCreated());
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.banuserNick").value("nickgogo"));
     }
 
 }

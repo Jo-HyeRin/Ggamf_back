@@ -165,7 +165,7 @@ public class GgamfApiController {
             throw new CustomApiException("본인을 추천겜프에서 삭제할 수 없습니다", HttpStatus.BAD_REQUEST);
         }
         RecommendBanRespDto recommendBanRespDto = ggamfService.추천겜프삭제(recommendBanReqDto, userId, banuserId);
-        return new ResponseEntity<>(new ResponseDto<>("추천겜프삭제 완료", recommendBanRespDto), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDto<>("추천겜프삭제 완료", recommendBanRespDto), HttpStatus.CREATED);
     }
 
 }
