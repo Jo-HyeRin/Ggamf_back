@@ -20,12 +20,12 @@ public class GgamfRespDto {
         private String followingNick;
         private String followingPhoto;
 
-        public FollowGgamfRespDto(Follow follower, Follow following) {
-            this.followerId = follower.getFollower().getId();
-            this.followingId = follower.getFollowing().getId();
-            this.accept = follower.getAccept();
-            this.followingNick = follower.getFollowing().getNickname();
-            this.followingPhoto = follower.getFollowing().getPhoto();
+        public FollowGgamfRespDto(Follow follow) {
+            this.followerId = follow.getFollower().getId();
+            this.followingId = follow.getFollowing().getId();
+            this.accept = follow.getAccept();
+            this.followingNick = follow.getFollowing().getNickname();
+            this.followingPhoto = follow.getFollowing().getPhoto();
         }
     }
 
