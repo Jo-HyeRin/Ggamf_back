@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.Setter;
 import shop.ggamf.ggamf.domain.follow.Follow;
+import shop.ggamf.ggamf.domain.recommendBanUser.RecommendBanUser;
 import shop.ggamf.ggamf.domain.report.Report;
 import shop.ggamf.ggamf.domain.user.User;
 
@@ -230,6 +231,18 @@ public class GgamfRespDto {
                 this.nickName = user.getNickname();
                 this.intro = user.getIntro();
             }
+        }
+    }
+
+    @Setter
+    @Getter
+    public static class RecommendBanRespDto {
+        private String userNick;
+        private String banuserNick;
+
+        public RecommendBanRespDto(RecommendBanUser recommendBanUser) {
+            this.userNick = recommendBanUser.getUsers().getNickname();
+            this.banuserNick = recommendBanUser.getBanuser().getNickname();
         }
     }
 }

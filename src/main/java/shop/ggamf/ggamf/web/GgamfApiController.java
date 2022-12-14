@@ -19,6 +19,7 @@ import shop.ggamf.ggamf.config.annotations.AuthorizationCheck;
 import shop.ggamf.ggamf.config.auth.LoginUser;
 import shop.ggamf.ggamf.config.exception.CustomApiException;
 import shop.ggamf.ggamf.dto.GgamfReqDto.FollowGgamfReqDto;
+import shop.ggamf.ggamf.dto.GgamfReqDto.RecommendBanReqDto;
 import shop.ggamf.ggamf.dto.GgamfReqDto.ReportGgamfReqDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.AcceptGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.CancelGgamfRespDto;
@@ -26,6 +27,7 @@ import shop.ggamf.ggamf.dto.GgamfRespDto.DeleteGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.FollowGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.GgamfListRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.ReceiveGgamfRespDto;
+import shop.ggamf.ggamf.dto.GgamfRespDto.RecommendBanRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.RecommendGgamfListRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.RejectGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.ReportGgamfRespDto;
@@ -151,4 +153,19 @@ public class GgamfApiController {
         RecommendGgamfListRespDto recommendGgamfListRespDto = ggamfService.추천겜프목록보기(userId);
         return new ResponseEntity<>(new ResponseDto<>("추천겜프목록보기 완료", recommendGgamfListRespDto), HttpStatus.OK);
     }
+
+    // 추천 겜프 삭제
+    @AuthorizationCheck
+    @PostMapping("/ggamf/user/{userId}/recommendban/{banuserId}")
+    public ResponseEntity<?> recommendBan(@RequestBody RecommendBanReqDto recommendBanReqDto, @PathVariable Long userId,
+            @PathVariable Long banuserId,
+            @AuthenticationPrincipal LoginUser loginUser) {
+        log.debug("디버그 : 추천 겜프 삭제 컨트롤러 호출");
+        if (userId == banuserId) {
+            throw new CustomApiException("본인을 추천겜프에서 삭제할 수 없습니다", HttpStatus.BAD_REQUEST);
+        }
+        RecommendBanRespDto recommendBanRespDto = ggamfService.추천겜프삭제(recommendBanReqDto, userId, banuserId);
+        return new ResponseEntity<>(new ResponseDto<>("추천겜프삭제 완료", recommendBanRespDto), HttpStatus.OK);
+    }
+
 }
