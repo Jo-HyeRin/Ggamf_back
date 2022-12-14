@@ -202,6 +202,7 @@ public class PartyRespDto {
             private String roomName;
             private String nickName;
             private String gameName;
+            private String gameLogo;
             private Boolean active;
 
             public RoomDto(Room room) {
@@ -209,6 +210,7 @@ public class PartyRespDto {
                 this.roomName = room.getRoomName();
                 this.nickName = room.getUser().getNickname();
                 this.gameName = room.getGameCode().getGameName();
+                this.gameLogo = room.getGameCode().getLogo();
                 this.active = room.getActive();
             }
         }

@@ -50,6 +50,9 @@ public class DevInit extends DummyEntity {
             User cash = userRepository.save(newUser("cash"));
             User power = userRepository.save(newUser("power"));
             User house = userRepository.save(newUser("house"));
+            User nero = userRepository.save(newUser("nero"));
+            User poll = userRepository.save(newUser("poll"));
+            User love = userRepository.save(newUser("love"));
             // Follow : 겜프
             Follow f1 = followRepository.save(newFollow(ssar, cos, false));
             Follow f11 = followRepository.save(newFollow(ssar, vovo, false));
@@ -82,19 +85,30 @@ public class DevInit extends DummyEntity {
             Room room11 = roomRepository.save(newRoom("roomname11", money, LoL));
             Room room12 = roomRepository.save(newRoom("roomname12", money, LoL));
             Room room13 = roomRepository.save(newRoom("roomname13", money, LoL));
-            Room room14 = roomRepository.save(newRoom("roomname14", terry, LoL));
-            Room room15 = roomRepository.save(newRoom("roomname15", terry, LoL));
-            Room room16 = roomRepository.save(newRoom("roomname16", terry, LoL));
+            Room room14 = roomRepository.save(newRoom("roomname14", terry, starcraft));
+            Room room15 = roomRepository.save(newRoom("roomname15", terry, starcraft));
+            Room room16 = roomRepository.save(newRoom("roomname16", terry, starcraft));
             Room room17 = roomRepository.save(newRoom("roomname17", wow, LoL));
             Room room18 = roomRepository.save(newRoom("roomname18", wow, LoL));
             Room room19 = roomRepository.save(newRoom("roomname19", wow, LoL));
             Room room20 = roomRepository.save(newRoom("roomname20", cash, LoL));
             Room room21 = roomRepository.save(newRoom("roomname21", cash, LoL));
             Room room22 = roomRepository.save(newRoom("roomname22", cash, LoL));
-            Room room23 = roomRepository.save(newRoom("roomname23", power, LoL));
-            Room room24 = roomRepository.save(newRoom("roomname24", power, LoL));
-            Room room25 = roomRepository.save(newRoom("roomname25", power, LoL));
-
+            Room room23 = roomRepository.save(newRoom("roomname23", power, etc));
+            Room room24 = roomRepository.save(newRoom("roomname24", power, etc));
+            Room room25 = roomRepository.save(newRoom("roomname25", power, etc));
+            Room room26 = roomRepository.save(newRoom("roomname26", house, LoL));
+            Room room27 = roomRepository.save(newRoom("roomname27", house, LoL));
+            Room room28 = roomRepository.save(newRoom("roomname28", house, LoL));
+            Room room29 = roomRepository.save(newRoom("roomname29", nero, LoL));
+            Room room30 = roomRepository.save(newRoom("roomname30", nero, LoL));
+            Room room31 = roomRepository.save(newRoom("room222231", nero, LoL));
+            Room room32 = roomRepository.save(newRoom("room222232", poll, LoL));
+            Room room33 = roomRepository.save(newRoom("room222233", poll, LoL));
+            Room room34 = roomRepository.save(newRoom("room222234", poll, LoL));
+            Room room35 = roomRepository.save(newRoom("room222235", love, LoL));
+            Room room36 = roomRepository.save(newRoom("room222236", love, LoL));
+            Room room37 = roomRepository.save(newRoom("room222237", love, LoL));
             // Enter : 방 참여 정보
             Enter enter1 = enterRepository.save(endEnter(lala, endroom1));
             Enter enter11 = enterRepository.save(endEnter(dada, endroom1));
