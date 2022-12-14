@@ -1,13 +1,23 @@
 package shop.ggamf.ggamf.dto;
 
-import java.math.BigInteger;
-import java.sql.Timestamp;
-
 import lombok.Getter;
 import lombok.Setter;
-import shop.ggamf.ggamf.config.enums.UserStateEnum;
+import shop.ggamf.ggamf.domain.gameCode.GameCode;
 
 public class AdminRespDto {
+
+    @Setter
+    @Getter
+    public static class SaveGameRespDto {
+        private String logo;
+        private String gameName;
+
+        public SaveGameRespDto(GameCode gameCode) {
+            this.logo = gameCode.getLogo();
+            this.gameName = gameCode.getGameName();
+        }
+    }
+
     // @Setter
     // @Getter
     // public static class ReportRespDto {

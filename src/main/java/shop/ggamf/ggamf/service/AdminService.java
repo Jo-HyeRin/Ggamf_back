@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import shop.ggamf.ggamf.config.auth.LoginUser;
 import shop.ggamf.ggamf.config.exception.CustomApiException;
+import shop.ggamf.ggamf.domain.gameCode.GameCode;
+import shop.ggamf.ggamf.domain.gameCode.GameCodeRepository;
 import shop.ggamf.ggamf.domain.report.DetailReportRespDto;
 import shop.ggamf.ggamf.domain.report.ReportRepositoryQuery;
 import shop.ggamf.ggamf.domain.report.ReportRespDto;
@@ -19,6 +21,8 @@ import shop.ggamf.ggamf.domain.statistics.GameMatchingResponseDto;
 import shop.ggamf.ggamf.domain.statistics.StatisticsRepositoryQuery;
 import shop.ggamf.ggamf.domain.user.User;
 import shop.ggamf.ggamf.domain.user.UserRepository;
+import shop.ggamf.ggamf.dto.AdminReqDto.SaveGameReqDto;
+import shop.ggamf.ggamf.dto.AdminRespDto.SaveGameRespDto;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -27,6 +31,7 @@ public class AdminService {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
     private final UserRepository userRepository;
+    private final GameCodeRepository gameCodeRepository;
     private final ReportRepositoryQuery reportRepositoryQuery;
     private final StatisticsRepositoryQuery statisticsRepositoryQuery;
     private static LoginUser loginUser;
@@ -52,5 +57,11 @@ public class AdminService {
     public List<GameMatchingResponseDto> 매칭통계목록보기() {
         List<GameMatchingResponseDto> gameMatchingResponseDto = statisticsRepositoryQuery.findGameMatchingStatistics();
         return gameMatchingResponseDto;
+    }
+
+    @Transactional
+    public SaveGameRespDto 게임추가하기(SaveGameReqDto saveGameReqDto) {
+        GameCode gameCodePS = gameCodeRepository.save(saveGameReqDto.toEntity());
+        return new SaveGameRespDto(gameCodePS);
     }
 }
