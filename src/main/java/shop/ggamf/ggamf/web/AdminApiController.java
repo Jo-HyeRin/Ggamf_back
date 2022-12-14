@@ -54,7 +54,11 @@ public class AdminApiController {
     }
 
     @PostMapping("/admin/saveGame")
-    public ResponseEntity<?> saveGame(@RequestBody SaveGameReqDto saveGameReqDto) {
+    public ResponseEntity<?> saveGame(@RequestBody SaveGameReqDto saveGameReqDto,
+            @AuthenticationPrincipal LoginUser loginUser) {
+        if (!loginUser.getUser().getRole().equals(UserEnum.ADMIN)) {
+            return new ResponseEntity<>(new ResponseDto<>("권한이 없습니다", null), HttpStatus.FORBIDDEN);
+        }
         SaveGameRespDto saveGameRespDto = adminService.게임추가하기(saveGameReqDto);
         return new ResponseEntity<>(new ResponseDto<>("게임 추가 성공", saveGameRespDto), HttpStatus.CREATED);
     }
