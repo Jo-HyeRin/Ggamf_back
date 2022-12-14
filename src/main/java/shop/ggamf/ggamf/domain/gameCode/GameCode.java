@@ -32,4 +32,12 @@ public class GameCode {
         this.logo = logo;
         this.gameName = gameName;
     }
+
+    public void 로고수정(String logo) {
+        this.logo = logo;
+    }
+
+    public void 게임이름수정(String gameName) {
+        this.gameName = gameName;
+    }
 }

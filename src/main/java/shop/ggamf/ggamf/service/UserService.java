@@ -102,6 +102,7 @@ public class UserService {
         return new UpdateStateRespDto(userPS);
     }
 
+    // Admin으로 옮기기
     @Transactional
     public UpdateRoleRespDto 역할변경(UpdateRoleReqDto updateRoleReqDto) {
         // 1. user가 본인인지 체크
