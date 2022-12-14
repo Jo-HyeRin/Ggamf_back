@@ -18,11 +18,9 @@ import shop.ggamf.ggamf.config.auth.LoginUser;
 import shop.ggamf.ggamf.dto.ResponseDto;
 import shop.ggamf.ggamf.dto.UserReqDto.JoinReqDto;
 import shop.ggamf.ggamf.dto.UserReqDto.UpdateReqDto;
-import shop.ggamf.ggamf.dto.UserReqDto.UpdateRoleReqDto;
 import shop.ggamf.ggamf.dto.UserReqDto.UpdateStateReqDto;
 import shop.ggamf.ggamf.dto.UserRespDto.JoinRespDto;
 import shop.ggamf.ggamf.dto.UserRespDto.UpdateRespDto;
-import shop.ggamf.ggamf.dto.UserRespDto.UpdateRoleRespDto;
 import shop.ggamf.ggamf.dto.UserRespDto.UpdateStateRespDto;
 import shop.ggamf.ggamf.service.UserService;
 
@@ -52,7 +50,11 @@ public class UserApiController {
     }
 
     @PutMapping("/user/{userId}/withdraw")
-    public ResponseEntity<?> withdraw(@PathVariable Long userId, @RequestBody UpdateStateReqDto updateStateReqDto) {
+    public ResponseEntity<?> withdraw(@PathVariable Long userId, @RequestBody UpdateStateReqDto updateStateReqDto,
+            @AuthenticationPrincipal LoginUser loginUser) {
+        if (userId != loginUser.getUser().getId()) {
+            return new ResponseEntity<>(new ResponseDto<>("권한이 없습니다", null), HttpStatus.FORBIDDEN);
+        }
         updateStateReqDto.setId(userId);
         UpdateStateRespDto updateStateRespDto = userService.회원탈퇴(updateStateReqDto);
         return new ResponseEntity<>(new ResponseDto<>("회원탈퇴성공", updateStateRespDto), HttpStatus.OK);
@@ -78,4 +80,12 @@ public class UserApiController {
     // return new ResponseEntity<>(new ResponseDto<>("회원삭제성공", null),
     // HttpStatus.OK);
     // }
+
+    @GetMapping("/join/{username}")
+    public ResponseEntity<?> checkUsername(@PathVariable String username) {
+        if (userService.아이디중복확인(username).equals("해당 아이디가 이미 존재합니다.")) {
+            return new ResponseEntity<>(new ResponseDto<>("아이디 중복체크 성공", null), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(new ResponseDto<>("아이디 중복체크 성공", null), HttpStatus.OK);
+    }
 }

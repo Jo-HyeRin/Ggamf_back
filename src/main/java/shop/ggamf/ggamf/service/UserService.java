@@ -33,7 +33,7 @@ import shop.ggamf.ggamf.dto.UserRespDto.UpdateStateRespDto;
 @RequiredArgsConstructor
 @Service
 public class UserService {
-    
+
     private final Logger log = LoggerFactory.getLogger(getClass());
     private final UserRepository userRepository;
     private final StarRateRepository starRateRepository;
@@ -56,12 +56,12 @@ public class UserService {
     }
 
     public ReturnRespDto 유저상세보기(Long id) {
-         //1. user가 본인인지 체크
-         Optional<User> userOP = userRepository.findById(id);
-         if (!userOP.isPresent()) {
-             userRepository.findById(id)
-                     .orElseThrow(() -> (new CustomApiException("해당유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST)));
-         }
+        // 1. user가 본인인지 체크
+        Optional<User> userOP = userRepository.findById(id);
+        if (!userOP.isPresent()) {
+            userRepository.findById(id)
+                    .orElseThrow(() -> (new CustomApiException("해당유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST)));
+        }
         DetailRespDto detailRespDto = userRepositoryQuery.findDetailById(id);
         StarRateRespDto starRateRespDto = starRateRepositoryQuery.caculateStaRateById(id);
 
@@ -70,13 +70,13 @@ public class UserService {
 
     @Transactional
     public UpdateRespDto 회원정보수정(UpdateReqDto updateReqDto) {
-        //1. user가 본인인지 체크
+        // 1. user가 본인인지 체크
         Optional<User> userOP = userRepository.findById(updateReqDto.getId());
         if (!userOP.isPresent()) {
             userRepository.findById(updateReqDto.getId())
                     .orElseThrow(() -> (new CustomApiException("해당유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST)));
         }
-        //2. 수정
+        // 2. 수정
         User userPS = userOP.get();
         userPS.사진수정(updateReqDto.getPhoto());
         userPS.자기소개수정(updateReqDto.getIntro());
@@ -90,13 +90,13 @@ public class UserService {
 
     @Transactional
     public UpdateStateRespDto 회원탈퇴(UpdateStateReqDto updateStateReqDto) {
-        //1. user가 본인인지 체크
+        // 1. user가 본인인지 체크
         Optional<User> userOP = userRepository.findById(updateStateReqDto.getId());
         if (!userOP.isPresent()) {
             userRepository.findById(updateStateReqDto.getId())
                     .orElseThrow(() -> (new CustomApiException("해당유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST)));
         }
-        //2. user의 state를 '탈퇴' 로 바꾸기
+        // 2. user의 state를 '탈퇴' 로 바꾸기
         User userPS = userOP.get();
         userPS.회원탈퇴(updateStateReqDto.getState());
         return new UpdateStateRespDto(userPS);
@@ -104,24 +104,30 @@ public class UserService {
 
     @Transactional
     public UpdateRoleRespDto 역할변경(UpdateRoleReqDto updateRoleReqDto) {
-        //1. user가 본인인지 체크
+        // 1. user가 본인인지 체크
         Optional<User> userOP = userRepository.findById(updateRoleReqDto.getId());
         if (!userOP.isPresent()) {
             userRepository.findById(updateRoleReqDto.getId())
                     .orElseThrow(() -> (new CustomApiException("해당유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST)));
         }
-        //2. user의 role을 'ADMIN' 으로 바꾸기
+        // 2. user의 role을 'ADMIN' 으로 바꾸기
         User userPS = userOP.get();
         userPS.역할변경(updateRoleReqDto.getRole());
         return new UpdateRoleRespDto(userPS);
     }
 
-
     @Transactional
-    public void 회원영구삭제(Long id) { //관리자만 가능
-        //1. ROLE이 admin이고
-        //2. user의 state가 '탈퇴' 상태이면
-        //3. 회원 영구삭제
+    public void 회원영구삭제(Long id) { // 관리자만 가능
+        // 1. ROLE이 admin이고
+        // 2. user의 state가 '탈퇴' 상태이면
+        // 3. 회원 영구삭제
         userRepository.deleteById(id);
+    }
+
+    public String 아이디중복확인(String username) {
+        if (userRepository.findByUsername(username).isPresent()) {
+            return "해당 아이디가 이미 존재합니다.";
+        }
+        return "해당 아이디는 사용 가능 합니다.";
     }
 }

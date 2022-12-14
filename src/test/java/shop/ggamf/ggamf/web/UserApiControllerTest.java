@@ -62,6 +62,19 @@ public class UserApiControllerTest extends DummyEntity {
     }
 
     @Test
+    public void checkUsername_test() throws Exception {
+        // given
+        String username = "ssar";
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(get("/s/api/join/" + username));
+
+        // then
+        resultActions.andExpect(status().isBadRequest());
+    }
+
+    @Test
     public void join_test() throws Exception {
         // given
         JoinReqDto joinReqDto = new JoinReqDto();
