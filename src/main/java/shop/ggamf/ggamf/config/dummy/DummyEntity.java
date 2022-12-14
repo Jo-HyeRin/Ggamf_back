@@ -10,11 +10,7 @@ import shop.ggamf.ggamf.domain.enter.Enter;
 import shop.ggamf.ggamf.domain.follow.Follow;
 import shop.ggamf.ggamf.domain.gameCode.GameCode;
 import shop.ggamf.ggamf.domain.reasonCode.ReasonCode;
-<<<<<<< HEAD
 import shop.ggamf.ggamf.domain.recommendBanuser.RecommendBanuser;
-=======
-import shop.ggamf.ggamf.domain.recommendBanUser.RecommendBanUser;
->>>>>>> dcc9ac843457b43792ded08266e0ea21f125f32b
 import shop.ggamf.ggamf.domain.report.Report;
 import shop.ggamf.ggamf.domain.room.Room;
 import shop.ggamf.ggamf.domain.starRate.StarRate;
@@ -157,20 +153,11 @@ public abstract class DummyEntity {
         return reasonCode;
     }
 
-<<<<<<< HEAD
     protected RecommendBanuser newBanuser(User users, User banuser) {
         RecommendBanuser recommendBanuser = RecommendBanuser.builder()
                 .users(users)
                 .banuser(banuser)
                 .build();
         return recommendBanuser;
-=======
-    protected RecommendBanUser newBanuser(User users, User banuser) {
-        RecommendBanUser recommendBanUser = RecommendBanUser.builder()
-                .users(users)
-                .banuser(banuser)
-                .build();
-        return recommendBanUser;
->>>>>>> dcc9ac843457b43792ded08266e0ea21f125f32b
     }
 }
