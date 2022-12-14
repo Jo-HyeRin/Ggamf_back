@@ -14,15 +14,13 @@ public class GgamfRespDto {
     @Setter
     @Getter
     public static class FollowGgamfRespDto {
-        private Long followerId;
-        private Long followingId;
+        private Long userId;
         private Boolean accept;
         private String followingNick;
         private String followingPhoto;
 
         public FollowGgamfRespDto(Follow follow) {
-            this.followerId = follow.getFollower().getId();
-            this.followingId = follow.getFollowing().getId();
+            this.userId = follow.getFollowing().getId();
             this.accept = follow.getAccept();
             this.followingNick = follow.getFollowing().getNickname();
             this.followingPhoto = follow.getFollowing().getPhoto();
@@ -34,16 +32,12 @@ public class GgamfRespDto {
     public static class AcceptGgamfRespDto {
         private Long followId;
         private Long userId;
-        private String userNick;
-        private Long friendId;
         private String friendNick;
         private Boolean accept;
 
         public AcceptGgamfRespDto(Follow follow) {
             this.followId = follow.getId();
-            this.userId = follow.getFollowing().getId();
-            this.userNick = follow.getFollowing().getNickname();
-            this.friendId = follow.getFollower().getId();
+            this.userId = follow.getFollower().getId();
             this.friendNick = follow.getFollower().getNickname();
             this.accept = follow.getAccept();
         }
@@ -53,12 +47,12 @@ public class GgamfRespDto {
     @Getter
     public static class DeleteGgamfRespDto {
         private Long followId;
-        private Long friendId;
+        private Long userId;
         private String friendNick;
 
         public DeleteGgamfRespDto(Long followId, User friend) {
             this.followId = followId;
-            this.friendId = friend.getId();
+            this.userId = friend.getId();
             this.friendNick = friend.getNickname();
         }
     }
@@ -67,12 +61,12 @@ public class GgamfRespDto {
     @Getter
     public static class RejectGgamfRespDto {
         private Long followId;
-        private Long friendId;
+        private Long userId;
         private String friendNick;
 
         public RejectGgamfRespDto(Long followId, User friend) {
             this.followId = followId;
-            this.friendId = friend.getId();
+            this.userId = friend.getId();
             this.friendNick = friend.getNickname();
         }
     }
@@ -81,12 +75,12 @@ public class GgamfRespDto {
     @Getter
     public static class CancelGgamfRespDto {
         private Long followId;
-        private Long friendId;
+        private Long userId;
         private String friendNick;
 
         public CancelGgamfRespDto(Long followId, User friend) {
             this.followId = followId;
-            this.friendId = friend.getId();
+            this.userId = friend.getId();
             this.friendNick = friend.getNickname();
         }
     }
@@ -125,13 +119,13 @@ public class GgamfRespDto {
         @Setter
         @Getter
         public class FollowerDto {
-            private Long friendId;
+            private Long userId;
             private String photo;
             private String nickName;
             private String intro;
 
             public FollowerDto(Follow follow) {
-                this.friendId = follow.getFollowing().getId();
+                this.userId = follow.getFollowing().getId();
                 this.photo = follow.getFollowing().getPhoto();
                 this.nickName = follow.getFollowing().getNickname();
                 this.intro = follow.getFollowing().getIntro();
@@ -141,13 +135,13 @@ public class GgamfRespDto {
         @Setter
         @Getter
         public class FollowingDto {
-            private Long friendId;
+            private Long userId;
             private String photo;
             private String nickName;
             private String intro;
 
             public FollowingDto(Follow follow) {
-                this.friendId = follow.getFollower().getId();
+                this.userId = follow.getFollower().getId();
                 this.photo = follow.getFollower().getPhoto();
                 this.nickName = follow.getFollower().getNickname();
                 this.intro = follow.getFollower().getIntro();
@@ -169,13 +163,13 @@ public class GgamfRespDto {
         @Setter
         @Getter
         public class FollowingDto {
-            private Long friendId;
+            private Long userId;
             private String photo;
             private String nickName;
             private String intro;
 
             public FollowingDto(Follow follow) {
-                this.friendId = follow.getFollowing().getId();
+                this.userId = follow.getFollowing().getId();
                 this.photo = follow.getFollowing().getPhoto();
                 this.nickName = follow.getFollowing().getNickname();
                 this.intro = follow.getFollowing().getIntro();
@@ -197,13 +191,13 @@ public class GgamfRespDto {
         @Setter
         @Getter
         public class FollowerDto {
-            private Long friendId;
+            private Long userId;
             private String photo;
             private String nickName;
             private String intro;
 
             public FollowerDto(Follow follow) {
-                this.friendId = follow.getFollower().getId();
+                this.userId = follow.getFollower().getId();
                 this.photo = follow.getFollower().getPhoto();
                 this.nickName = follow.getFollower().getNickname();
                 this.intro = follow.getFollower().getIntro();
