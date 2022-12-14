@@ -118,7 +118,9 @@ public class DevInit extends DummyEntity {
             Enter enter222 = enterRepository.save(newEnter(romio, room2));
             Enter enter3 = enterRepository.save(newEnter(ssar, room3));
             Enter enter33 = enterRepository.save(newEnter(toto, room3));
-            Enter enter333 = enterRepository.save(newEnter(gogo, room3));
+            Enter enter333 = enterRepository.save(newEnter(love, room3));
+            Enter enter3333 = enterRepository.save(newEnter(money, room3));
+            Enter enter33333 = enterRepository.save(newEnter(gogo, room3));
             Enter endEnter4 = enterRepository.save(endEnter(ssar, endroom4));
             Enter endEnter44 = enterRepository.save(endEnter(cos, endroom4));
             Enter endEnter444 = enterRepository.save(endEnter(yeye, endroom4));

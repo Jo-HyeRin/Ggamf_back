@@ -1,5 +1,7 @@
 package shop.ggamf.ggamf.dto;
 
+import javax.validation.constraints.NotEmpty;
+
 import lombok.Getter;
 import lombok.Setter;
 import shop.ggamf.ggamf.domain.enter.Enter;
@@ -13,10 +15,16 @@ public class PartyReqDto {
     @Getter
     public static class CreateRoomReqDto {
         private String gameName;
+
+        @NotEmpty(message = "파티방 이름은 필수 입력 값입니다.")
         private String roomName;
+
+        @NotEmpty(message = "인원은 필수 입력 값입니다.")
         private Long totalPeople;
 
         private Long userId;
+
+        @NotEmpty(message = "게임 코드는 필수 입력 값입니다.")
         private Long gameCodeId;
 
         public Room toEntity(User user, GameCode gameCode) {
@@ -35,6 +43,8 @@ public class PartyReqDto {
     @Getter
     public static class JoinRoomReqDto {
         private Long userId;
+
+        @NotEmpty(message = "입장할 파티방은 필수 입력 값입니다.")
         private Long roomId;
 
         public Enter toEntity(User user, Room room) {
@@ -51,7 +61,11 @@ public class PartyReqDto {
     @Getter
     public static class KickUserReqDto {
         private Long userId;
+
+        @NotEmpty(message = "파티방은 필수 입력 값입니다.")
         private Long roomId;
+
+        @NotEmpty(message = "추방할 유저는 필수 입력 값입니다.")
         private Long kickUserId; // 추방대상유저
     }
 }
