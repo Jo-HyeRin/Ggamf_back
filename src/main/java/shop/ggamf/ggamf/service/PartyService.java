@@ -211,7 +211,7 @@ public class PartyService {
                     .orElseThrow(
                             () -> new CustomApiException("존재하지 않는 게임코드입니다", HttpStatus.FORBIDDEN));
         }
-        List<Room> roomListPS = roomRepository.findAll(gameCodeId, keyword, page);
+        List<Room> roomListPS = roomRepository.findAllRoom(gameCodeId, keyword, page);
         return new RoomListRespDto(roomListPS);
     }
 
