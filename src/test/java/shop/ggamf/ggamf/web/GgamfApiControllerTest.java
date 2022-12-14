@@ -188,7 +188,7 @@ public class GgamfApiControllerTest extends DummyEntity {
 
         // then
         resultActions.andExpect(MockMvcResultMatchers.status().isOk());
-        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.followId").value(5L));
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.nickname").value("nickdada"));
     }
 
     @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
@@ -207,7 +207,7 @@ public class GgamfApiControllerTest extends DummyEntity {
 
         // then
         resultActions.andExpect(MockMvcResultMatchers.status().isOk());
-        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.followId").value(3L));
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.nickname").value("nicklala"));
     }
 
     @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
@@ -226,7 +226,7 @@ public class GgamfApiControllerTest extends DummyEntity {
 
         // then
         resultActions.andExpect(MockMvcResultMatchers.status().isOk());
-        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.followId").value(1L));
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.nickname").value("nickcos"));
     }
 
     @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
@@ -270,7 +270,7 @@ public class GgamfApiControllerTest extends DummyEntity {
 
         // then
         resultActions.andExpect(MockMvcResultMatchers.status().isOk());
-        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.followers.[0].nickName").value("nickdada"));
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.followers.[0].nickname").value("nickdada"));
     }
 
     @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
@@ -287,7 +287,7 @@ public class GgamfApiControllerTest extends DummyEntity {
 
         // then
         resultActions.andExpect(MockMvcResultMatchers.status().isOk());
-        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.followings.[0].nickName").value("nickcos"));
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.followings.[0].nickname").value("nickcos"));
     }
 
     @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
@@ -304,7 +304,7 @@ public class GgamfApiControllerTest extends DummyEntity {
 
         // then
         resultActions.andExpect(MockMvcResultMatchers.status().isOk());
-        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.followers.[0].nickName").value("nicklala"));
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.followers.[0].nickname").value("nicklala"));
     }
 
     @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
@@ -345,7 +345,7 @@ public class GgamfApiControllerTest extends DummyEntity {
 
         // then
         resultActions.andExpect(MockMvcResultMatchers.status().isCreated());
-        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.banuserNick").value("nickgogo"));
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.nickname").value("nickgogo"));
     }
 
 }
