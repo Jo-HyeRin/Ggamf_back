@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import shop.ggamf.ggamf.config.annotations.AuthorizationCheck;
 import shop.ggamf.ggamf.config.auth.LoginUser;
-import shop.ggamf.ggamf.config.exception.CustomApiException;
 import shop.ggamf.ggamf.domain.gameCode.GameCode;
 import shop.ggamf.ggamf.dto.PartyReqDto.CreateRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.JoinRoomReqDto;
@@ -45,8 +44,10 @@ public class PartyApiController {
     private final PartyService partyService;
 
     // 파티방 생성
+    @AuthorizationCheck
     @GetMapping("/party/user/{userId}/create")
-    public ResponseEntity<?> createRoomView() {
+    public ResponseEntity<?> createRoomView(@PathVariable Long userId,
+            @AuthenticationPrincipal LoginUser loginUser) {
         List<GameCode> gameCodeList = partyService.파티방생성화면게임코드전달();
         return new ResponseEntity<>(new ResponseDto<>("파티방생성화면 게임코드 전달 완료", gameCodeList), HttpStatus.OK);
     }

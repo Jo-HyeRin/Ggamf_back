@@ -14,6 +14,8 @@ import shop.ggamf.ggamf.domain.gameCode.GameCode;
 import shop.ggamf.ggamf.domain.gameCode.GameCodeRepository;
 import shop.ggamf.ggamf.domain.reasonCode.ReasonCode;
 import shop.ggamf.ggamf.domain.reasonCode.ReasonCodeRepository;
+import shop.ggamf.ggamf.domain.recommendBanuser.RecommendBanuser;
+import shop.ggamf.ggamf.domain.recommendBanuser.RecommendBanuserRepository;
 import shop.ggamf.ggamf.domain.room.Room;
 import shop.ggamf.ggamf.domain.room.RoomRepository;
 import shop.ggamf.ggamf.domain.user.User;
@@ -28,7 +30,7 @@ public class DevInit extends DummyEntity {
     public CommandLineRunner dataSetting(UserRepository userRepository,
             RoomRepository roomRepository,
             GameCodeRepository gameCodeRepository, EnterRepository enterRepository, FollowRepository followRepository,
-            ReasonCodeRepository reasonCodeRepository) {
+            ReasonCodeRepository reasonCodeRepository, RecommendBanuserRepository recommendBanuserRepository) {
 
         return (args) -> {
             // User : 유저
@@ -52,8 +54,9 @@ public class DevInit extends DummyEntity {
             User power = userRepository.save(newUser("power"));
             User house = userRepository.save(newUser("house"));
             User nero = userRepository.save(newUser("nero"));
-            User poll = userRepository.save(newUser("poll"));
+            User poll20 = userRepository.save(newUser("poll20"));
             User love = userRepository.save(newUser("love"));
+            User judy = userRepository.save(newUser("judy"));
             // Follow : 겜프
             Follow f1 = followRepository.save(newFollow(ssar, cos, false));
             Follow f11 = followRepository.save(newFollow(ssar, vovo, false));
@@ -63,15 +66,26 @@ public class DevInit extends DummyEntity {
             Follow f33 = followRepository.save(newFollow(ssar, ohoh, true));
             Follow f4 = followRepository.save(newFollow(kaka, ssar, true));
             Follow f44 = followRepository.save(newFollow(yeye, ssar, true));
+            Follow f5 = followRepository.save(newFollow(ssar, terry, true));
+            Follow f55 = followRepository.save(newFollow(ssar, wow, true));
+            Follow f6 = followRepository.save(newFollow(cash, ssar, false));
+            Follow f66 = followRepository.save(newFollow(power, ssar, false));
+            // RecommendBanUser : 추천겜프목록에서 제외할 유저
+            RecommendBanuser banuser1 = recommendBanuserRepository.save(newBanuser(ssar, romio));
+            RecommendBanuser banuser2 = recommendBanuserRepository.save(newBanuser(ssar, nero));
             // ReasonCode : 신고카테고리
             ReasonCode reason1 = reasonCodeRepository.save(newReasonCode("욕설"));
             ReasonCode reason2 = reasonCodeRepository.save(newReasonCode("탈주"));
-            ReasonCode reason3 = reasonCodeRepository.save(newReasonCode("기타"));
+            ReasonCode reason3 = reasonCodeRepository.save(newReasonCode("대리기사"));
+            ReasonCode reason4 = reasonCodeRepository.save(newReasonCode("비매너 행위"));
+            ReasonCode reason5 = reasonCodeRepository.save(newReasonCode("기타"));
             // GameCode : 게임카테고리
             GameCode etc = gameCodeRepository.save(newGameCode("etc"));
             GameCode LoL = gameCodeRepository.save(newGameCode("LoL"));
             GameCode starcraft = gameCodeRepository.save(newGameCode("starcraft"));
             GameCode battleground = gameCodeRepository.save(newGameCode("battleground"));
+            GameCode overwatch = gameCodeRepository.save(newGameCode("overwatch"));
+            GameCode lostark = gameCodeRepository.save(newGameCode("lostark"));
             // Room : 파티방
             Room endroom1 = roomRepository.save(endRoom("roomname1", ssar, LoL));
             Room room2 = roomRepository.save(newRoom("roomname2", ssar, etc));
@@ -104,12 +118,12 @@ public class DevInit extends DummyEntity {
             Room room29 = roomRepository.save(newRoom("roomname29", nero, LoL));
             Room room30 = roomRepository.save(newRoom("roomname30", nero, LoL));
             Room room31 = roomRepository.save(newRoom("room222231", nero, LoL));
-            Room room32 = roomRepository.save(newRoom("room222232", poll, LoL));
-            Room room33 = roomRepository.save(newRoom("room222233", poll, LoL));
-            Room room34 = roomRepository.save(newRoom("room222234", poll, LoL));
+            Room room32 = roomRepository.save(newRoom("room222232", poll20, LoL));
+            Room room33 = roomRepository.save(newRoom("room222233", poll20, LoL));
+            Room room34 = roomRepository.save(newRoom("room222234", poll20, LoL));
             Room room35 = roomRepository.save(newRoom("room222235", love, LoL));
             Room room36 = roomRepository.save(newRoom("room222236", love, LoL));
-            Room room37 = roomRepository.save(newRoom("room222237", love, LoL));
+            Room room37 = roomRepository.save(newRoom("room222237", ssar, LoL));
             // Enter : 방 참여 정보
             Enter enter1 = enterRepository.save(endEnter(lala, endroom1));
             Enter enter11 = enterRepository.save(endEnter(dada, endroom1));
@@ -131,6 +145,15 @@ public class DevInit extends DummyEntity {
             Enter enter555 = enterRepository.save(newEnter(dada, room5));
             Enter enter6 = enterRepository.save(newEnter(ssar, room6));
             Enter enter66 = enterRepository.save(newEnter(lala, room6));
+            Enter enter666 = enterRepository.save(newEnter(romio, room6));
+            Enter enter6666 = enterRepository.save(newEnter(house, room6));
+            Enter endenter7 = enterRepository.save(endEnter(ssar, room7));
+            Enter endenter77 = enterRepository.save(endEnter(power, room7));
+            Enter endenter777 = enterRepository.save(endEnter(nero, room7));
+            Enter endenter7777 = enterRepository.save(endEnter(house, room7));
+            Enter endenter77777 = enterRepository.save(endEnter(judy, room7));
+            Enter enter37 = enterRepository.save(newEnter(love, room37));
+            Enter enter38 = enterRepository.save(newEnter(house, room37));
         };
     }
 }
