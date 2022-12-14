@@ -15,6 +15,8 @@ public class GgamfReqDto {
     @Getter
     public static class FollowGgamfReqDto {
         private Long userId;
+
+        @NotEmpty(message = "상대 유저는 필수 입력 값입니다.")
         private Long friendId;
 
         public Follow toEntity(User users, User friend) {
