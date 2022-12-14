@@ -8,6 +8,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,9 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import shop.ggamf.ggamf.config.auth.LoginUser;
 import shop.ggamf.ggamf.config.enums.UserEnum;
-import shop.ggamf.ggamf.dto.ResponseDto;
 import shop.ggamf.ggamf.dto.AdminReqDto.SaveGameReqDto;
+import shop.ggamf.ggamf.dto.AdminReqDto.UpdateGameReqDto;
 import shop.ggamf.ggamf.dto.AdminRespDto.SaveGameRespDto;
+import shop.ggamf.ggamf.dto.AdminRespDto.UpdateGameRespDto;
+import shop.ggamf.ggamf.dto.ResponseDto;
 import shop.ggamf.ggamf.service.AdminService;
 
 @RequestMapping("/s/api")
@@ -61,5 +64,16 @@ public class AdminApiController {
         }
         SaveGameRespDto saveGameRespDto = adminService.게임추가하기(saveGameReqDto);
         return new ResponseEntity<>(new ResponseDto<>("게임 추가 성공", saveGameRespDto), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/admin/{id}/updateGame")
+    public ResponseEntity<?> updateGame(@PathVariable Long id, @RequestBody UpdateGameReqDto updateGameReqDto,
+            @AuthenticationPrincipal LoginUser loginUser) {
+        if (!loginUser.getUser().getRole().equals(UserEnum.ADMIN)) {
+            return new ResponseEntity<>(new ResponseDto<>("권한이 없습니다", null), HttpStatus.FORBIDDEN);
+        }
+        updateGameReqDto.setId(id);
+        UpdateGameRespDto updateGameRespDto = adminService.게임정보수정(updateGameReqDto);
+        return new ResponseEntity<>(new ResponseDto<>("게임정보 수정 성공", updateGameRespDto), HttpStatus.OK);
     }
 }

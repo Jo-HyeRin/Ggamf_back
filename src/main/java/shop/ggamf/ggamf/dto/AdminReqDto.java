@@ -24,4 +24,12 @@ public class AdminReqDto {
                     .build();
         }
     }
+
+    @Setter
+    @Getter
+    public static class UpdateGameReqDto {
+        private Long id; // 서비스 로직
+        private String logo;
+        private String gameName;
+    }
 }

@@ -18,6 +18,20 @@ public class AdminRespDto {
         }
     }
 
+    @Setter
+    @Getter
+    public static class UpdateGameRespDto {
+        private Long id;
+        private String logo;
+        private String gameName;
+
+        public UpdateGameRespDto(GameCode gameCode) {
+            this.id = gameCode.getId();
+            this.logo = gameCode.getLogo();
+            this.gameName = gameCode.getGameName();
+        }
+    }
+
     // @Setter
     // @Getter
     // public static class ReportRespDto {

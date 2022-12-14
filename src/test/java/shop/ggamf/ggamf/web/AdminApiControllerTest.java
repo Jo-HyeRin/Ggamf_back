@@ -2,6 +2,7 @@ package shop.ggamf.ggamf.web;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -34,6 +35,7 @@ import shop.ggamf.ggamf.domain.room.RoomRepository;
 import shop.ggamf.ggamf.domain.user.User;
 import shop.ggamf.ggamf.domain.user.UserRepository;
 import shop.ggamf.ggamf.dto.AdminReqDto.SaveGameReqDto;
+import shop.ggamf.ggamf.dto.AdminReqDto.UpdateGameReqDto;
 
 @Sql("classpath:db/truncate.sql")
 @ActiveProfiles("test")
@@ -141,7 +143,27 @@ public class AdminApiControllerTest extends DummyEntity {
         // then
         resultActions.andExpect(status().isCreated());
         resultActions.andExpect(jsonPath("$.data.gameName").value("리그오브레전드"));
+    }
 
+    @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    public void updateGame_Test() throws Exception {
+        // given
+        Long id = 3L;
+        UpdateGameReqDto updateGameReqDto = new UpdateGameReqDto();
+        updateGameReqDto.setLogo("로고입니다");
+        updateGameReqDto.setGameName("파이널판타지14");
+        String requestBody = om.writeValueAsString(updateGameReqDto);
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(put("/s/api/admin/" + id + "/updateGame").content(requestBody)
+                        .contentType(APPLICATION_JSON_UTF8));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+
+        // then
+        resultActions.andExpect(status().isOk());
+        resultActions.andExpect(jsonPath("$.data.gameName").value("파이널판타지14"));
     }
 
     private void dummy_init() {

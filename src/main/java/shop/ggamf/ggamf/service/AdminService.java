@@ -22,7 +22,9 @@ import shop.ggamf.ggamf.domain.statistics.StatisticsRepositoryQuery;
 import shop.ggamf.ggamf.domain.user.User;
 import shop.ggamf.ggamf.domain.user.UserRepository;
 import shop.ggamf.ggamf.dto.AdminReqDto.SaveGameReqDto;
+import shop.ggamf.ggamf.dto.AdminReqDto.UpdateGameReqDto;
 import shop.ggamf.ggamf.dto.AdminRespDto.SaveGameRespDto;
+import shop.ggamf.ggamf.dto.AdminRespDto.UpdateGameRespDto;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -63,5 +65,19 @@ public class AdminService {
     public SaveGameRespDto 게임추가하기(SaveGameReqDto saveGameReqDto) {
         GameCode gameCodePS = gameCodeRepository.save(saveGameReqDto.toEntity());
         return new SaveGameRespDto(gameCodePS);
+    }
+
+    @Transactional
+    public UpdateGameRespDto 게임정보수정(UpdateGameReqDto updateGameReqDto) {
+        Optional<GameCode> gameCodeOP = gameCodeRepository.findById(updateGameReqDto.getId());
+        if (!gameCodeOP.isPresent()) {
+            gameCodeRepository.findById(updateGameReqDto.getId())
+                    .orElseThrow(() -> (new CustomApiException("해당 게임이 존재하지 않습니다", HttpStatus.BAD_REQUEST)));
+        }
+        GameCode gameCodePS = gameCodeOP.get();
+        gameCodePS.로고수정(updateGameReqDto.getLogo());
+        gameCodePS.게임이름수정(updateGameReqDto.getGameName());
+
+        return new UpdateGameRespDto(gameCodePS);
     }
 }
