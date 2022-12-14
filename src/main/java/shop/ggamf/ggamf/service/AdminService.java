@@ -1,5 +1,6 @@
 package shop.ggamf.ggamf.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,7 +37,10 @@ public class AdminService {
     private final StatisticsRepositoryQuery statisticsRepositoryQuery;
 
     public List<ReportRespDto> 신고목록보기() {
-        List<ReportRespDto> reportRespDto = reportRepositoryQuery.findReportList();
+        List<ReportRespDto> reportRespDto = new ArrayList<>();
+        if (reportRespDto.size() != 0) {
+            reportRespDto = reportRepositoryQuery.findReportList();
+        }
         return reportRespDto;
     }
 

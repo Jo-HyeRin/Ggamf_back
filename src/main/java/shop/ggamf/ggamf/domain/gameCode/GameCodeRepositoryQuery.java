@@ -1,8 +1,10 @@
 package shop.ggamf.ggamf.domain.gameCode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 import org.qlrm.mapper.JpaResultMapper;
@@ -24,8 +26,15 @@ public class GameCodeRepositoryQuery {
         Query query = em.createNativeQuery(sb.toString());
 
         JpaResultMapper result = new JpaResultMapper();
-        List<GameListRespDto> gameListRespDto = result.list(query, GameListRespDto.class);
+        try {
+            List<GameListRespDto> gameListRespDto = result.list(query, GameListRespDto.class);
         return gameListRespDto;
+            
+        } catch (NoResultException e) {
+            List<GameListRespDto> gameListRespDto = new ArrayList<>();
+            return gameListRespDto;
+        }
+        
     }
 
 }
