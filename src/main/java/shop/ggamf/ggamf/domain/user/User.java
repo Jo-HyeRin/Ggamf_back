@@ -62,7 +62,8 @@ public class User extends AuditingTime {
 
     @Builder
     public User(Long id, String username, String password, String name, String phone, String nickname, String email,
-            Boolean phoneChecked, String photo, String intro, UserStateEnum state, UserEnum role, Boolean agree) {
+            Boolean phoneChecked, String photo, String intro, UserStateEnum state, UserEnum role, Boolean agree,
+            String uid) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -76,6 +77,7 @@ public class User extends AuditingTime {
         this.state = state;
         this.role = role;
         this.agree = agree;
+        this.uid = uid;
     }
 
     public void 사진수정(String photo) {
