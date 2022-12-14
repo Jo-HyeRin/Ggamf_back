@@ -1,5 +1,7 @@
 package shop.ggamf.ggamf.web;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import shop.ggamf.ggamf.config.auth.LoginUser;
 import shop.ggamf.ggamf.config.exception.CustomApiException;
+import shop.ggamf.ggamf.domain.gameCode.GameCode;
 import shop.ggamf.ggamf.dto.PartyReqDto.CreateRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.JoinRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.KickUserReqDto;
@@ -41,6 +44,12 @@ public class PartyApiController {
     private final PartyService partyService;
 
     // 파티방 생성
+    @GetMapping("/party/user/{userId}/create")
+    public ResponseEntity<?> createRoomView() {
+        List<GameCode> gameCodeList = partyService.파티방생성화면게임코드전달();
+        return new ResponseEntity<>(new ResponseDto<>("파티방생성화면 게임코드 전달 완료", gameCodeList), HttpStatus.OK);
+    }
+
     @PostMapping("/party/user/{userId}/create/{gameCodeId}")
     public ResponseEntity<?> createRoom(@RequestBody CreateRoomReqDto createRoomReqDto, @PathVariable Long userId,
             @PathVariable Long gameCodeId,
