@@ -15,18 +15,10 @@ public class GgamfReqDto {
         private Long userId;
         private Long friendId;
 
-        public Follow toSendEntity(User users, User friend) {
+        public Follow toEntity(User users, User friend) {
             return Follow.builder()
                     .follower(users)
                     .following(friend)
-                    .accept(false)
-                    .build();
-        }
-
-        public Follow toAcceptEntity(User users, User friend) {
-            return Follow.builder()
-                    .follower(friend)
-                    .following(users)
                     .accept(false)
                     .build();
         }

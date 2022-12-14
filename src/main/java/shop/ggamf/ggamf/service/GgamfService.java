@@ -65,11 +65,9 @@ public class GgamfService {
             throw new CustomApiException("상대방과 이미 겜프이거나 이미 겜프 신청이 되어있는 상태입니다.",
                     HttpStatus.BAD_REQUEST);
         }
-        Follow myFollow = followGgamfReqDto.toSendEntity(user, friend);
-        Follow myFollowPS = followRepository.save(myFollow);
-        Follow yourFollow = followGgamfReqDto.toAcceptEntity(friend, user);
-        Follow yourFollowPS = followRepository.save(yourFollow);
-        return new FollowGgamfRespDto(myFollowPS, yourFollowPS);
+        Follow followPS = followGgamfReqDto.toEntity(user, friend);
+        Follow follow = followRepository.save(followPS);
+        return new FollowGgamfRespDto(follow);
     }
 
     @Transactional
@@ -77,7 +75,7 @@ public class GgamfService {
         log.debug("디버그 : 겜프수락 서비스 호출");
         // 내가 받은 신청 true
         Follow followPS = followRepository.findById(followId)
-                .orElseThrow(() -> new CustomApiException("겜프 신청 중이 아닙니다", HttpStatus.FORBIDDEN));
+                .orElseThrow(() -> new CustomApiException("요청이 오가지도, 친구사이도 아닙니다", HttpStatus.FORBIDDEN));
         if (followPS.getFollowing().getId() != userId) {
             throw new CustomApiException("당신은 해당 요청을 수락할 권한이 없습니다.", HttpStatus.BAD_REQUEST);
         }
