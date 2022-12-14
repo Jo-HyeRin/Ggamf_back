@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.Setter;
 import shop.ggamf.ggamf.domain.follow.Follow;
-import shop.ggamf.ggamf.domain.recommendBanUser.RecommendBanUser;
+import shop.ggamf.ggamf.domain.recommendBanuser.RecommendBanuser;
 import shop.ggamf.ggamf.domain.report.Report;
 import shop.ggamf.ggamf.domain.user.User;
 
@@ -46,7 +46,7 @@ public class GgamfRespDto {
         private Long userId;
         private String nickname;
 
-        public DeleteGgamfRespDto(Long followId, User friend) {
+        public DeleteGgamfRespDto(User friend) {
             this.userId = friend.getId();
             this.nickname = friend.getNickname();
         }
@@ -58,7 +58,7 @@ public class GgamfRespDto {
         private Long userId;
         private String nickname;
 
-        public RejectGgamfRespDto(Long followId, User friend) {
+        public RejectGgamfRespDto(User friend) {
             this.userId = friend.getId();
             this.nickname = friend.getNickname();
         }
@@ -70,7 +70,7 @@ public class GgamfRespDto {
         private Long userId;
         private String nickname;
 
-        public CancelGgamfRespDto(Long followId, User friend) {
+        public CancelGgamfRespDto(User friend) {
             this.userId = friend.getId();
             this.nickname = friend.getNickname();
         }
@@ -225,8 +225,8 @@ public class GgamfRespDto {
     public static class RecommendBanRespDto {
         private String nickname;
 
-        public RecommendBanRespDto(RecommendBanUser recommendBanUser) {
-            this.nickname = recommendBanUser.getBanuser().getNickname();
+        public RecommendBanRespDto(RecommendBanuser recommendBanuser) {
+            this.nickname = recommendBanuser.getBanuser().getNickname();
         }
     }
 }

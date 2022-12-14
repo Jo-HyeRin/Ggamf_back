@@ -18,8 +18,8 @@ import shop.ggamf.ggamf.domain.follow.Follow;
 import shop.ggamf.ggamf.domain.follow.FollowRepository;
 import shop.ggamf.ggamf.domain.reasonCode.ReasonCode;
 import shop.ggamf.ggamf.domain.reasonCode.ReasonCodeRepository;
-import shop.ggamf.ggamf.domain.recommendBanUser.RecommendBanUser;
-import shop.ggamf.ggamf.domain.recommendBanUser.RecommendBanUserRepository;
+import shop.ggamf.ggamf.domain.recommendBanuser.RecommendBanuser;
+import shop.ggamf.ggamf.domain.recommendBanuser.RecommendBanuserRepository;
 import shop.ggamf.ggamf.domain.report.Report;
 import shop.ggamf.ggamf.domain.report.ReportRepository;
 import shop.ggamf.ggamf.domain.room.Room;
@@ -53,7 +53,7 @@ public class GgamfService {
     private final ReasonCodeRepository reasonCodeRepository;
     private final EnterRepository enterRepository;
     private final RoomRepository roomRepository;
-    private final RecommendBanUserRepository recommendBanUserRepository;
+    private final RecommendBanuserRepository recommendBanuserRepository;
 
     @Transactional
     public FollowGgamfRespDto 겜프요청(FollowGgamfReqDto followGgamfReqDto) {
@@ -64,17 +64,17 @@ public class GgamfService {
         // 요청받은사람
         User friend = userRepository.findById(followGgamfReqDto.getFriendId())
                 .orElseThrow(() -> new CustomApiException("해당 유저가 없습니다", HttpStatus.FORBIDDEN));
-        if (!followRepository.findByBothId(followGgamfReqDto.getUserId(), followGgamfReqDto.getFriendId()).isEmpty()
-                || !followRepository.findByBothId(followGgamfReqDto.getFriendId(),
-                        followGgamfReqDto.getUserId()).isEmpty()) {
+        if (followRepository.findByBothId(followGgamfReqDto.getUserId(), followGgamfReqDto.getFriendId()) != null
+                || followRepository.findByBothId(followGgamfReqDto.getFriendId(),
+                        followGgamfReqDto.getUserId()) != null) {
             throw new CustomApiException("상대방과 이미 겜프이거나 이미 겜프 신청이 되어있는 상태입니다.",
                     HttpStatus.BAD_REQUEST);
         }
         // 추천받지않기 테이블에 있으면 삭제
-        RecommendBanUser recommendBanUser = recommendBanUserRepository.findByBothId(followGgamfReqDto.getUserId(),
+        RecommendBanuser recommendBanUser = recommendBanuserRepository.findByBothId(followGgamfReqDto.getUserId(),
                 followGgamfReqDto.getFriendId());
         if (recommendBanUser != null) {
-            recommendBanUserRepository.deleteById(recommendBanUser.getId());
+            recommendBanuserRepository.deleteById(recommendBanUser.getId());
         }
         // 실행
         Follow followPS = followGgamfReqDto.toEntity(user, friend);
@@ -83,11 +83,15 @@ public class GgamfService {
     }
 
     @Transactional
-    public AcceptGgamfRespDto 겜프수락(Long userId, Long followId) {
+    public AcceptGgamfRespDto 겜프수락(Long userId, Long friendId) {
         log.debug("디버그 : 겜프수락 서비스 호출");
-        // 내가 받은 신청 true
-        Follow followPS = followRepository.findById(followId)
-                .orElseThrow(() -> new CustomApiException("요청이 오간 사이도, 겜프 사이도 아닙니다", HttpStatus.FORBIDDEN));
+        Follow followPS = followRepository.findByBothId(userId, friendId);
+        if (followPS == null) {
+            followPS = followRepository.findByBothId(friendId, userId);
+        }
+        if (followPS == null) {
+            throw new CustomApiException("요청이 오간 사이도, 겜프 사이도 아닙니다", HttpStatus.BAD_REQUEST);
+        }
         if (followPS.getFollowing().getId() != userId) {
             throw new CustomApiException("당신이 받은 겜프 요청이 아닙니다.", HttpStatus.BAD_REQUEST);
         }
@@ -100,10 +104,15 @@ public class GgamfService {
     }
 
     @Transactional
-    public DeleteGgamfRespDto 겜프삭제(Long userId, Long followId) {
+    public DeleteGgamfRespDto 겜프삭제(Long userId, Long friendId) {
         log.debug("디버그 : 겜프삭제 서비스 호출");
-        Follow followPS = followRepository.findById(followId)
-                .orElseThrow(() -> new CustomApiException("요청이 오간 사이도, 겜프 사이도 아닙니다", HttpStatus.FORBIDDEN));
+        Follow followPS = followRepository.findByBothId(userId, friendId);
+        if (followPS == null) {
+            followPS = followRepository.findByBothId(friendId, userId);
+        }
+        if (followPS == null) {
+            throw new CustomApiException("요청이 오간 사이도, 겜프 사이도 아닙니다", HttpStatus.BAD_REQUEST);
+        }
         if (!(followPS.getFollower().getId() == userId || followPS.getFollowing().getId() == userId)) {
             throw new CustomApiException("당신의 겜프가 아닙니다", HttpStatus.BAD_REQUEST);
         }
@@ -112,17 +121,22 @@ public class GgamfService {
         }
         followRepository.delete(followPS);
         if (followPS.getFollower().getId() == userId) {
-            return new DeleteGgamfRespDto(followId, followPS.getFollowing());
+            return new DeleteGgamfRespDto(followPS.getFollowing());
         } else {
-            return new DeleteGgamfRespDto(followId, followPS.getFollower());
+            return new DeleteGgamfRespDto(followPS.getFollower());
         }
     }
 
     @Transactional
-    public RejectGgamfRespDto 겜프거절(Long userId, Long followId) {
+    public RejectGgamfRespDto 겜프거절(Long userId, Long friendId) {
         log.debug("디버그 : 겜프거절 서비스 호출");
-        Follow followPS = followRepository.findById(followId)
-                .orElseThrow(() -> new CustomApiException("요청이 오간 사이도, 겜프 사이도 아닙니다", HttpStatus.FORBIDDEN));
+        Follow followPS = followRepository.findByBothId(userId, friendId);
+        if (followPS == null) {
+            followPS = followRepository.findByBothId(friendId, userId);
+        }
+        if (followPS == null) {
+            throw new CustomApiException("요청이 오간 사이도, 겜프 사이도 아닙니다", HttpStatus.BAD_REQUEST);
+        }
         if (!(followPS.getFollower().getId() == userId || followPS.getFollowing().getId() == userId)) {
             throw new CustomApiException("당신과 관련된 겜프 요청이 아닙니다", HttpStatus.BAD_REQUEST);
         }
@@ -134,17 +148,22 @@ public class GgamfService {
         }
         followRepository.delete(followPS);
         if (followPS.getFollower().getId() == userId) {
-            return new RejectGgamfRespDto(followId, followPS.getFollowing());
+            return new RejectGgamfRespDto(followPS.getFollowing());
         } else {
-            return new RejectGgamfRespDto(followId, followPS.getFollower());
+            return new RejectGgamfRespDto(followPS.getFollower());
         }
     }
 
     @Transactional
-    public CancelGgamfRespDto 겜프요청취소(Long userId, Long followId) {
+    public CancelGgamfRespDto 겜프요청취소(Long userId, Long friendId) {
         log.debug("디버그 : 겜프요청취소 서비스 호출");
-        Follow followPS = followRepository.findById(followId)
-                .orElseThrow(() -> new CustomApiException("요청이 오간 사이도, 겜프 사이도 아닙니다", HttpStatus.FORBIDDEN));
+        Follow followPS = followRepository.findByBothId(userId, friendId);
+        if (followPS == null) {
+            followPS = followRepository.findByBothId(friendId, userId);
+        }
+        if (followPS == null) {
+            throw new CustomApiException("요청이 오간 사이도, 겜프 사이도 아닙니다", HttpStatus.BAD_REQUEST);
+        }
         if (!(followPS.getFollower().getId() == userId || followPS.getFollowing().getId() == userId)) {
             throw new CustomApiException("당신과 관련된 겜프 요청이 아닙니다", HttpStatus.BAD_REQUEST);
         }
@@ -156,9 +175,9 @@ public class GgamfService {
         }
         followRepository.delete(followPS);
         if (followPS.getFollower().getId() == userId) {
-            return new CancelGgamfRespDto(followId, followPS.getFollowing());
+            return new CancelGgamfRespDto(followPS.getFollowing());
         } else {
-            return new CancelGgamfRespDto(followId, followPS.getFollower());
+            return new CancelGgamfRespDto(followPS.getFollower());
         }
     }
 
@@ -236,31 +255,31 @@ public class GgamfService {
         List<Long> recommendFriendList = new ArrayList<>();
         recommendFriendList.addAll(latestIdList);
         recommendFriendList.addAll(enterUserIdList);
-        List<Long> recommendFriendListPS = recommendFriendList.stream().distinct().collect(Collectors.toList());
+        List<Long> userList = recommendFriendList.stream().distinct().collect(Collectors.toList());
 
         // 합친 리스트 친구, 친구 신청 여부 확인 팔로잉=친구 or 팔로워=친구
-        List<Follow> friendFollowingLatest = followRepository.findByRecommendFollowing(userId, recommendFriendListPS);
+        List<Follow> friendFollowingLatest = followRepository.findByRecommendFollowing(userId, userList);
         for (int i = 0; i < friendFollowingLatest.size(); i++) {
-            if (recommendFriendList.contains(friendFollowingLatest.get(i).getFollowing().getId())) {
-                recommendFriendList.remove(friendFollowingLatest.get(i).getFollowing().getId());
+            if (userList.contains(friendFollowingLatest.get(i).getFollowing().getId())) {
+                userList.remove(friendFollowingLatest.get(i).getFollowing().getId());
             }
         }
-        List<Follow> friendFollowerLatest = followRepository.findByRecommendFollower(userId, recommendFriendListPS);
+        List<Follow> friendFollowerLatest = followRepository.findByRecommendFollower(userId, userList);
         for (int i = 0; i < friendFollowerLatest.size(); i++) {
-            if (recommendFriendList.contains(friendFollowerLatest.get(i).getFollower().getId())) {
-                recommendFriendList.remove(friendFollowerLatest.get(i).getFollower().getId());
+            if (userList.contains(friendFollowerLatest.get(i).getFollower().getId())) {
+                userList.remove(friendFollowerLatest.get(i).getFollower().getId());
             }
         }
         // 합친 리스트 추천받지않도록 설정되어있는지 확인
-        List<RecommendBanUser> banList = recommendBanUserRepository.findByUserId(userId);
+        List<RecommendBanuser> banList = recommendBanuserRepository.findByUserId(userId);
         for (int i = 0; i < banList.size(); i++) {
-            if (recommendFriendList.contains(banList.get(i).getBanuser().getId())) {
-                recommendFriendList.remove(banList.get(i).getBanuser().getId());
+            if (userList.contains(banList.get(i).getBanuser().getId())) {
+                userList.remove(banList.get(i).getBanuser().getId());
             }
         }
         // 친구 추천하기
-        List<User> recommendUserList = userRepository.findByIdForRecommend(recommendFriendList);
-        return new RecommendGgamfListRespDto(recommendUserList);
+        List<User> recommendList = userRepository.findByIdForRecommendIn(userList);
+        return new RecommendGgamfListRespDto(recommendList);
     }
 
     @Transactional
@@ -271,11 +290,11 @@ public class GgamfService {
         User banuserPS = userRepository.findById(banuserId)
                 .orElseThrow(
                         () -> new CustomApiException("해당 유저가 없습니다", HttpStatus.FORBIDDEN));
-        if (recommendBanUserRepository.findByBothId(userId, banuserId) != null) {
+        if (recommendBanuserRepository.findByBothId(userId, banuserId) != null) {
             throw new CustomApiException("이미 추천받지 않게 설정된 유저입니다", HttpStatus.BAD_REQUEST);
         }
-        RecommendBanUser recommendBanUserPS = recommendBanReqDto.toEntity(userPS, banuserPS);
-        RecommendBanUser recommendBanUser = recommendBanUserRepository.save(recommendBanUserPS);
+        RecommendBanuser recommendBanuserPS = recommendBanReqDto.toEntity(userPS, banuserPS);
+        RecommendBanuser recommendBanUser = recommendBanuserRepository.save(recommendBanuserPS);
         return new RecommendBanRespDto(recommendBanUser);
     }
 

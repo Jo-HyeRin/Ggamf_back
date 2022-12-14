@@ -26,8 +26,8 @@ import shop.ggamf.ggamf.domain.gameCode.GameCode;
 import shop.ggamf.ggamf.domain.gameCode.GameCodeRepository;
 import shop.ggamf.ggamf.domain.reasonCode.ReasonCode;
 import shop.ggamf.ggamf.domain.reasonCode.ReasonCodeRepository;
-import shop.ggamf.ggamf.domain.recommendBanUser.RecommendBanUser;
-import shop.ggamf.ggamf.domain.recommendBanUser.RecommendBanUserRepository;
+import shop.ggamf.ggamf.domain.recommendBanuser.RecommendBanuser;
+import shop.ggamf.ggamf.domain.recommendBanuser.RecommendBanuserRepository;
 import shop.ggamf.ggamf.domain.room.Room;
 import shop.ggamf.ggamf.domain.room.RoomRepository;
 import shop.ggamf.ggamf.domain.user.User;
@@ -63,7 +63,7 @@ public class GgamfApiControllerTest extends DummyEntity {
     @Autowired
     private EnterRepository enterRepository;
     @Autowired
-    private RecommendBanUserRepository recommendBanUserRepository;
+    private RecommendBanuserRepository recommendBanuserRepository;
 
     @BeforeEach
     public void setUp() {
@@ -89,7 +89,7 @@ public class GgamfApiControllerTest extends DummyEntity {
         Follow f4 = followRepository.save(newFollow(kaka, ssar, true));
         Follow f44 = followRepository.save(newFollow(yeye, ssar, true));
         // RecommendBanUser : 추천겜프목록에서 제외할 유저
-        RecommendBanUser banuser1 = recommendBanUserRepository.save(newBanuser(ssar, romio));
+        RecommendBanuser banuser1 = recommendBanuserRepository.save(newBanuser(ssar, romio));
         // ReasonCode : 신고카테고리
         ReasonCode reason1 = reasonCodeRepository.save(newReasonCode("욕설"));
         ReasonCode reason2 = reasonCodeRepository.save(newReasonCode("탈주"));
@@ -158,11 +158,11 @@ public class GgamfApiControllerTest extends DummyEntity {
     public void acceptGgamf_test() throws Exception {
         // given
         Long userId = 1L;
-        Long followId = 4L;
+        Long friendId = 3L;
 
         // when
         ResultActions resultActions = mvc
-                .perform(MockMvcRequestBuilders.put("/s/api/ggamf/user/" + userId + "/accept/" + followId)
+                .perform(MockMvcRequestBuilders.put("/s/api/ggamf/user/" + userId + "/accept/" + friendId)
                         .contentType(APPLICATION_JSON_UTF8));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
@@ -176,31 +176,31 @@ public class GgamfApiControllerTest extends DummyEntity {
     @Test
     public void deleteGgamf_test() throws Exception {
         // given
-        Long followId = 5L;
         Long userId = 1L;
+        Long friendId = 8L;
 
         // when
         ResultActions resultActions = mvc
-                .perform(MockMvcRequestBuilders.delete("/s/api/ggamf/user/" + userId + "/unfollow/" + followId)
+                .perform(MockMvcRequestBuilders.delete("/s/api/ggamf/user/" + userId + "/unfollow/" + friendId)
                         .contentType(APPLICATION_JSON_UTF8));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
 
         // then
         resultActions.andExpect(MockMvcResultMatchers.status().isOk());
-        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.nickname").value("nickdada"));
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.nickname").value("nickohoh"));
     }
 
     @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
     public void rejectGgamf_test() throws Exception {
         // given
-        Long followId = 3L;
+        Long friendId = 3L;
         Long userId = 1L;
 
         // when
         ResultActions resultActions = mvc
-                .perform(MockMvcRequestBuilders.delete("/s/api/ggamf/user/" + userId + "/reject/" + followId)
+                .perform(MockMvcRequestBuilders.delete("/s/api/ggamf/user/" + userId + "/reject/" + friendId)
                         .contentType(APPLICATION_JSON_UTF8));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
@@ -214,19 +214,19 @@ public class GgamfApiControllerTest extends DummyEntity {
     @Test
     public void cancelGgamf_test() throws Exception {
         // given
-        Long followId = 1L;
         Long userId = 1L;
+        Long friendId = 6L;
 
         // when
         ResultActions resultActions = mvc
-                .perform(MockMvcRequestBuilders.delete("/s/api/ggamf/user/" + userId + "/cancel/" + followId)
+                .perform(MockMvcRequestBuilders.delete("/s/api/ggamf/user/" + userId + "/cancel/" + friendId)
                         .contentType(APPLICATION_JSON_UTF8));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
 
         // then
         resultActions.andExpect(MockMvcResultMatchers.status().isOk());
-        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.nickname").value("nickcos"));
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.nickname").value("nickvovo"));
     }
 
     @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
@@ -304,7 +304,7 @@ public class GgamfApiControllerTest extends DummyEntity {
 
         // then
         resultActions.andExpect(MockMvcResultMatchers.status().isOk());
-        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.followers.[0].nickName").value("nicklala"));
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.followers.[0].nickname").value("nicklala"));
     }
 
     @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
@@ -321,7 +321,8 @@ public class GgamfApiControllerTest extends DummyEntity {
 
         // then
         resultActions.andExpect(MockMvcResultMatchers.status().isOk());
-        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.recommendUserList.[0].photo").value("내사진입니다"));
+        resultActions
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.recommendUserList.[0].nickname").value("nickgogo"));
     }
 
     @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)

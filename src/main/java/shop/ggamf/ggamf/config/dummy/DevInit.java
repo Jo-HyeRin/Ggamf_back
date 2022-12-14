@@ -14,8 +14,8 @@ import shop.ggamf.ggamf.domain.gameCode.GameCode;
 import shop.ggamf.ggamf.domain.gameCode.GameCodeRepository;
 import shop.ggamf.ggamf.domain.reasonCode.ReasonCode;
 import shop.ggamf.ggamf.domain.reasonCode.ReasonCodeRepository;
-import shop.ggamf.ggamf.domain.recommendBanUser.RecommendBanUser;
-import shop.ggamf.ggamf.domain.recommendBanUser.RecommendBanUserRepository;
+import shop.ggamf.ggamf.domain.recommendBanuser.RecommendBanuser;
+import shop.ggamf.ggamf.domain.recommendBanuser.RecommendBanuserRepository;
 import shop.ggamf.ggamf.domain.room.Room;
 import shop.ggamf.ggamf.domain.room.RoomRepository;
 import shop.ggamf.ggamf.domain.user.User;
@@ -30,7 +30,7 @@ public class DevInit extends DummyEntity {
     public CommandLineRunner dataSetting(UserRepository userRepository,
             RoomRepository roomRepository,
             GameCodeRepository gameCodeRepository, EnterRepository enterRepository, FollowRepository followRepository,
-            ReasonCodeRepository reasonCodeRepository, RecommendBanUserRepository recommendBanUserRepository) {
+            ReasonCodeRepository reasonCodeRepository, RecommendBanuserRepository recommendBanuserRepository) {
 
         return (args) -> {
             // User : 유저
@@ -65,7 +65,7 @@ public class DevInit extends DummyEntity {
             Follow f4 = followRepository.save(newFollow(kaka, ssar, true));
             Follow f44 = followRepository.save(newFollow(yeye, ssar, true));
             // RecommendBanUser : 추천겜프목록에서 제외할 유저
-            RecommendBanUser banuser1 = recommendBanUserRepository.save(newBanuser(ssar, romio));
+            RecommendBanuser banuser1 = recommendBanuserRepository.save(newBanuser(ssar, romio));
             // ReasonCode : 신고카테고리
             ReasonCode reason1 = reasonCodeRepository.save(newReasonCode("욕설"));
             ReasonCode reason2 = reasonCodeRepository.save(newReasonCode("탈주"));

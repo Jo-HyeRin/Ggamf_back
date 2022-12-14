@@ -1,4 +1,4 @@
-package shop.ggamf.ggamf.domain.recommendBanUser;
+package shop.ggamf.ggamf.domain.recommendBanuser;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -17,9 +17,9 @@ import shop.ggamf.ggamf.domain.user.User;
 
 @NoArgsConstructor
 @Getter
-@Table(name = "recommend_ban_user")
+@Table(name = "recommend_banuser")
 @Entity
-public class RecommendBanUser extends AuditingTime {
+public class RecommendBanuser extends AuditingTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -33,7 +33,7 @@ public class RecommendBanUser extends AuditingTime {
     User banuser;
 
     @Builder
-    public RecommendBanUser(Long id, User users, User banuser) {
+    public RecommendBanuser(Long id, User users, User banuser) {
         this.id = id;
         this.users = users;
         this.banuser = banuser;
