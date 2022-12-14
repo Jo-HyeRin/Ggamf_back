@@ -44,6 +44,11 @@ public class PartyService {
     private final GameCodeRepository gameCodeRepository;
     private final EnterRepository enterRepository;
 
+    public List<GameCode> 파티방생성화면게임코드전달() {
+        List<GameCode> gameCodeList = gameCodeRepository.findAll();
+        return gameCodeList;
+    }
+
     @Transactional
     public CreateRoomRespDto 파티방생성(CreateRoomReqDto createRoomReqDto) {
         log.debug("디버그 : 파티방생성 서비스 호출");
@@ -255,5 +260,4 @@ public class PartyService {
 
         return new RoomListByIdRespDto(enterListPS);
     }
-
 }
