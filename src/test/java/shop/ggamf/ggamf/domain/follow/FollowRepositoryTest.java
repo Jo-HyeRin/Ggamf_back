@@ -122,7 +122,8 @@ public class FollowRepositoryTest extends DummyEntity {
         Long friendId = 6L;
 
         // when
-        Follow followPS = followRepository.findByBothId(userId, friendId);
+        Follow followPS = followRepository.findByBothId(userId, friendId)
+                .orElseThrow();
 
         // then
         Assertions.assertThat(followPS.getId()).isEqualTo(2L);

@@ -52,7 +52,7 @@ public class GgamfApiController {
         log.debug("디버그 : 겜프 요청 컨트롤러 호출");
         followGgamfReqDto.setUserId(userId);
         followGgamfReqDto.setFriendId(friendId);
-        FollowGgamfRespDto followGgamfRespDto = ggamfService.겜프요청(followGgamfReqDto);
+        FollowGgamfRespDto followGgamfRespDto = ggamfService.겜프요청(followGgamfReqDto, userId, friendId);
         return new ResponseEntity<>(new ResponseDto<>("겜프 요청 완료", followGgamfRespDto), HttpStatus.CREATED);
     }
 

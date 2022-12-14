@@ -2,6 +2,7 @@ package shop.ggamf.ggamf.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -56,19 +57,19 @@ public class GgamfService {
     private final RecommendBanuserRepository recommendBanuserRepository;
 
     @Transactional
-    public FollowGgamfRespDto 겜프요청(FollowGgamfReqDto followGgamfReqDto) {
+    public FollowGgamfRespDto 겜프요청(FollowGgamfReqDto followGgamfReqDto, Long userId, Long friendId) {
         log.debug("디버그 : 겜프요청 서비스 호출");
         // 나
-        User user = userRepository.findById(followGgamfReqDto.getUserId())
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomApiException("내 유저 정보가 없습니다", HttpStatus.FORBIDDEN));
         // 요청받은사람
-        User friend = userRepository.findById(followGgamfReqDto.getFriendId())
+        User friend = userRepository.findById(friendId)
                 .orElseThrow(() -> new CustomApiException("해당 유저가 없습니다", HttpStatus.FORBIDDEN));
-        if (followRepository.findByBothId(followGgamfReqDto.getUserId(), followGgamfReqDto.getFriendId()) != null
-                || followRepository.findByBothId(followGgamfReqDto.getFriendId(),
-                        followGgamfReqDto.getUserId()) != null) {
-            throw new CustomApiException("상대방과 이미 겜프이거나 이미 겜프 신청이 되어있는 상태입니다.",
-                    HttpStatus.BAD_REQUEST);
+        // 중복 요청 체크
+        Follow followerPS = followRepository.isGgamfFollow(userId, friendId).orElse(null);
+        Follow followingPS = followRepository.isGgamfFollow(friendId, userId).orElse(null);
+        if (!(followerPS == null && followingPS == null)) {
+            throw new CustomApiException("요청이 있었거나 이미 겜프입니다", HttpStatus.BAD_REQUEST);
         }
         // 추천받지않기 테이블에 있으면 삭제
         RecommendBanuser recommendBanUser = recommendBanuserRepository.findByBothId(followGgamfReqDto.getUserId(),
@@ -85,13 +86,8 @@ public class GgamfService {
     @Transactional
     public AcceptGgamfRespDto 겜프수락(Long userId, Long friendId) {
         log.debug("디버그 : 겜프수락 서비스 호출");
-        Follow followPS = followRepository.findByBothId(userId, friendId);
-        if (followPS == null) {
-            followPS = followRepository.findByBothId(friendId, userId);
-        }
-        if (followPS == null) {
-            throw new CustomApiException("요청이 오간 사이도, 겜프 사이도 아닙니다", HttpStatus.BAD_REQUEST);
-        }
+        Follow followPS = followRepository.findByBothId(friendId, userId)
+                .orElseThrow(() -> new CustomApiException("요청이 오간 사이도, 겜프 사이도 아닙니다", HttpStatus.FORBIDDEN));
         if (followPS.getFollowing().getId() != userId) {
             throw new CustomApiException("당신이 받은 겜프 요청이 아닙니다.", HttpStatus.BAD_REQUEST);
         }
@@ -106,79 +102,65 @@ public class GgamfService {
     @Transactional
     public DeleteGgamfRespDto 겜프삭제(Long userId, Long friendId) {
         log.debug("디버그 : 겜프삭제 서비스 호출");
-        Follow followPS = followRepository.findByBothId(userId, friendId);
-        if (followPS == null) {
-            followPS = followRepository.findByBothId(friendId, userId);
-        }
-        if (followPS == null) {
+        Follow followerPS = followRepository.isGgamfFollow(userId, friendId).orElse(null);
+        Follow followingPS = followRepository.isGgamfFollow(friendId, userId).orElse(null);
+        if (followerPS == null && followingPS == null) {
             throw new CustomApiException("요청이 오간 사이도, 겜프 사이도 아닙니다", HttpStatus.BAD_REQUEST);
+        } else if (followerPS != null && followingPS != null) {
+            throw new CustomApiException("잘못된 요청입니다.", HttpStatus.BAD_REQUEST);
         }
-        if (!(followPS.getFollower().getId() == userId || followPS.getFollowing().getId() == userId)) {
-            throw new CustomApiException("당신의 겜프가 아닙니다", HttpStatus.BAD_REQUEST);
-        }
-        if (followPS.getAccept() != true) {
-            throw new CustomApiException("겜프 사이가 아닙니다", HttpStatus.BAD_REQUEST);
-        }
-        followRepository.delete(followPS);
-        if (followPS.getFollower().getId() == userId) {
-            return new DeleteGgamfRespDto(followPS.getFollowing());
+        if (followerPS != null && followingPS == null) {
+            if (followerPS.getFollower().getId() != userId) {
+                throw new CustomApiException("당신의 겜프가 아닙니다", HttpStatus.BAD_REQUEST);
+            }
+            if (followerPS.getAccept() != true) {
+                throw new CustomApiException("겜프 사이가 아닙니다", HttpStatus.BAD_REQUEST);
+            }
+            followRepository.delete(followerPS);
+            return new DeleteGgamfRespDto(followerPS.getFollowing());
         } else {
-            return new DeleteGgamfRespDto(followPS.getFollower());
+            if (followingPS.getFollower().getId() != userId) {
+                throw new CustomApiException("당신의 겜프가 아닙니다", HttpStatus.BAD_REQUEST);
+            }
+            if (followingPS.getAccept() != true) {
+                throw new CustomApiException("겜프 사이가 아닙니다", HttpStatus.BAD_REQUEST);
+            }
+            followRepository.delete(followingPS);
+            return new DeleteGgamfRespDto(followingPS.getFollower());
         }
     }
 
     @Transactional
     public RejectGgamfRespDto 겜프거절(Long userId, Long friendId) {
         log.debug("디버그 : 겜프거절 서비스 호출");
-        Follow followPS = followRepository.findByBothId(userId, friendId);
-        if (followPS == null) {
-            followPS = followRepository.findByBothId(friendId, userId);
-        }
-        if (followPS == null) {
-            throw new CustomApiException("요청이 오간 사이도, 겜프 사이도 아닙니다", HttpStatus.BAD_REQUEST);
-        }
-        if (!(followPS.getFollower().getId() == userId || followPS.getFollowing().getId() == userId)) {
-            throw new CustomApiException("당신과 관련된 겜프 요청이 아닙니다", HttpStatus.BAD_REQUEST);
+        Follow followPS = followRepository.findByBothId(friendId, userId)
+                .orElseThrow(() -> new CustomApiException("요청이 오간 사이도, 겜프 사이도 아닙니다", HttpStatus.FORBIDDEN));
+        if (followPS.getFollowing().getId() != userId) {
+            throw new CustomApiException("당신이 받은 겜프 요청이 아닙니다", HttpStatus.BAD_REQUEST);
         }
         if (followPS.getAccept() == true) {
             throw new CustomApiException("이미 겜프입니다. 삭제를 원하면 겜프 프로필에서 삭제하세요", HttpStatus.BAD_REQUEST);
         }
-        if (followPS.getFollowing().getId() != userId) {
-            throw new CustomApiException("당신이 받은 요청이 아닙니다.", HttpStatus.BAD_REQUEST);
-        }
         followRepository.delete(followPS);
-        if (followPS.getFollower().getId() == userId) {
-            return new RejectGgamfRespDto(followPS.getFollowing());
-        } else {
-            return new RejectGgamfRespDto(followPS.getFollower());
-        }
+        return new RejectGgamfRespDto(followPS.getFollower());
     }
 
     @Transactional
     public CancelGgamfRespDto 겜프요청취소(Long userId, Long friendId) {
         log.debug("디버그 : 겜프요청취소 서비스 호출");
-        Follow followPS = followRepository.findByBothId(userId, friendId);
-        if (followPS == null) {
-            followPS = followRepository.findByBothId(friendId, userId);
-        }
-        if (followPS == null) {
-            throw new CustomApiException("요청이 오간 사이도, 겜프 사이도 아닙니다", HttpStatus.BAD_REQUEST);
-        }
-        if (!(followPS.getFollower().getId() == userId || followPS.getFollowing().getId() == userId)) {
-            throw new CustomApiException("당신과 관련된 겜프 요청이 아닙니다", HttpStatus.BAD_REQUEST);
+        Follow followPS = followRepository.findByBothId(userId, friendId)
+                .orElseThrow(() -> new CustomApiException("요청이 오간 사이도, 겜프 사이도 아닙니다", HttpStatus.FORBIDDEN));
+        if (!(followPS.getFollower().getId() == userId)) {
+            throw new CustomApiException("당신이 보낸 겜프 요청이 아닙니다", HttpStatus.BAD_REQUEST);
         }
         if (followPS.getAccept() == true) {
-            throw new CustomApiException("이미 겜프입니다. 삭제를 원하면 겜프 프로필에서 삭제하세요", HttpStatus.BAD_REQUEST);
+            throw new CustomApiException("이미 겜프입니다. 삭제를 원하면 겜프 삭제하세요", HttpStatus.BAD_REQUEST);
         }
         if (followPS.getFollower().getId() != userId) {
             throw new CustomApiException("당신이 요청한 것이 아닙니다.", HttpStatus.BAD_REQUEST);
         }
         followRepository.delete(followPS);
-        if (followPS.getFollower().getId() == userId) {
-            return new CancelGgamfRespDto(followPS.getFollowing());
-        } else {
-            return new CancelGgamfRespDto(followPS.getFollower());
-        }
+        return new CancelGgamfRespDto(followPS.getFollowing());
     }
 
     @Transactional
