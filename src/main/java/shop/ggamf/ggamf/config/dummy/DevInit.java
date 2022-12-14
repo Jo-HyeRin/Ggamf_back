@@ -32,6 +32,7 @@ public class DevInit extends DummyEntity {
 
         return (args) -> {
             // User : 유저
+            User admin = userRepository.save(newAdmin("admin"));
             User ssar = userRepository.save(newUser("ssar"));
             User cos = userRepository.save(newUser("cos"));
             User lala = userRepository.save(newUser("lala"));
