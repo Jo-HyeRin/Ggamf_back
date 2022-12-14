@@ -52,47 +52,47 @@ public class GgamfApiController {
         log.debug("디버그 : 겜프 요청 컨트롤러 호출");
         followGgamfReqDto.setUserId(userId);
         followGgamfReqDto.setFriendId(friendId);
-        FollowGgamfRespDto followGgamfRespDto = ggamfService.겜프요청(followGgamfReqDto);
+        FollowGgamfRespDto followGgamfRespDto = ggamfService.겜프요청(followGgamfReqDto, userId, friendId);
         return new ResponseEntity<>(new ResponseDto<>("겜프 요청 완료", followGgamfRespDto), HttpStatus.CREATED);
     }
 
     // 겜프 수락
     @AuthorizationCheck
-    @PutMapping("/ggamf/user/{userId}/accept/{followId}")
-    public ResponseEntity<?> acceptGgamf(@PathVariable Long userId, @PathVariable Long followId,
+    @PutMapping("/ggamf/user/{userId}/accept/{friendId}")
+    public ResponseEntity<?> acceptGgamf(@PathVariable Long userId, @PathVariable Long friendId,
             @AuthenticationPrincipal LoginUser loginUser) {
         log.debug("디버그 : 겜프 수락 컨트롤러 호출");
-        AcceptGgamfRespDto acceptGgamfRespDto = ggamfService.겜프수락(userId, followId);
+        AcceptGgamfRespDto acceptGgamfRespDto = ggamfService.겜프수락(userId, friendId);
         return new ResponseEntity<>(new ResponseDto<>("겜프 수락 완료", acceptGgamfRespDto), HttpStatus.CREATED);
     }
 
     // 겜프 삭제
     @AuthorizationCheck
-    @DeleteMapping("/ggamf/user/{userId}/unfollow/{followId}")
-    public ResponseEntity<?> deleteGgamf(@PathVariable Long userId, @PathVariable Long followId,
+    @DeleteMapping("/ggamf/user/{userId}/unfollow/{friendId}")
+    public ResponseEntity<?> deleteGgamf(@PathVariable Long userId, @PathVariable Long friendId,
             @AuthenticationPrincipal LoginUser loginUser) {
         log.debug("디버그 : 겜프 삭제 컨트롤러 호출");
-        DeleteGgamfRespDto deleteGgamfRespDto = ggamfService.겜프삭제(userId, followId);
+        DeleteGgamfRespDto deleteGgamfRespDto = ggamfService.겜프삭제(userId, friendId);
         return new ResponseEntity<>(new ResponseDto<>("겜프 삭제 완료", deleteGgamfRespDto), HttpStatus.OK);
     }
 
     // 겜프 거절
     @AuthorizationCheck
-    @DeleteMapping("/ggamf/user/{userId}/reject/{followId}")
-    public ResponseEntity<?> rejectGgamf(@PathVariable Long userId, @PathVariable Long followId,
+    @DeleteMapping("/ggamf/user/{userId}/reject/{friendId}")
+    public ResponseEntity<?> rejectGgamf(@PathVariable Long userId, @PathVariable Long friendId,
             @AuthenticationPrincipal LoginUser loginUser) {
         log.debug("디버그 : 겜프 거절 컨트롤러 호출");
-        RejectGgamfRespDto rejectGgamfRespDto = ggamfService.겜프거절(userId, followId);
+        RejectGgamfRespDto rejectGgamfRespDto = ggamfService.겜프거절(userId, friendId);
         return new ResponseEntity<>(new ResponseDto<>("겜프 거절 완료", rejectGgamfRespDto), HttpStatus.OK);
     }
 
     // 겜프 요청 취소
     @AuthorizationCheck
-    @DeleteMapping("/ggamf/user/{userId}/cancel/{followId}")
-    public ResponseEntity<?> cancelGgamf(@PathVariable Long userId, @PathVariable Long followId,
+    @DeleteMapping("/ggamf/user/{userId}/cancel/{friendId}")
+    public ResponseEntity<?> cancelGgamf(@PathVariable Long userId, @PathVariable Long friendId,
             @AuthenticationPrincipal LoginUser loginUser) {
         log.debug("디버그 : 겜프 요청 취소 컨트롤러 호출");
-        CancelGgamfRespDto cancelGgamfRespDto = ggamfService.겜프요청취소(userId, followId);
+        CancelGgamfRespDto cancelGgamfRespDto = ggamfService.겜프요청취소(userId, friendId);
         return new ResponseEntity<>(new ResponseDto<>("겜프요청취소 완료", cancelGgamfRespDto), HttpStatus.OK);
     }
 
@@ -154,7 +154,7 @@ public class GgamfApiController {
         return new ResponseEntity<>(new ResponseDto<>("추천겜프목록보기 완료", recommendGgamfListRespDto), HttpStatus.OK);
     }
 
-    // 추천 겜프 삭제
+    // 추천 겜프 삭제 = RecommendBanuser 테이블 insert
     @AuthorizationCheck
     @PostMapping("/ggamf/user/{userId}/recommendban/{banuserId}")
     public ResponseEntity<?> recommendBan(@RequestBody RecommendBanReqDto recommendBanReqDto, @PathVariable Long userId,

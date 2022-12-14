@@ -10,12 +10,11 @@ import shop.ggamf.ggamf.domain.enter.Enter;
 import shop.ggamf.ggamf.domain.follow.Follow;
 import shop.ggamf.ggamf.domain.gameCode.GameCode;
 import shop.ggamf.ggamf.domain.reasonCode.ReasonCode;
-import shop.ggamf.ggamf.domain.recommendBanUser.RecommendBanUser;
+import shop.ggamf.ggamf.domain.recommendBanuser.RecommendBanuser;
 import shop.ggamf.ggamf.domain.report.Report;
 import shop.ggamf.ggamf.domain.room.Room;
 import shop.ggamf.ggamf.domain.starRate.StarRate;
 import shop.ggamf.ggamf.domain.user.User;
-import shop.ggamf.ggamf.service.UserService;
 
 public abstract class DummyEntity {
 
@@ -154,11 +153,11 @@ public abstract class DummyEntity {
         return reasonCode;
     }
 
-    protected RecommendBanUser newBanuser(User users, User banuser) {
-        RecommendBanUser recommendBanUser = RecommendBanUser.builder()
+    protected RecommendBanuser newBanuser(User users, User banuser) {
+        RecommendBanuser recommendBanuser = RecommendBanuser.builder()
                 .users(users)
                 .banuser(banuser)
                 .build();
-        return recommendBanUser;
+        return recommendBanuser;
     }
 }

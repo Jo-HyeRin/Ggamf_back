@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import shop.ggamf.ggamf.domain.follow.Follow;
 import shop.ggamf.ggamf.domain.reasonCode.ReasonCode;
-import shop.ggamf.ggamf.domain.recommendBanUser.RecommendBanUser;
+import shop.ggamf.ggamf.domain.recommendBanuser.RecommendBanuser;
 import shop.ggamf.ggamf.domain.report.Report;
 import shop.ggamf.ggamf.domain.user.User;
 
@@ -61,8 +61,8 @@ public class GgamfReqDto {
         @NotEmpty(message = "추천목록에서 삭제할 유저는 필수 입력 값입니다.")
         private Long banuserId;
 
-        public RecommendBanUser toEntity(User users, User banuser) {
-            return RecommendBanUser.builder()
+        public RecommendBanuser toEntity(User users, User banuser) {
+            return RecommendBanuser.builder()
                     .users(users)
                     .banuser(banuser)
                     .build();
