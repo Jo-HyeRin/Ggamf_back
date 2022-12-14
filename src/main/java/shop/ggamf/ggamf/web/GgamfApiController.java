@@ -51,11 +51,6 @@ public class GgamfApiController {
         }
         followGgamfReqDto.setUserId(userId);
         followGgamfReqDto.setFriendId(friendId);
-        if (loginUser.getUser().getId() != userId) {
-            throw new CustomApiException("로그인 유저와 요청 유저가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
-        }
-        followGgamfReqDto.setUserId(userId);
-        followGgamfReqDto.setFriendId(friendId);
         FollowGgamfRespDto followGgamfRespDto = ggamfService.겜프요청(followGgamfReqDto);
         return new ResponseEntity<>(new ResponseDto<>("겜프 요청 완료", followGgamfRespDto), HttpStatus.CREATED);
     }
