@@ -15,6 +15,8 @@ import shop.ggamf.ggamf.config.exception.CustomApiException;
 import shop.ggamf.ggamf.domain.report.DetailReportRespDto;
 import shop.ggamf.ggamf.domain.report.ReportRepositoryQuery;
 import shop.ggamf.ggamf.domain.report.ReportRespDto;
+import shop.ggamf.ggamf.domain.statistics.GameMatchingResponseDto;
+import shop.ggamf.ggamf.domain.statistics.StatisticsRepositoryQuery;
 import shop.ggamf.ggamf.domain.user.User;
 import shop.ggamf.ggamf.domain.user.UserRepository;
 
@@ -26,6 +28,7 @@ public class AdminService {
     private final Logger log = LoggerFactory.getLogger(getClass());
     private final UserRepository userRepository;
     private final ReportRepositoryQuery reportRepositoryQuery;
+    private final StatisticsRepositoryQuery statisticsRepositoryQuery;
     private static LoginUser loginUser;
 
     public List<ReportRespDto> 신고목록보기(Long id) {
@@ -44,5 +47,10 @@ public class AdminService {
     public DetailReportRespDto 리포트상세내용보기(Long id, Long badUserId) {
         DetailReportRespDto detailReportRespDto = reportRepositoryQuery.findDetailReport(id, badUserId);
         return detailReportRespDto;
+    }
+
+    public List<GameMatchingResponseDto> 매칭통계목록보기() {
+        List<GameMatchingResponseDto> gameMatchingResponseDto = statisticsRepositoryQuery.findGameMatchingStatistics();
+        return gameMatchingResponseDto;
     }
 }

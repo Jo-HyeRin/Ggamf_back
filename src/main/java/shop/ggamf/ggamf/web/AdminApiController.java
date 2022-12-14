@@ -40,4 +40,12 @@ public class AdminApiController {
         return new ResponseEntity<>(new ResponseDto<>("신고 상세내용 보기 성공", adminService.리포트상세내용보기(reportId, badUserId)),
                 HttpStatus.OK);
     }
+
+    @GetMapping("/admin/gameMatchingList")
+    public ResponseEntity<?> findGameMatchingList(@AuthenticationPrincipal LoginUser loginUser) {
+        if (!loginUser.getUser().getRole().equals(UserEnum.ADMIN)) {
+            return new ResponseEntity<>(new ResponseDto<>("권한이 없습니다", null), HttpStatus.FORBIDDEN);
+        }
+        return new ResponseEntity<>(new ResponseDto<>("게임 매칭 통계 리스트 불러오기 성공", adminService.매칭통계목록보기()), HttpStatus.OK);
+    }
 }
