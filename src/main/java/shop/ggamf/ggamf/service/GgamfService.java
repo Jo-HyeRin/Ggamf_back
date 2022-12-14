@@ -70,6 +70,12 @@ public class GgamfService {
             throw new CustomApiException("상대방과 이미 겜프이거나 이미 겜프 신청이 되어있는 상태입니다.",
                     HttpStatus.BAD_REQUEST);
         }
+        // 추천받지않기 테이블에 있으면 삭제
+        RecommendBanUser recommendBanUser = recommendBanUserRepository.findByBothId(followGgamfReqDto.getUserId(),
+                followGgamfReqDto.getFriendId());
+        if (recommendBanUser != null) {
+            recommendBanUserRepository.deleteById(recommendBanUser.getId());
+        }
         // 실행
         Follow followPS = followGgamfReqDto.toEntity(user, friend);
         Follow follow = followRepository.save(followPS);
@@ -243,6 +249,13 @@ public class GgamfService {
         for (int i = 0; i < friendFollowerLatest.size(); i++) {
             if (recommendFriendList.contains(friendFollowerLatest.get(i).getFollower().getId())) {
                 recommendFriendList.remove(friendFollowerLatest.get(i).getFollower().getId());
+            }
+        }
+        // 합친 리스트 추천받지않도록 설정되어있는지 확인
+        List<RecommendBanUser> banList = recommendBanUserRepository.findByUserId(userId);
+        for (int i = 0; i < banList.size(); i++) {
+            if (recommendFriendList.contains(banList.get(i).getBanuser().getId())) {
+                recommendFriendList.remove(banList.get(i).getBanuser().getId());
             }
         }
         // 친구 추천하기
