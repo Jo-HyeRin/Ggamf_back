@@ -18,6 +18,8 @@ import shop.ggamf.ggamf.domain.follow.Follow;
 import shop.ggamf.ggamf.domain.follow.FollowRepository;
 import shop.ggamf.ggamf.domain.reasonCode.ReasonCode;
 import shop.ggamf.ggamf.domain.reasonCode.ReasonCodeRepository;
+import shop.ggamf.ggamf.domain.recommendBanUser.RecommendBanUser;
+import shop.ggamf.ggamf.domain.recommendBanUser.RecommendBanUserRepository;
 import shop.ggamf.ggamf.domain.report.Report;
 import shop.ggamf.ggamf.domain.report.ReportRepository;
 import shop.ggamf.ggamf.domain.room.Room;
@@ -25,6 +27,7 @@ import shop.ggamf.ggamf.domain.room.RoomRepository;
 import shop.ggamf.ggamf.domain.user.User;
 import shop.ggamf.ggamf.domain.user.UserRepository;
 import shop.ggamf.ggamf.dto.GgamfReqDto.FollowGgamfReqDto;
+import shop.ggamf.ggamf.dto.GgamfReqDto.RecommendBanReqDto;
 import shop.ggamf.ggamf.dto.GgamfReqDto.ReportGgamfReqDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.AcceptGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.CancelGgamfRespDto;
@@ -32,6 +35,7 @@ import shop.ggamf.ggamf.dto.GgamfRespDto.DeleteGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.FollowGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.GgamfListRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.ReceiveGgamfRespDto;
+import shop.ggamf.ggamf.dto.GgamfRespDto.RecommendBanRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.RecommendGgamfListRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.RejectGgamfRespDto;
 import shop.ggamf.ggamf.dto.GgamfRespDto.ReportGgamfRespDto;
@@ -49,6 +53,7 @@ public class GgamfService {
     private final ReasonCodeRepository reasonCodeRepository;
     private final EnterRepository enterRepository;
     private final RoomRepository roomRepository;
+    private final RecommendBanUserRepository recommendBanUserRepository;
 
     @Transactional
     public FollowGgamfRespDto 겜프요청(FollowGgamfReqDto followGgamfReqDto) {
@@ -64,6 +69,12 @@ public class GgamfService {
                         followGgamfReqDto.getUserId()).isEmpty()) {
             throw new CustomApiException("상대방과 이미 겜프이거나 이미 겜프 신청이 되어있는 상태입니다.",
                     HttpStatus.BAD_REQUEST);
+        }
+        // 추천받지않기 테이블에 있으면 삭제
+        RecommendBanUser recommendBanUser = recommendBanUserRepository.findByBothId(followGgamfReqDto.getUserId(),
+                followGgamfReqDto.getFriendId());
+        if (recommendBanUser != null) {
+            recommendBanUserRepository.deleteById(recommendBanUser.getId());
         }
         // 실행
         Follow followPS = followGgamfReqDto.toEntity(user, friend);
@@ -240,9 +251,32 @@ public class GgamfService {
                 recommendFriendList.remove(friendFollowerLatest.get(i).getFollower().getId());
             }
         }
+        // 합친 리스트 추천받지않도록 설정되어있는지 확인
+        List<RecommendBanUser> banList = recommendBanUserRepository.findByUserId(userId);
+        for (int i = 0; i < banList.size(); i++) {
+            if (recommendFriendList.contains(banList.get(i).getBanuser().getId())) {
+                recommendFriendList.remove(banList.get(i).getBanuser().getId());
+            }
+        }
         // 친구 추천하기
         List<User> recommendUserList = userRepository.findByIdForRecommend(recommendFriendList);
         return new RecommendGgamfListRespDto(recommendUserList);
+    }
+
+    @Transactional
+    public RecommendBanRespDto 추천겜프삭제(RecommendBanReqDto recommendBanReqDto, Long userId, Long banuserId) {
+        User userPS = userRepository.findById(userId)
+                .orElseThrow(
+                        () -> new CustomApiException("요청 유저가 없습니다", HttpStatus.FORBIDDEN));
+        User banuserPS = userRepository.findById(banuserId)
+                .orElseThrow(
+                        () -> new CustomApiException("해당 유저가 없습니다", HttpStatus.FORBIDDEN));
+        if (recommendBanUserRepository.findByBothId(userId, banuserId) != null) {
+            throw new CustomApiException("이미 추천받지 않게 설정된 유저입니다", HttpStatus.BAD_REQUEST);
+        }
+        RecommendBanUser recommendBanUserPS = recommendBanReqDto.toEntity(userPS, banuserPS);
+        RecommendBanUser recommendBanUser = recommendBanUserRepository.save(recommendBanUserPS);
+        return new RecommendBanRespDto(recommendBanUser);
     }
 
 }
