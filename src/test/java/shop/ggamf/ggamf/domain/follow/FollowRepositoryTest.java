@@ -1,6 +1,5 @@
-package shop.ggamf.ggamf.domain.enter;
+package shop.ggamf.ggamf.domain.follow;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -14,8 +13,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import shop.ggamf.ggamf.config.dummy.DummyEntity;
-import shop.ggamf.ggamf.domain.follow.Follow;
-import shop.ggamf.ggamf.domain.follow.FollowRepository;
+import shop.ggamf.ggamf.domain.enter.Enter;
+import shop.ggamf.ggamf.domain.enter.EnterRepository;
 import shop.ggamf.ggamf.domain.gameCode.GameCode;
 import shop.ggamf.ggamf.domain.gameCode.GameCodeRepository;
 import shop.ggamf.ggamf.domain.room.Room;
@@ -25,7 +24,7 @@ import shop.ggamf.ggamf.domain.user.UserRepository;
 
 @ActiveProfiles("test")
 @DataJpaTest
-public class EnterRepositoryTest extends DummyEntity {
+public class FollowRepositoryTest extends DummyEntity {
 
     @Autowired
     private EntityManager em;
@@ -117,80 +116,65 @@ public class EnterRepositoryTest extends DummyEntity {
     }
 
     @Test
-    public void findByRoomIdAndUserId_test() throws Exception {
+    public void findByBothId_test() throws Exception {
         // given
-        Long roomId = 3L;
         Long userId = 1L;
+        Long friendId = 6L;
 
         // when
-        Enter enterPS = enterRepository.findByRoomIdAndUserId(roomId, userId)
+        Follow followPS = followRepository.findByBothId(userId, friendId)
                 .orElseThrow();
 
         // then
-        Assertions.assertThat(enterPS.getId()).isEqualTo(7L);
+        Assertions.assertThat(followPS.getId()).isEqualTo(2L);
     }
 
     @Test
-    public void findByRoomId_test() throws Exception {
-        // given
-        Long roomId = 2L;
-
-        // when
-        List<Enter> enterListPS = enterRepository.findByRoomId(roomId);
-
-        // then
-        Assertions.assertThat(enterListPS.get(0).getUser().getNickname()).isEqualTo("nickcos");
-    }
-
-    @Test
-    public void findByUserId_test() throws Exception {
+    public void findByFollowerId_test() throws Exception {
         // given
         Long userId = 1L;
 
         // when
-        List<Enter> enterListPS = enterRepository.findByUserId(userId);
+        List<Follow> followListPS = followRepository.findByFollowerId(userId);
 
         // then
-        Assertions.assertThat(enterListPS.get(0).getRoom().getRoomName()).isEqualTo("roomname3");
+        Assertions.assertThat(followListPS.get(0).getId()).isEqualTo(5L);
     }
 
     @Test
-    public void findByRoomIdEnd_test() throws Exception {
-        // given
-        Long roomId = 1L;
-
-        // when
-        List<Enter> enterListPS = enterRepository.findByRoomIdEnd(roomId);
-
-        // then
-        Assertions.assertThat(enterListPS.get(0).getUser().getNickname()).isEqualTo("nicklala");
-    }
-
-    @Test
-    public void findEnterRoom_test() throws Exception {
+    public void findByFollowingId_test() throws Exception {
         // given
         Long userId = 1L;
 
         // when
-        List<Enter> enterListPS = enterRepository.findEnterRoom(userId);
+        List<Follow> followListPS = followRepository.findByFollowingId(userId);
 
         // then
-        Assertions.assertThat(enterListPS.get(0).getRoom().getRoomName()).isEqualTo("roomname4");
+        Assertions.assertThat(followListPS.get(0).getId()).isEqualTo(7L);
     }
 
     @Test
-    public void findTogether_test() throws Exception {
+    public void findByUserIdFollower_test() throws Exception {
         // given
         Long userId = 1L;
-        List<Long> roomIdList = new ArrayList();
-        roomIdList.add(4L);
-        roomIdList.add(8L);
 
         // when
-        List<Enter> enterListPS = enterRepository.findTogether(userId, roomIdList);
+        List<Follow> followListPS = followRepository.findByUserIdFollower(userId);
 
         // then
-        Assertions.assertThat(enterListPS.size()).isEqualTo(5);
+        Assertions.assertThat(followListPS.get(0).getId()).isEqualTo(1L);
+    }
+
+    @Test
+    public void findByUserIdFollowing_test() throws Exception {
+        // given
+        Long userId = 1L;
+
+        // when
+        List<Follow> followListPS = followRepository.findByUserIdFollowing(userId);
+
+        // then
+        Assertions.assertThat(followListPS.get(0).getId()).isEqualTo(3L);
     }
 
 }
