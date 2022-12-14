@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 public interface FollowRepository extends JpaRepository<Follow, Long>, Dao {
 
     // 내가 상대에게 신청한 내역
-    @Query("select f from Follow f join fetch f.follower e join fetch f.following i where e.id=:userId and i.id=:friendId")
+    @Query("select f from Follow f join fetch f.follower e join fetch f.following i where e.id=:userId and i.id=:friendId and f.accept=false")
     Optional<Follow> findByBothId(@Param("userId") Long userId, @Param("friendId") Long friendId);
 
     // 겜프사이 확인하기

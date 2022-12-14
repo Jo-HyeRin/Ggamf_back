@@ -119,7 +119,7 @@ public class GgamfService {
             followRepository.delete(followerPS);
             return new DeleteGgamfRespDto(followerPS.getFollowing());
         } else {
-            if (followingPS.getFollower().getId() != userId) {
+            if (followingPS.getFollowing().getId() != userId) {
                 throw new CustomApiException("당신의 겜프가 아닙니다", HttpStatus.BAD_REQUEST);
             }
             if (followingPS.getAccept() != true) {
@@ -216,6 +216,7 @@ public class GgamfService {
         List<Room> roomList = roomRepository.findByUserIdEnd(userId);
         // 방 종료까지 함께한 인원 셀렉하기
         List<Enter> latestList = enterRepository.findByRoomIdEnd(roomList.get(0).getId());
+        log.debug("디버그 : latestList.size() : " + latestList.size());
         List<Long> latestIdList = new ArrayList<>();
         for (int i = 0; i < latestList.size(); i++) {
             latestIdList.add(latestList.get(i).getUser().getId());
@@ -223,21 +224,26 @@ public class GgamfService {
         // <내가 참여했을 때>
         // 내가 참여했던 방
         List<Enter> enterRoomList = enterRepository.findEnterRoom(userId);
+        log.debug("디버그 : enterRoomList.size() : " + enterRoomList.size());
         List<Long> enterRoomIdList = new ArrayList<>();
         for (int i = 0; i < enterRoomList.size(); i++) {
             enterRoomIdList.add(enterRoomList.get(i).getRoom().getId());
         }
+        log.debug("디버그 : enterRoomIdList.size() : " + enterRoomIdList.size());
         // 방 출입 유저 id 목록
         List<Enter> enterUserList = enterRepository.findTogether(userId, enterRoomIdList);
         List<Long> enterUserIdList = new ArrayList<>();
         for (int i = 0; i < enterUserList.size(); i++) {
             enterUserIdList.add(enterUserList.get(i).getUser().getId());
         }
+        log.debug("디버그 : enterUserIdList.size() : " + enterUserIdList.size());
         // 두 리스트 합치기
         List<Long> recommendFriendList = new ArrayList<>();
         recommendFriendList.addAll(latestIdList);
         recommendFriendList.addAll(enterUserIdList);
+        log.debug("디버그 : recommendFriendList.size() : " + recommendFriendList.size());
         List<Long> userList = recommendFriendList.stream().distinct().collect(Collectors.toList());
+        log.debug("디버그 : userList.size() : " + userList.size());
 
         // 합친 리스트 친구, 친구 신청 여부 확인 팔로잉=친구 or 팔로워=친구
         List<Follow> friendFollowingLatest = followRepository.findByRecommendFollowing(userId, userList);
@@ -252,6 +258,7 @@ public class GgamfService {
                 userList.remove(friendFollowerLatest.get(i).getFollower().getId());
             }
         }
+        log.debug("디버그 : userList.size() : " + userList.size());
         // 합친 리스트 추천받지않도록 설정되어있는지 확인
         List<RecommendBanuser> banList = recommendBanuserRepository.findByUserId(userId);
         for (int i = 0; i < banList.size(); i++) {
@@ -259,8 +266,9 @@ public class GgamfService {
                 userList.remove(banList.get(i).getBanuser().getId());
             }
         }
+        log.debug("디버그 : userList.size() : " + userList.size());
         // 친구 추천하기
-        List<User> recommendList = userRepository.findByIdForRecommendIn(userList);
+        List<User> recommendList = userRepository.findByIdRecommend(userList);
         return new RecommendGgamfListRespDto(recommendList);
     }
 

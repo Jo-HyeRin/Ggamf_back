@@ -154,7 +154,7 @@ public class GgamfApiController {
         return new ResponseEntity<>(new ResponseDto<>("추천겜프목록보기 완료", recommendGgamfListRespDto), HttpStatus.OK);
     }
 
-    // 추천 겜프 삭제
+    // 추천 겜프 삭제 = RecommendBanuser 테이블 insert
     @AuthorizationCheck
     @PostMapping("/ggamf/user/{userId}/recommendban/{banuserId}")
     public ResponseEntity<?> recommendBan(@RequestBody RecommendBanReqDto recommendBanReqDto, @PathVariable Long userId,

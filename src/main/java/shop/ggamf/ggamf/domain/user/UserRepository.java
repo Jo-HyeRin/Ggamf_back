@@ -23,5 +23,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     // 추천친구목록보기 - 친구 추천 쿼리
     @Query(value = "select u from User u where u.id in :userList")
-    List<User> findByIdForRecommendIn(@Param("userList") List<Long> userList);
+    List<User> findByIdRecommend(@Param("userList") List<Long> userList);
 }
