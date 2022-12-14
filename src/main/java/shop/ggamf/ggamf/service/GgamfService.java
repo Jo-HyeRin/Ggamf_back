@@ -2,7 +2,6 @@ package shop.ggamf.ggamf.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -20,6 +19,7 @@ import shop.ggamf.ggamf.domain.follow.FollowRepository;
 import shop.ggamf.ggamf.domain.reasonCode.ReasonCode;
 import shop.ggamf.ggamf.domain.reasonCode.ReasonCodeRepository;
 import shop.ggamf.ggamf.domain.recommendBanuser.RecommendBanuser;
+import shop.ggamf.ggamf.domain.recommendBanuser.RecommendBanuser.RecommendBanUser;
 import shop.ggamf.ggamf.domain.recommendBanuser.RecommendBanuserRepository;
 import shop.ggamf.ggamf.domain.report.Report;
 import shop.ggamf.ggamf.domain.report.ReportRepository;
@@ -76,6 +76,12 @@ public class GgamfService {
                 followGgamfReqDto.getFriendId());
         if (recommendBanUser != null) {
             recommendBanuserRepository.deleteById(recommendBanUser.getId());
+        }
+        // 추천받지않기 테이블에 있으면 삭제
+        RecommendBanUser recommendBanUser = recommendBanUserRepository.findByBothId(followGgamfReqDto.getUserId(),
+                followGgamfReqDto.getFriendId());
+        if (recommendBanUser != null) {
+            recommendBanUserRepository.deleteById(recommendBanUser.getId());
         }
         // 실행
         Follow followPS = followGgamfReqDto.toEntity(user, friend);
@@ -287,5 +293,4 @@ public class GgamfService {
         RecommendBanuser recommendBanUser = recommendBanuserRepository.save(recommendBanuserPS);
         return new RecommendBanRespDto(recommendBanUser);
     }
-
 }
