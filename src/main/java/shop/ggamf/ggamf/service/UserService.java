@@ -126,8 +126,29 @@ public class UserService {
 
     public String 아이디중복확인(String username) {
         if (userRepository.findByUsername(username).isPresent()) {
-            return "해당 아이디가 이미 존재합니다.";
+            return "exist";
         }
         return "해당 아이디는 사용 가능 합니다.";
+    }
+
+    public String 닉네임중복확인(String nickname) {
+        if (userRepository.findByNickname(nickname).isPresent()) {
+            return "exist";
+        }
+        return "해당 닉네임은 사용 가능 합니다.";
+    }
+
+    public String 전화번호중복확인(String phone) {
+        if (userRepository.findByPhone(phone).isPresent()) {
+            return "exist";
+        }
+        return "해당 전화번호는 사용 가능 합니다.";
+    }
+
+    public String 이메일중복확인(String email) {
+        if (userRepository.findByEmail(email).isPresent()) {
+            return "exist";
+        }
+        return "해당 이메일은 사용 가능 합니다.";
     }
 }

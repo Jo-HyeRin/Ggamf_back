@@ -81,11 +81,35 @@ public class UserApiController {
     // HttpStatus.OK);
     // }
 
-    @GetMapping("/join/{username}")
+    @GetMapping("/join/{username}/username")
     public ResponseEntity<?> checkUsername(@PathVariable String username) {
-        if (userService.아이디중복확인(username).equals("해당 아이디가 이미 존재합니다.")) {
+        if (userService.아이디중복확인(username).equals("exist")) {
             return new ResponseEntity<>(new ResponseDto<>("아이디 중복체크 성공", null), HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(new ResponseDto<>("아이디 중복체크 성공", null), HttpStatus.OK);
+    }
+
+    @GetMapping("/join/{nickname}/nickname")
+    public ResponseEntity<?> checkNickname(@PathVariable String nickname) {
+        if (userService.닉네임중복확인(nickname).equals("exist")) {
+            return new ResponseEntity<>(new ResponseDto<>("닉네임 중복체크 성공", null), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(new ResponseDto<>("닉네임 중복체크 성공", null), HttpStatus.OK);
+    }
+
+    @GetMapping("/join/{phone}/phone")
+    public ResponseEntity<?> checkPhone(@PathVariable String phone) {
+        if (userService.전화번호중복확인(phone).equals("exist")) {
+            return new ResponseEntity<>(new ResponseDto<>("전화번호 중복체크 성공", null), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(new ResponseDto<>("전화번호 중복체크 성공", null), HttpStatus.OK);
+    }
+
+    @GetMapping("/join/{email}/email")
+    public ResponseEntity<?> checkEmail(@PathVariable String email) {
+        if (userService.이메일중복확인(email).equals("exist")) {
+            return new ResponseEntity<>(new ResponseDto<>("이메일 중복체크 성공", null), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(new ResponseDto<>("이메일 중복체크 성공", null), HttpStatus.OK);
     }
 }
