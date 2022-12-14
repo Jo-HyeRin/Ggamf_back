@@ -38,15 +38,7 @@ public class AdminService {
     private final StatisticsRepositoryQuery statisticsRepositoryQuery;
     private static LoginUser loginUser;
 
-    public List<ReportRespDto> 신고목록보기(Long id) {
-        Optional<User> userOP = userRepository.findById(id);
-        log.debug("디버그 : username : " + userOP.get().getUsername());
-        log.debug("디버그 : role : " + userOP.get().getRole());
-
-        if (!userOP.isPresent()) {
-            userRepository.findById(id)
-                    .orElseThrow(() -> (new CustomApiException("해당유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST)));
-        }
+    public List<ReportRespDto> 신고목록보기() {
         List<ReportRespDto> reportRespDto = reportRepositoryQuery.findReportList();
         return reportRespDto;
     }
@@ -89,5 +81,9 @@ public class AdminService {
                     .orElseThrow(() -> (new CustomApiException("해당 게임이 존재하지 않습니다", HttpStatus.BAD_REQUEST)));
         }
         gameCodeRepository.deleteById(id);
+    }
+
+    public void 게임목록보기() {
+
     }
 }
