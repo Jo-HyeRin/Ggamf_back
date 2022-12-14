@@ -24,7 +24,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import shop.ggamf.ggamf.config.dummy.DummyEntity;
-import shop.ggamf.ggamf.config.enums.UserEnum;
 import shop.ggamf.ggamf.config.enums.UserStateEnum;
 import shop.ggamf.ggamf.domain.user.User;
 import shop.ggamf.ggamf.domain.user.UserRepository;
@@ -83,6 +82,58 @@ public class UserApiControllerTest extends DummyEntity {
         // then
         resultActions.andExpect(status().isCreated());
         resultActions.andExpect(jsonPath("$.data.username").value("asdf"));
+    }
+
+    @Test
+    public void checkUsername_test() throws Exception {
+        // given
+        String username = "ssar";
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(get("/s/api/join/" + username + "/username"));
+
+        // then
+        resultActions.andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void checkNickname_test() throws Exception {
+        // given
+        String nickname = "nickssar";
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(get("/s/api/join/" + nickname + "/nickname"));
+
+        // then
+        resultActions.andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void checkPhone_test() throws Exception {
+        // given
+        String phone = "010-1234-5678kaka";
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(get("/s/api/join/" + phone + "/phone"));
+
+        // then
+        resultActions.andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void checkEmail_test() throws Exception {
+        // given
+        String email = "ssar@nate.com";
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(get("/s/api/join/" + email + "/email"));
+
+        // then
+        resultActions.andExpect(status().isBadRequest());
     }
 
     @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)

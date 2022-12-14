@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
@@ -130,13 +131,18 @@ public class PartyApiController {
         return new ResponseEntity<>(new ResponseDto<>("파티방 상세보기 완료", detailRoomRespDto), HttpStatus.OK);
     }
 
-    // 전체 파티방 목록 보기 -> 카테고리별, 페이징, 검색 필요
+    // 전체 파티방 목록 보기 -> 카테고리별, 페이징, 검색
     @GetMapping("/party/user/{userId}/list")
-    public ResponseEntity<?> findAllRoom(@PathVariable Long userId, @AuthenticationPrincipal LoginUser loginUser) {
+    public ResponseEntity<?> findAllRoom(@PathVariable Long userId, @AuthenticationPrincipal LoginUser loginUser,
+            @RequestParam(value = "keyword", defaultValue = "") String keyword,
+            @RequestParam(value = "gameCodeId", defaultValue = "") Long gameCodeId,
+            @RequestParam(value = "page", defaultValue = "0") Integer page) {
         if (loginUser.getUser().getId() != userId) {
             throw new CustomApiException("로그인 유저와 요청 유저가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
-        RoomListRespDto roomListRespDto = partyService.전체파티방목록보기();
+        log.debug("디버그 : gameCodeId : " + gameCodeId);
+        log.debug("디버그 : keyword : " + keyword);
+        RoomListRespDto roomListRespDto = partyService.전체파티방목록보기(gameCodeId, keyword, page);
         return new ResponseEntity<>(new ResponseDto<>("전체 파티방 목록 보기 완료", roomListRespDto), HttpStatus.OK);
     }
 

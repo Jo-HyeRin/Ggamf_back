@@ -204,8 +204,14 @@ public class PartyService {
         }
     }
 
-    public RoomListRespDto 전체파티방목록보기() {
-        List<Room> roomListPS = roomRepository.findByActive();
+    public RoomListRespDto 전체파티방목록보기(Long gameCodeId, String keyword, Integer page) {
+        // 게임 코드가 존재하는 지 확인
+        if (gameCodeId != null) {
+            GameCode gameCodePS = gameCodeRepository.findById(gameCodeId)
+                    .orElseThrow(
+                            () -> new CustomApiException("존재하지 않는 게임코드입니다", HttpStatus.FORBIDDEN));
+        }
+        List<Room> roomListPS = roomRepository.findAllRoom(gameCodeId, keyword, page);
         return new RoomListRespDto(roomListPS);
     }
 
