@@ -10,6 +10,7 @@ import shop.ggamf.ggamf.domain.enter.Enter;
 import shop.ggamf.ggamf.domain.follow.Follow;
 import shop.ggamf.ggamf.domain.gameCode.GameCode;
 import shop.ggamf.ggamf.domain.reasonCode.ReasonCode;
+import shop.ggamf.ggamf.domain.recommendBanUser.RecommendBanUser;
 import shop.ggamf.ggamf.domain.report.Report;
 import shop.ggamf.ggamf.domain.room.Room;
 import shop.ggamf.ggamf.domain.starRate.StarRate;
@@ -151,5 +152,13 @@ public abstract class DummyEntity {
                 .reason(reason)
                 .build();
         return reasonCode;
+    }
+
+    protected RecommendBanUser newBanuser(User users, User banuser) {
+        RecommendBanUser recommendBanUser = RecommendBanUser.builder()
+                .users(users)
+                .banuser(banuser)
+                .build();
+        return recommendBanUser;
     }
 }
