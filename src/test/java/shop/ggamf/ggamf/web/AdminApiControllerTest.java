@@ -181,6 +181,21 @@ public class AdminApiControllerTest extends DummyEntity {
         resultActions.andExpect(status().isOk());
     }
 
+    @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    public void findGameList_Test() throws Exception {
+        // given
+
+        // when
+        ResultActions resultActions = mvc.perform(get("/s/api/admin/gameList"));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+        resultActions.andExpect(status().isOk());
+        resultActions.andExpect(jsonPath("$.data.[4].gameName").value("파이널판타지14"));
+    }
+
     private void dummy_init() {
         // 유저
         User ssar = userRepository.save(newAdmin("ssar"));

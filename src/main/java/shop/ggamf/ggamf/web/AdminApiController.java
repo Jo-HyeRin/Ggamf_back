@@ -88,4 +88,12 @@ public class AdminApiController {
         adminService.게임삭제(id);
         return new ResponseEntity<>(new ResponseDto<>("게임 삭제 성공", null), HttpStatus.OK);
     }
+
+    @GetMapping("/admin/gameList")
+    public ResponseEntity<?> findGameList(@AuthenticationPrincipal LoginUser loginUser) {
+        if (!loginUser.getUser().getRole().equals(UserEnum.ADMIN)) {
+            return new ResponseEntity<>(new ResponseDto<>("권한이 없습니다", null), HttpStatus.FORBIDDEN);
+        }
+        return new ResponseEntity<>(new ResponseDto<>("게임 목록 보기 성공", adminService.게임목록보기()), HttpStatus.OK);
+    }
 }
