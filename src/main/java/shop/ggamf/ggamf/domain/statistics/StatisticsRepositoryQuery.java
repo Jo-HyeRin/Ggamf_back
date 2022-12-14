@@ -1,5 +1,8 @@
 package shop.ggamf.ggamf.domain.statistics;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
@@ -18,20 +21,21 @@ public class StatisticsRepositoryQuery {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
-    public void findGameMatchingStatistics() {
+    public List<GameMatchingResponseDto> findGameMatchingStatistics() {
         StringBuffer sb = new StringBuffer();
         sb.append(
-                "select rank() over (order by count) rank, gc.game_name gameName, count(select * from room where active = 'FALSE' group by gc.game_name) count from room r left outer join game_code gc on r.game_code_id = gc.id group by gc.game_name");
+                "select rank() over (order by count(r.game_code_id)) rank, gc.game_name, count(r.game_code_id) count from room r left outer join game_code gc on gc.id = r.game_code_id  where r.active = FALSE group by r.game_code_id");
 
         Query query = em.createNativeQuery(sb.toString());
 
         JpaResultMapper result = new JpaResultMapper();
         try {
-            // List<ReportRespDto> reportRespDto = result.list(query, ReportRespDto.class);
-            // log.debug("디버그 : reportRespDto : " + reportRespDto.get(0).getId());
+            List<GameMatchingResponseDto> gameMatchingResponseDto = result.list(query, GameMatchingResponseDto.class);
+            return gameMatchingResponseDto;
 
         } catch (NoResultException e) {
-
+            List<GameMatchingResponseDto> gameMatchingResponseDto = new ArrayList<>();
+            return gameMatchingResponseDto;
         }
     }
 }

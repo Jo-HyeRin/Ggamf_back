@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 @Getter
 public class GameMatchingResponseDto {
-    private BigInteger Rank;
+    private BigInteger rank;
     private String gameName;
     private BigInteger count;
 }
