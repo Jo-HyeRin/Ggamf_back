@@ -16,6 +16,8 @@ import shop.ggamf.ggamf.domain.reasonCode.ReasonCode;
 import shop.ggamf.ggamf.domain.reasonCode.ReasonCodeRepository;
 import shop.ggamf.ggamf.domain.recommendBanuser.RecommendBanuser;
 import shop.ggamf.ggamf.domain.recommendBanuser.RecommendBanuserRepository;
+import shop.ggamf.ggamf.domain.report.Report;
+import shop.ggamf.ggamf.domain.report.ReportRepository;
 import shop.ggamf.ggamf.domain.room.Room;
 import shop.ggamf.ggamf.domain.room.RoomRepository;
 import shop.ggamf.ggamf.domain.user.User;
@@ -30,7 +32,8 @@ public class DevInit extends DummyEntity {
     public CommandLineRunner dataSetting(UserRepository userRepository,
             RoomRepository roomRepository,
             GameCodeRepository gameCodeRepository, EnterRepository enterRepository, FollowRepository followRepository,
-            ReasonCodeRepository reasonCodeRepository, RecommendBanuserRepository recommendBanuserRepository) {
+            ReasonCodeRepository reasonCodeRepository, RecommendBanuserRepository recommendBanuserRepository,
+            ReportRepository reportRepository) {
 
         return (args) -> {
             // User : 유저
@@ -154,6 +157,15 @@ public class DevInit extends DummyEntity {
             Enter endenter77777 = enterRepository.save(endEnter(judy, room7));
             Enter enter37 = enterRepository.save(newEnter(love, room37));
             Enter enter38 = enterRepository.save(newEnter(house, room37));
+            // Report : 신고
+            Report report1 = reportRepository.save(newReport(ssar, house, reason1));
+            Report report2 = reportRepository.save(newReport(cos, house, reason1));
+            Report report3 = reportRepository.save(newReport(lala, house, reason4));
+            Report report4 = reportRepository.save(newReport(kaka, house, reason1));
+            Report report5 = reportRepository.save(newReport(house, ssar, reason2));
+            Report report6 = reportRepository.save(newReport(house, dada, reason3));
+            Report report7 = reportRepository.save(newReport(jeje, love, reason4));
+            Report report8 = reportRepository.save(newReport(nero, judy, reason5));
         };
     }
 }
