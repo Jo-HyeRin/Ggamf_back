@@ -23,6 +23,7 @@ public class JwtProcess {
                 .withClaim("id", loginUser.getUser().getId())
                 .withClaim("username", loginUser.getUsername())
                 .withClaim("role", loginUser.getUser().getRole().name())
+                .withClaim("uid", loginUser.getUser().getUid())
                 .sign(Algorithm.HMAC512(JwtProperties.SECRET));
 
         return JwtProperties.TOKEN_PREFIX + jwtToken;
@@ -37,7 +38,8 @@ public class JwtProcess {
         Long id = decodedJWT.getClaim("id").asLong();
         String username = decodedJWT.getClaim("username").asString();
         String role = decodedJWT.getClaim("role").asString();
-        User user = User.builder().id(id).username(username).role(UserEnum.valueOf(role)).build();
+        String uid = decodedJWT.getClaim("uid").asString();
+        User user = User.builder().id(id).username(username).role(UserEnum.valueOf(role)).uid(uid).build();
         LoginUser loginUser = new LoginUser(user);
         return loginUser;
     }

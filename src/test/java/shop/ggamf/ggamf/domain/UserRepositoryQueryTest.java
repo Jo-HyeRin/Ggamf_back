@@ -20,8 +20,7 @@ import shop.ggamf.ggamf.domain.user.User;
 import shop.ggamf.ggamf.domain.user.UserRepository;
 import shop.ggamf.ggamf.domain.user.UserRepositoryQuery;
 
-
-@Import({UserRepositoryQuery.class, StarRateRepositoryQuery.class})
+@Import({ UserRepositoryQuery.class, StarRateRepositoryQuery.class })
 @ActiveProfiles("test")
 @DataJpaTest
 public class UserRepositoryQueryTest extends DummyEntity {
@@ -43,8 +42,8 @@ public class UserRepositoryQueryTest extends DummyEntity {
 
     // @Test
     // public void dto_select_test22() {
-    //     HelloDto helloDto = userRepositoryQuery.findHelloDto();
-    //     System.out.println("테스트 : helloDto.id : " + helloDto.getRating());
+    // HelloDto helloDto = userRepositoryQuery.findHelloDto();
+    // System.out.println("테스트 : helloDto.id : " + helloDto.getRating());
     // }
 
     @BeforeEach
@@ -53,28 +52,27 @@ public class UserRepositoryQueryTest extends DummyEntity {
         dummy_init();
     }
 
-
     @Test
-    public void dto_select_test33() {
-        //given
+    public void starRateCaculate_test() {
+        // given
         Long receiverId = 2L;
 
-        //when
+        // when
         StarRateRespDto starRateRespDto = starRateRepositoryQuery.caculateStaRateById(receiverId);
 
-        //then
+        // then
         Assertions.assertThat(starRateRespDto.getRate());
     }
 
     @Test
-    public void dto_select_test() {
-        //given
+    public void findDetailById_test() {
+        // given
         Long id = 1L;
-        
-        //when
+
+        // when
         DetailRespDto detailRespDto = userRepositoryQuery.findDetailById(id);
 
-        //then
+        // then
         Assertions.assertThat(detailRespDto.getNickname()).isEqualTo("nickssar");
     }
 
@@ -84,7 +82,7 @@ public class UserRepositoryQueryTest extends DummyEntity {
         User lala = userRepository.save(newUser("lala"));
         User dada = userRepository.save(newUser("dada"));
         User kaka = userRepository.save(newUser("kaka"));
-        
+
         StarRate starRate1 = starRateRepository.save(newStarRate(dada, kaka));
         StarRate starRate2 = starRateRepository.save(newStarRate(ssar, cos));
         StarRate starRate3 = starRateRepository.save(newStarRate(ssar, lala));

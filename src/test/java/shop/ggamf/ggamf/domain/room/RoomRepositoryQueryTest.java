@@ -1,159 +1,64 @@
 package shop.ggamf.ggamf.domain.room;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.persistence.EntityManager;
 
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
 import shop.ggamf.ggamf.config.dummy.DummyEntity;
 import shop.ggamf.ggamf.domain.enter.Enter;
 import shop.ggamf.ggamf.domain.enter.EnterRepository;
-import shop.ggamf.ggamf.domain.follow.Follow;
-import shop.ggamf.ggamf.domain.follow.FollowRepository;
 import shop.ggamf.ggamf.domain.gameCode.GameCode;
 import shop.ggamf.ggamf.domain.gameCode.GameCodeRepository;
 import shop.ggamf.ggamf.domain.user.User;
 import shop.ggamf.ggamf.domain.user.UserRepository;
 
+@Import(RoomRepositoryQuery.class)
 @ActiveProfiles("test")
 @DataJpaTest
-public class RoomRepositoryImplTest extends DummyEntity {
+public class RoomRepositoryQueryTest extends DummyEntity {
 
     @Autowired
     private EntityManager em;
-    @Autowired
-    private EnterRepository enterRepository;
-    @Autowired
-    private UserRepository userRepository;
+
     @Autowired
     private RoomRepository roomRepository;
+
+    @Autowired
+    private RoomRepositoryQuery roomRepositoryQuery;
+
+    @Autowired
+    private UserRepository userRepository;
+
     @Autowired
     private GameCodeRepository gameCodeRepository;
+
     @Autowired
-    private FollowRepository followRepository;
+    private EnterRepository enterRepository;
 
     @BeforeEach
     public void setUp() {
+        autoincrement_reset();
         dummy_init();
     }
 
-    @AfterEach
-    public void tearDown() {
-        // auto-increment 초기화
-        em.createNativeQuery("ALTER TABLE users ALTER COLUMN `id` RESTART WITH 1").executeUpdate();
-        em.createNativeQuery("ALTER TABLE follow ALTER COLUMN `id` RESTART WITH 1").executeUpdate();
-        em.createNativeQuery("ALTER TABLE game_code ALTER COLUMN `id` RESTART WITH 1").executeUpdate();
-        em.createNativeQuery("ALTER TABLE room ALTER COLUMN `id` RESTART WITH 1").executeUpdate();
-        em.createNativeQuery("ALTER TABLE enter ALTER COLUMN `id` RESTART WITH 1").executeUpdate();
-    }
-
     @Test
-    public void findByUserIdEnd_test() throws Exception {
+    public void findRoomList_test() {
         // given
-        Long userId = 1L;
 
         // when
-        List<Room> roomListPS = roomRepository.findByUserIdEnd(userId);
+        RoomListRespDto roomInfoRespDto = roomRepositoryQuery.findRoomList().get(2);
 
         // then
-        Assertions.assertThat(roomListPS.get(0).getId()).isEqualTo(1L);
-    }
-
-    @Test
-    public void findAllRoom_test() throws Exception {
-        // given
-        Long gameCodeId = null;
-        String keyword = null;
-        Integer page = 0;
-
-        // when
-        List<Room> roomListPS = roomRepository.findAllRoom(gameCodeId, keyword, page);
-
-        // then
-        Assertions.assertThat(roomListPS.size()).isEqualTo(10);
-        Assertions.assertThat(roomListPS.get(0).getId()).isEqualTo(2L);
-    }
-
-    @Test
-    public void findAllRoomPaging_test() throws Exception {
-        // given
-        Long gameCodeId = null;
-        String keyword = null;
-        Integer page = 1;
-
-        // when
-        List<Room> roomListPS = roomRepository.findAllRoom(gameCodeId, keyword, page);
-
-        // then
-        Assertions.assertThat(roomListPS.get(0).getRoomName()).isEqualTo("roomname14");
-    }
-
-    @Test
-    public void findAllRoomkeyword_test() throws Exception {
-        // given
-        Long gameCodeId = null;
-        String keyword = "2";
-        Integer page = 0;
-
-        // when
-        List<Room> roomListPS = roomRepository.findAllRoom(gameCodeId, keyword, page);
-
-        // then
-        Assertions.assertThat(roomListPS.size()).isEqualTo(5);
-    }
-
-    @Test
-    public void findAllRoomGameCodeId_test() throws Exception {
-        // given
-        Long gameCodeId = 3L;
-        String keyword = "";
-        Integer page = 0;
-
-        // when
-        List<Room> roomListPS = roomRepository.findAllRoom(gameCodeId, keyword, page);
-
-        // then
-        Assertions.assertThat(roomListPS.size()).isEqualTo(4);
-    }
-
-    @Test
-    public void findAllRoomGameCodeIdKeyword_test() throws Exception {
-        // given
-        Long gameCodeId = 3L;
-        String keyword = "1";
-        Integer page = 0;
-
-        // when
-        List<Room> roomListPS = roomRepository.findAllRoom(gameCodeId, keyword, page);
-
-        // then
-        Assertions.assertThat(roomListPS.size()).isEqualTo(3);
-    }
-
-    @Test
-    public void findAllRoomPagingGameCodeIdKeyword_test() throws Exception {
-        // given
-        Long gameCodeId = 2L;
-        String keyword = "r";
-        Integer page = 1;
-
-        // when
-        List<Room> roomListPS = roomRepository.findAllRoom(gameCodeId, keyword, page);
-
-        // then
-        Assertions.assertThat(roomListPS.size()).isEqualTo(3);
+        Assertions.assertThat(roomInfoRespDto.getNickname()).isEqualTo("nickcos");
     }
 
     private void dummy_init() {
-        // User : 유저
         User ssar = userRepository.save(newUser("ssar"));
         User cos = userRepository.save(newUser("cos"));
         User lala = userRepository.save(newUser("lala"));
@@ -165,20 +70,6 @@ public class RoomRepositoryImplTest extends DummyEntity {
         User yeye = userRepository.save(newUser("yeye"));
         User gogo = userRepository.save(newUser("gogo"));
         User romio = userRepository.save(newUser("romio"));
-        User jeje = userRepository.save(newUser("jeje"));
-        User money = userRepository.save(newUser("money"));
-        User terry = userRepository.save(newUser("terry"));
-        User wow = userRepository.save(newUser("wow"));
-        User cash = userRepository.save(newUser("cash"));
-        // Follow : 겜프
-        Follow f1 = followRepository.save(newFollow(ssar, cos, false));
-        Follow f11 = followRepository.save(newFollow(ssar, vovo, false));
-        Follow f2 = followRepository.save(newFollow(lala, ssar, false));
-        Follow f22 = followRepository.save(newFollow(toto, ssar, false));
-        Follow f3 = followRepository.save(newFollow(ssar, dada, true));
-        Follow f33 = followRepository.save(newFollow(ssar, ohoh, true));
-        Follow f4 = followRepository.save(newFollow(kaka, ssar, true));
-        Follow f44 = followRepository.save(newFollow(yeye, ssar, true));
         // GameCode_Logo
         // String etc_logo =
         // "data:image/png;base64,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";
@@ -206,26 +97,10 @@ public class RoomRepositoryImplTest extends DummyEntity {
         Room endroom4 = roomRepository.save(endRoom("roomname4", lala, etc));
         Room room5 = roomRepository.save(newRoom("roomname5", yeye, starcraft));
         Room room6 = roomRepository.save(newRoom("roomname6", ohoh, battleground));
-        Room room7 = roomRepository.save(newRoom("roomname7", vovo, LoL));
-        Room endroom8 = roomRepository.save(endRoom("roomname8", jeje, LoL));
-        Room room9 = roomRepository.save(newRoom("roomname9", jeje, LoL));
-        Room room10 = roomRepository.save(newRoom("roomname10", jeje, LoL));
-        Room room11 = roomRepository.save(newRoom("roomname11", money, LoL));
-        Room room12 = roomRepository.save(newRoom("roomname12", money, LoL));
-        Room room13 = roomRepository.save(newRoom("roomname13", money, LoL));
-        Room room14 = roomRepository.save(newRoom("roomname14", terry, starcraft));
-        Room room15 = roomRepository.save(newRoom("roomname15", terry, starcraft));
-        Room room16 = roomRepository.save(newRoom("roomname16", terry, starcraft));
-        Room room17 = roomRepository.save(newRoom("roomname17", wow, LoL));
-        Room room18 = roomRepository.save(newRoom("roomname18", wow, LoL));
-        Room room19 = roomRepository.save(newRoom("roomname19", wow, LoL));
-        Room room20 = roomRepository.save(newRoom("roomname20", cash, LoL));
-        Room room21 = roomRepository.save(newRoom("roomname21", cash, LoL));
-        Room room22 = roomRepository.save(newRoom("roomname22", cash, LoL));
         // Enter : 방 참여 정보
-        Enter endenter1 = enterRepository.save(endEnter(lala, endroom1));
-        Enter endenter11 = enterRepository.save(endEnter(dada, endroom1));
-        Enter endenter111 = enterRepository.save(endEnter(gogo, endroom1));
+        Enter enter1 = enterRepository.save(endEnter(lala, endroom1));
+        Enter enter11 = enterRepository.save(endEnter(dada, endroom1));
+        Enter enter111 = enterRepository.save(endEnter(gogo, endroom1));
         Enter enter2 = enterRepository.save(newEnter(cos, room2));
         Enter enter22 = enterRepository.save(newEnter(kaka, room2));
         Enter enter222 = enterRepository.save(newEnter(romio, room2));
@@ -236,13 +111,11 @@ public class RoomRepositoryImplTest extends DummyEntity {
         Enter endEnter44 = enterRepository.save(endEnter(cos, endroom4));
         Enter endEnter444 = enterRepository.save(endEnter(yeye, endroom4));
         Enter endEnter4444 = enterRepository.save(endEnter(romio, endroom4));
-        Enter enter5 = enterRepository.save(newEnter(gogo, room5));
-        Enter enter55 = enterRepository.save(newEnter(cos, room5));
-        Enter enter555 = enterRepository.save(newEnter(dada, room5));
-        Enter enter6 = enterRepository.save(newEnter(ssar, room6));
-        Enter enter66 = enterRepository.save(newEnter(lala, room6));
-        Enter endenter8 = enterRepository.save(endEnter(ssar, endroom8));
-        Enter endenter88 = enterRepository.save(endEnter(kaka, endroom8));
-        Enter endenter888 = enterRepository.save(endEnter(money, endroom8));
+    }
+
+    private void autoincrement_reset() {
+        this.em
+                .createNativeQuery("ALTER TABLE users ALTER COLUMN `id` RESTART WITH 1")
+                .executeUpdate();
     }
 }

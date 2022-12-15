@@ -10,11 +10,11 @@ import shop.ggamf.ggamf.domain.enter.Enter;
 import shop.ggamf.ggamf.domain.follow.Follow;
 import shop.ggamf.ggamf.domain.gameCode.GameCode;
 import shop.ggamf.ggamf.domain.reasonCode.ReasonCode;
+import shop.ggamf.ggamf.domain.recommendBanuser.RecommendBanuser;
 import shop.ggamf.ggamf.domain.report.Report;
 import shop.ggamf.ggamf.domain.room.Room;
 import shop.ggamf.ggamf.domain.starRate.StarRate;
 import shop.ggamf.ggamf.domain.user.User;
-import shop.ggamf.ggamf.service.UserService;
 
 public abstract class DummyEntity {
 
@@ -24,7 +24,7 @@ public abstract class DummyEntity {
         User user = User.builder()
                 .username(username)
                 .password(encPassword)
-                .name("유저이름")
+                .name("유저이름"+ username)
                 .phone("010-1234-5678" + username)
                 .nickname("nick" + username)
                 .email(username + "@nate.com")
@@ -34,6 +34,7 @@ public abstract class DummyEntity {
                 .state(UserStateEnum.NORMAL)
                 .role(UserEnum.USER)
                 .agree(true)
+                .uid("uid" + username)
                 .build();
         return user;
     }
@@ -54,13 +55,14 @@ public abstract class DummyEntity {
                 .state(UserStateEnum.NORMAL)
                 .role(UserEnum.ADMIN)
                 .agree(true)
+                .uid("uid" + username)
                 .build();
         return user;
     }
 
-    protected GameCode newGameCode(String gamename) {
+    protected GameCode newGameCode(String gamename, String logo) {
         GameCode gameCode = GameCode.builder()
-                .logo(gamename + "사진")
+                .logo(logo)
                 .gameName(gamename)
                 .build();
         return gameCode;
@@ -151,5 +153,13 @@ public abstract class DummyEntity {
                 .reason(reason)
                 .build();
         return reasonCode;
+    }
+
+    protected RecommendBanuser newBanuser(User users, User banuser) {
+        RecommendBanuser recommendBanuser = RecommendBanuser.builder()
+                .users(users)
+                .banuser(banuser)
+                .build();
+        return recommendBanuser;
     }
 }
