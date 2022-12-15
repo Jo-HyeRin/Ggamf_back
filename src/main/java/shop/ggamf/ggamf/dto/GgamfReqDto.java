@@ -1,6 +1,7 @@
 package shop.ggamf.ggamf.dto;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -33,8 +34,10 @@ public class GgamfReqDto {
     @Getter
     public static class ReportGgamfReqDto {
 
+        @Size(max = 50)
         @NotEmpty(message = "상세 신고 사유는 필수 입력 값입니다.")
         private String detail;
+
         private Long userId;
 
         @NotEmpty(message = "신고할 유저는 필수 입력 값입니다.")

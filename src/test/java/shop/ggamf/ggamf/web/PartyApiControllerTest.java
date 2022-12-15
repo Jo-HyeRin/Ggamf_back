@@ -254,8 +254,6 @@ public class PartyApiControllerTest extends DummyEntity {
         Long userId = 1L;
         Long roomId = 2L;
         KickUserReqDto kickUserReqDto = new KickUserReqDto();
-        kickUserReqDto.setUserId(userId);
-        kickUserReqDto.setRoomId(roomId);
         kickUserReqDto.setKickUserId(5L);
         String requestBody = om.writeValueAsString(kickUserReqDto);
         System.out.println("테스트 : " + requestBody);
