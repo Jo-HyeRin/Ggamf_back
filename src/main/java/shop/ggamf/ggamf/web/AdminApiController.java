@@ -32,10 +32,12 @@ public class AdminApiController {
     private final Logger log = LoggerFactory.getLogger(getClass());
     private final AdminService adminService;
 
-    @GetMapping("/admin/{id}/reportList")
-    public ResponseEntity<?> findReportList(@PathVariable Long id) {
-        log.debug("디버그 : 여기는 탔지롱");
-        return new ResponseEntity<>(new ResponseDto<>("신고목록 보기 성공", adminService.신고목록보기(id)), HttpStatus.OK);
+    @GetMapping("/admin/reportList")
+    public ResponseEntity<?> findReportList(@AuthenticationPrincipal LoginUser loginUser) {
+        if (!loginUser.getUser().getRole().equals(UserEnum.ADMIN)) {
+            return new ResponseEntity<>(new ResponseDto<>("권한이 없습니다", null), HttpStatus.FORBIDDEN);
+        }
+        return new ResponseEntity<>(new ResponseDto<>("신고목록 보기 성공", adminService.신고목록보기()), HttpStatus.OK);
     }
 
     @GetMapping("/admin/{reportId}/detailReport/{badUserId}")
@@ -85,5 +87,21 @@ public class AdminApiController {
         }
         adminService.게임삭제(id);
         return new ResponseEntity<>(new ResponseDto<>("게임 삭제 성공", null), HttpStatus.OK);
+    }
+
+    @GetMapping("/admin/gameList")
+    public ResponseEntity<?> findGameList(@AuthenticationPrincipal LoginUser loginUser) {
+        if (!loginUser.getUser().getRole().equals(UserEnum.ADMIN)) {
+            return new ResponseEntity<>(new ResponseDto<>("권한이 없습니다", null), HttpStatus.FORBIDDEN);
+        }
+        return new ResponseEntity<>(new ResponseDto<>("게임 목록 보기 성공", adminService.게임목록보기()), HttpStatus.OK);
+    }
+
+    @GetMapping("/admin/roomList")
+    public ResponseEntity<?> findRoomList(@AuthenticationPrincipal LoginUser loginUser) {
+        if (!loginUser.getUser().getRole().equals(UserEnum.ADMIN)) {
+            return new ResponseEntity<>(new ResponseDto<>("권한이 없습니다", null), HttpStatus.FORBIDDEN);
+        }
+        return new ResponseEntity<>(new ResponseDto<>("방 목록 보기 성공", adminService.방목록보기()), HttpStatus.OK);
     }
 }

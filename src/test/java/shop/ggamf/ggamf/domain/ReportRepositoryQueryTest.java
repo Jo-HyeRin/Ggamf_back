@@ -48,7 +48,7 @@ public class ReportRepositoryQueryTest extends DummyEntity {
     }
 
     @Test
-    public void dto_select_test4() {
+    public void findReportList_test4() {
         // given
 
         // when
