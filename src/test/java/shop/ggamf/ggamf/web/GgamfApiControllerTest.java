@@ -61,8 +61,6 @@ public class GgamfApiControllerTest extends DummyEntity {
         private GameCodeRepository gameCodeRepository;
         @Autowired
         private EnterRepository enterRepository;
-        @Autowired
-        private RecommendBanuserRepository recommendBanuserRepository;
 
         @BeforeEach
         public void setUp() {
@@ -133,8 +131,6 @@ public class GgamfApiControllerTest extends DummyEntity {
                 Long userId = 1L;
                 Long friendId = 10L;
                 FollowGgamfReqDto followGgamfReqDto = new FollowGgamfReqDto();
-                followGgamfReqDto.setUserId(userId);
-                followGgamfReqDto.setFriendId(friendId);
                 String requestBody = om.writeValueAsString(followGgamfReqDto);
                 System.out.println("테스트 : " + requestBody);
 
@@ -175,7 +171,6 @@ public class GgamfApiControllerTest extends DummyEntity {
         @Test
         public void deleteGgamf_test() throws Exception {
                 // given
-                Long followId = 5L;
                 Long userId = 1L;
                 Long friendId = 8L;
 
@@ -216,7 +211,6 @@ public class GgamfApiControllerTest extends DummyEntity {
         @Test
         public void cancelGgamf_test() throws Exception {
                 // given
-                Long followId = 1L;
                 Long userId = 1L;
                 Long friendId = 6L;
 
@@ -240,8 +234,6 @@ public class GgamfApiControllerTest extends DummyEntity {
                 Long userId = 1L;
                 Long badUserId = 2L;
                 ReportGgamfReqDto reportGgamfReqDto = new ReportGgamfReqDto();
-                reportGgamfReqDto.setUserId(userId);
-                reportGgamfReqDto.setBadUserId(badUserId);
                 reportGgamfReqDto.setReasonCodeId(1L);
                 reportGgamfReqDto.setDetail("욕설이 너무 심하네요");
                 String requestBody = om.writeValueAsString(reportGgamfReqDto);
@@ -341,8 +333,6 @@ public class GgamfApiControllerTest extends DummyEntity {
                 Long userId = 1L;
                 Long banuserId = 10L;
                 RecommendBanReqDto recommendBanReqDto = new RecommendBanReqDto();
-                recommendBanReqDto.setUserId(userId);
-                recommendBanReqDto.setBanuserId(banuserId);
                 String requestBody = om.writeValueAsString(recommendBanReqDto);
                 System.out.println("테스트 : " + requestBody);
 

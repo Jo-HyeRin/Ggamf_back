@@ -34,14 +34,12 @@ public class PartyRespDto {
     @Setter
     @Getter
     public static class JoinRoomRespDto {
-        private Long id;
         private Long userId;
         private Long roomId;
         private String userNick;
         private String roomName;
 
         public JoinRoomRespDto(Enter enter) {
-            this.id = enter.getId();
             this.userId = enter.getUser().getId();
             this.roomId = enter.getRoom().getId();
             this.userNick = enter.getUser().getNickname();
@@ -57,7 +55,6 @@ public class PartyRespDto {
         private Long roomId;
         private String userNick;
         private String roomName;
-        private Boolean stay;
 
         public ExitRoomRespDto(Enter enter) {
             this.id = enter.getId();
@@ -65,7 +62,6 @@ public class PartyRespDto {
             this.roomId = enter.getRoom().getId();
             this.userNick = enter.getUser().getNickname();
             this.roomName = enter.getRoom().getRoomName();
-            this.stay = enter.getStay();
         }
     }
 
@@ -87,13 +83,11 @@ public class PartyRespDto {
             private Long id;
             private String gameName;
             private String roomName;
-            private Boolean active;
 
             public RoomDto(Room room) {
                 this.id = room.getId();
                 this.gameName = room.getGameName();
                 this.roomName = room.getRoomName();
-                this.active = room.getActive();
             }
         }
 
@@ -105,8 +99,6 @@ public class PartyRespDto {
             private String userNick;
             private Long roomId;
             private String roomName;
-            private Boolean stay;
-            private Boolean stayUntilEnd;
 
             public EnterDto(Enter enter) {
                 this.id = enter.getId();
@@ -114,8 +106,6 @@ public class PartyRespDto {
                 this.userNick = enter.getUser().getNickname();
                 this.roomId = enter.getRoom().getId();
                 this.roomName = enter.getRoom().getRoomName();
-                this.stay = enter.getStay();
-                this.stayUntilEnd = enter.getStayUntilEnd();
             }
         }
     }
@@ -123,51 +113,14 @@ public class PartyRespDto {
     @Setter
     @Getter
     public static class KickUserRespDto {
-        private Long id;
-        private Long kickUserId;
-        private String kickUsername;
-        private String kickName;
+        private Long userId;
+        private String userNick;
         private Long roomId;
-        private Boolean stay;
 
         public KickUserRespDto(Enter enter) {
-            this.id = enter.getId();
-            this.kickUserId = enter.getUser().getId();
-            this.kickUsername = enter.getUser().getUsername();
-            this.kickName = enter.getUser().getName();
+            this.userId = enter.getUser().getId();
+            this.userNick = enter.getUser().getNickname();
             this.roomId = enter.getRoom().getId();
-            this.stay = enter.getStay();
-        }
-    }
-
-    @Setter
-    @Getter
-    public static class RoomListByMyIdRespDto { // 내가방장인파티방목록보기
-
-        List<RoomDto> rooms;
-
-        public RoomListByMyIdRespDto(List<Room> rooms) {
-            this.rooms = rooms.stream().map((room) -> new RoomDto(room)).collect(Collectors.toList());
-        }
-
-        @Setter
-        @Getter
-        public class RoomDto {
-            private Long id;
-            private String roomName;
-            private String nickName;
-            private Long totalPeople;
-            private String gameName;
-            private String gameLogo;
-
-            public RoomDto(Room room) {
-                this.id = room.getId();
-                this.roomName = room.getRoomName();
-                this.nickName = room.getUser().getNickname();
-                this.totalPeople = room.getTotalPeople();
-                this.gameName = room.getGameName();
-                this.gameLogo = room.getGameCode().getLogo();
-            }
         }
     }
 
@@ -203,17 +156,17 @@ public class PartyRespDto {
             private Long id;
             private String roomName;
             private String nickName;
+            private Long totalPeople;
             private String gameName;
             private String gameLogo;
-            private Boolean active;
 
             public RoomDto(Room room) {
                 this.id = room.getId();
                 this.roomName = room.getRoomName();
                 this.nickName = room.getUser().getNickname();
+                this.totalPeople = room.getTotalPeople();
                 this.gameName = room.getGameCode().getGameName();
                 this.gameLogo = room.getGameCode().getLogo();
-                this.active = room.getActive();
             }
         }
     }
@@ -245,6 +198,37 @@ public class PartyRespDto {
                 this.totalPeople = enter.getRoom().getTotalPeople();
                 this.gameName = enter.getRoom().getGameName();
                 this.gameLogo = enter.getRoom().getGameCode().getLogo();
+            }
+        }
+    }
+
+    @Setter
+    @Getter
+    public static class RoomListByMyIdRespDto { // 내가방장인파티방목록보기
+
+        List<RoomDto> rooms;
+
+        public RoomListByMyIdRespDto(List<Room> rooms) {
+            this.rooms = rooms.stream().map((room) -> new RoomDto(room)).collect(Collectors.toList());
+        }
+
+        @Setter
+        @Getter
+        public class RoomDto {
+            private Long id;
+            private String roomName;
+            private String nickName;
+            private Long totalPeople;
+            private String gameName;
+            private String gameLogo;
+
+            public RoomDto(Room room) {
+                this.id = room.getId();
+                this.roomName = room.getRoomName();
+                this.nickName = room.getUser().getNickname();
+                this.totalPeople = room.getTotalPeople();
+                this.gameName = room.getGameName();
+                this.gameLogo = room.getGameCode().getLogo();
             }
         }
     }
