@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Setter
 @Getter
-public class RoomInfoRespDto {
+public class RoomListRespDto {
     private BigInteger id;
     private BigInteger count;
     private BigInteger totalPeople;

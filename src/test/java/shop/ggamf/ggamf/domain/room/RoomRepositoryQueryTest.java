@@ -48,11 +48,11 @@ public class RoomRepositoryQueryTest extends DummyEntity {
     }
 
     @Test
-    public void findRoomInfo_test() {
+    public void findRoomList_test() {
         // given
 
         // when
-        RoomInfoRespDto roomInfoRespDto = roomRepositoryQuery.findRoomInfo().get(2);
+        RoomListRespDto roomInfoRespDto = roomRepositoryQuery.findRoomInfo().get(2);
 
         // then
         Assertions.assertThat(roomInfoRespDto.getNickname()).isEqualTo("nickcos");

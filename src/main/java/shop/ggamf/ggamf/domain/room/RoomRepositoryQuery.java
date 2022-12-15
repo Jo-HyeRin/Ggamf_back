@@ -17,7 +17,7 @@ public class RoomRepositoryQuery {
     @Autowired
     private EntityManager em;
 
-    public List<RoomInfoRespDto> findRoomInfo() {
+    public List<RoomListRespDto> findRoomInfo() {
         StringBuffer sb = new StringBuffer();
         sb.append("select r.id, count(*)+1 count, r.total_people, r.room_name, u.nickname from enter e ")
                 .append("inner join room r on r.id = e.room_id ")
@@ -28,10 +28,10 @@ public class RoomRepositoryQuery {
 
         JpaResultMapper result = new JpaResultMapper();
         try {
-            List<RoomInfoRespDto> roomInfoRespDto = result.list(query, RoomInfoRespDto.class);
+            List<RoomListRespDto> roomInfoRespDto = result.list(query, RoomListRespDto.class);
             return roomInfoRespDto;
         } catch (NoResultException e) {
-            List<RoomInfoRespDto> roomInfoRespDto = new ArrayList<>();
+            List<RoomListRespDto> roomInfoRespDto = new ArrayList<>();
             return roomInfoRespDto;
         }
 

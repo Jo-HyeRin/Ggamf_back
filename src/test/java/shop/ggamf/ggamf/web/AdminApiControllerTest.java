@@ -79,10 +79,9 @@ public class AdminApiControllerTest extends DummyEntity {
     @Test
     public void findReportList_Test() throws Exception {
         // given
-        Long userId = 1L;
 
         // when
-        ResultActions resultActions = mvc.perform(get("/s/api/admin/" + userId + "/reportList"));
+        ResultActions resultActions = mvc.perform(get("/s/api/admin/reportList"));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
 

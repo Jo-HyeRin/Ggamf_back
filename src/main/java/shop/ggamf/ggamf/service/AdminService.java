@@ -88,4 +88,8 @@ public class AdminService {
         List<GameListRespDto> gameListRespDto = gameCodeRepositoryQuery.findGameCodeList();
         return gameListRespDto;
     }
+
+    public void 방목록보기() {
+
+    }
 }
