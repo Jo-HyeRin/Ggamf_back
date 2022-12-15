@@ -157,6 +157,7 @@ public class PartyRespDto {
             private String roomName;
             private String nickName;
             private Long totalPeople;
+            private String gameName;
             private String gameLogo;
 
             public RoomDto(Room room) {
@@ -164,6 +165,7 @@ public class PartyRespDto {
                 this.roomName = room.getRoomName();
                 this.nickName = room.getUser().getNickname();
                 this.totalPeople = room.getTotalPeople();
+                this.gameName = room.getGameName();
                 this.gameLogo = room.getGameCode().getLogo();
             }
         }
@@ -233,6 +235,7 @@ public class PartyRespDto {
             private String roomName;
             private String nickName;
             private Long totalPeople;
+            private String gameName;
             private String gameLogo;
 
             public RoomDto(Enter enter) {
@@ -240,6 +243,7 @@ public class PartyRespDto {
                 this.roomName = enter.getRoom().getRoomName();
                 this.nickName = enter.getRoom().getUser().getNickname();
                 this.totalPeople = enter.getRoom().getTotalPeople();
+                this.gameName = enter.getRoom().getGameName();
                 this.gameLogo = enter.getRoom().getGameCode().getLogo();
             }
         }
