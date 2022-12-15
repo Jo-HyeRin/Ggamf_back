@@ -215,57 +215,61 @@ public class GgamfService {
         List<Room> roomList = roomRepository.findByUserIdEnd(userId);
         // 방 종료까지 함께한 인원 셀렉하기
         List<Enter> latestList = enterRepository.findByRoomIdEnd(roomList.get(0).getId());
-        log.debug("디버그 : latestList.size() : " + latestList.size());
         List<Long> latestIdList = new ArrayList<>();
-        for (int i = 0; i < latestList.size(); i++) {
-            latestIdList.add(latestList.get(i).getUser().getId());
+        if (latestList.size() != 0) {
+            for (int i = 0; i < latestList.size(); i++) {
+                latestIdList.add(latestList.get(i).getUser().getId());
+            }
         }
         // <내가 참여했을 때>
         // 내가 참여했던 방
         List<Enter> enterRoomList = enterRepository.findEnterRoom(userId);
-        log.debug("디버그 : enterRoomList.size() : " + enterRoomList.size());
         List<Long> enterRoomIdList = new ArrayList<>();
-        for (int i = 0; i < enterRoomList.size(); i++) {
-            enterRoomIdList.add(enterRoomList.get(i).getRoom().getId());
+        if (enterRoomList.size() != 0) {
+            for (int i = 0; i < enterRoomList.size(); i++) {
+                enterRoomIdList.add(enterRoomList.get(i).getRoom().getId());
+            }
         }
-        log.debug("디버그 : enterRoomIdList.size() : " + enterRoomIdList.size());
         // 방 출입 유저 id 목록
         List<Enter> enterUserList = enterRepository.findTogether(userId, enterRoomIdList);
         List<Long> enterUserIdList = new ArrayList<>();
-        for (int i = 0; i < enterUserList.size(); i++) {
-            enterUserIdList.add(enterUserList.get(i).getUser().getId());
+        if (enterUserList.size() != 0) {
+            for (int i = 0; i < enterUserList.size(); i++) {
+                enterUserIdList.add(enterUserList.get(i).getUser().getId());
+            }
         }
-        log.debug("디버그 : enterUserIdList.size() : " + enterUserIdList.size());
         // 두 리스트 합치기
         List<Long> recommendFriendList = new ArrayList<>();
         recommendFriendList.addAll(latestIdList);
         recommendFriendList.addAll(enterUserIdList);
-        log.debug("디버그 : recommendFriendList.size() : " + recommendFriendList.size());
         List<Long> userList = recommendFriendList.stream().distinct().collect(Collectors.toList());
-        log.debug("디버그 : userList.size() : " + userList.size());
 
         // 합친 리스트 친구, 친구 신청 여부 확인 팔로잉=친구 or 팔로워=친구
         List<Follow> friendFollowingLatest = followRepository.findByRecommendFollowing(userId, userList);
-        for (int i = 0; i < friendFollowingLatest.size(); i++) {
-            if (userList.contains(friendFollowingLatest.get(i).getFollowing().getId())) {
-                userList.remove(friendFollowingLatest.get(i).getFollowing().getId());
+        if (friendFollowingLatest.size() != 0) {
+            for (int i = 0; i < friendFollowingLatest.size(); i++) {
+                if (userList.contains(friendFollowingLatest.get(i).getFollowing().getId())) {
+                    userList.remove(friendFollowingLatest.get(i).getFollowing().getId());
+                }
             }
         }
         List<Follow> friendFollowerLatest = followRepository.findByRecommendFollower(userId, userList);
-        for (int i = 0; i < friendFollowerLatest.size(); i++) {
-            if (userList.contains(friendFollowerLatest.get(i).getFollower().getId())) {
-                userList.remove(friendFollowerLatest.get(i).getFollower().getId());
+        if (friendFollowerLatest.size() != 0) {
+            for (int i = 0; i < friendFollowerLatest.size(); i++) {
+                if (userList.contains(friendFollowerLatest.get(i).getFollower().getId())) {
+                    userList.remove(friendFollowerLatest.get(i).getFollower().getId());
+                }
             }
         }
-        log.debug("디버그 : userList.size() : " + userList.size());
         // 합친 리스트 추천받지않도록 설정되어있는지 확인
         List<RecommendBanuser> banList = recommendBanuserRepository.findByUserId(userId);
-        for (int i = 0; i < banList.size(); i++) {
-            if (userList.contains(banList.get(i).getBanuser().getId())) {
-                userList.remove(banList.get(i).getBanuser().getId());
+        if (banList.size() != 0) {
+            for (int i = 0; i < banList.size(); i++) {
+                if (userList.contains(banList.get(i).getBanuser().getId())) {
+                    userList.remove(banList.get(i).getBanuser().getId());
+                }
             }
         }
-        log.debug("디버그 : userList.size() : " + userList.size());
         // 친구 추천하기
         List<User> recommendList = userRepository.findByIdRecommend(userList);
         return new RecommendGgamfListRespDto(recommendList);
