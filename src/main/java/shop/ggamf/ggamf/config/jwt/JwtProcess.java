@@ -39,7 +39,7 @@ public class JwtProcess {
         String username = decodedJWT.getClaim("username").asString();
         String role = decodedJWT.getClaim("role").asString();
         String uid = decodedJWT.getClaim("uid").asString();
-        User user = User.builder().id(id).username(username).role(UserEnum.valueOf(role)).build();
+        User user = User.builder().id(id).username(username).role(UserEnum.valueOf(role)).uid(uid).build();
         LoginUser loginUser = new LoginUser(user);
         return loginUser;
     }
