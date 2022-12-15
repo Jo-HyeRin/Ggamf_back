@@ -43,13 +43,11 @@ public class AdminService {
         // List<ReportRespDto> reportRespDto = reportRepositoryQuery.findReportList();
         // return reportRespDto;
         List<ReportRespDto> reportRespDto = new ArrayList<>();
-        if (reportRespDto.size() != 0) {
+        if (reportRespDto.size() == 0) {
             reportRespDto = reportRepositoryQuery.findReportList();
             return reportRespDto;
-        } else {
-            return reportRespDto;
         }
-
+        return reportRespDto;
     }
 
     public DetailReportRespDto 리포트상세내용보기(Long id, Long badUserId) {
