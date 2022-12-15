@@ -34,6 +34,7 @@ public abstract class DummyEntity {
                 .state(UserStateEnum.NORMAL)
                 .role(UserEnum.USER)
                 .agree(true)
+                .uid("uid" + username)
                 .build();
         return user;
     }
@@ -54,6 +55,7 @@ public abstract class DummyEntity {
                 .state(UserStateEnum.NORMAL)
                 .role(UserEnum.ADMIN)
                 .agree(true)
+                .uid("uid" + username)
                 .build();
         return user;
     }

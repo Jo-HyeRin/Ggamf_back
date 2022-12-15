@@ -224,9 +224,11 @@ public class PartyService {
         for (int i = 0; i < enterListPS.size(); i++) {
             enterRoomIdList.add(enterListPS.get(i).getRoom().getId());
         }
+        // 방 참여 인원 정보 셀렉
+        List<Enter> enterPeoplePS = enterRepository.findByRoomId(roomId);
         // 내가 방장이거나 입장 중인가
         if (roomPS.getUser().getId() == userId || enterRoomIdList.contains(roomId)) {
-            return new DetailRoomRespDto(roomPS);
+            return new DetailRoomRespDto(roomPS, enterPeoplePS);
         } else {
             throw new CustomApiException("당신은 이 방의 방장도, 이 방 입장 유저도 아닙니다", HttpStatus.BAD_REQUEST);
         }
