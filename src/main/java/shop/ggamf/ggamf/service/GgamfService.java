@@ -71,8 +71,7 @@ public class GgamfService {
             throw new CustomApiException("요청이 있었거나 이미 겜프입니다", HttpStatus.BAD_REQUEST);
         }
         // 추천받지않기 테이블에 있으면 삭제
-        RecommendBanuser recommendBanUser = recommendBanuserRepository.findByBothId(followGgamfReqDto.getUserId(),
-                followGgamfReqDto.getFriendId());
+        RecommendBanuser recommendBanUser = recommendBanuserRepository.findByBothId(userId, friendId);
         if (recommendBanUser != null) {
             recommendBanuserRepository.deleteById(recommendBanUser.getId());
         }
@@ -163,13 +162,16 @@ public class GgamfService {
     }
 
     @Transactional
-    public ReportGgamfRespDto 겜프신고(ReportGgamfReqDto reportGgamfReqDto) {
+    public ReportGgamfRespDto 겜프신고(ReportGgamfReqDto reportGgamfReqDto, Long userId, Long badUserId) {
         log.debug("디버그 : 겜프신고 서비스 호출");
+        if (userId == badUserId) {
+            throw new CustomApiException("본인을 신고할 수 없습니다.", HttpStatus.BAD_REQUEST);
+        }
         // 신고하는자
-        User follower = userRepository.findById(reportGgamfReqDto.getUserId())
+        User follower = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomApiException("내 정보가 없습니다", HttpStatus.FORBIDDEN));
         // 신고당하는자
-        User following = userRepository.findById(reportGgamfReqDto.getBadUserId())
+        User following = userRepository.findById(badUserId)
                 .orElseThrow(() -> new CustomApiException("신고할 유저 정보가 없습니다", HttpStatus.FORBIDDEN));
         // 신고내용코드
         ReasonCode reasonCode = reasonCodeRepository.findById(reportGgamfReqDto.getReasonCodeId())
@@ -277,6 +279,9 @@ public class GgamfService {
 
     @Transactional
     public RecommendBanRespDto 추천겜프삭제(RecommendBanReqDto recommendBanReqDto, Long userId, Long banuserId) {
+        if (userId == banuserId) {
+            throw new CustomApiException("본인을 추천겜프에서 삭제할 수 없습니다", HttpStatus.BAD_REQUEST);
+        }
         User userPS = userRepository.findById(userId)
                 .orElseThrow(
                         () -> new CustomApiException("요청 유저가 없습니다", HttpStatus.FORBIDDEN));

@@ -1,6 +1,7 @@
 package shop.ggamf.ggamf.dto;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -14,8 +15,10 @@ public class PartyReqDto {
     @Setter
     @Getter
     public static class CreateRoomReqDto {
+        @Size(max = 20)
         private String gameName;
 
+        @Size(min = 2, max = 20)
         @NotEmpty(message = "파티방 이름은 필수 입력 값입니다.")
         private String roomName;
 
