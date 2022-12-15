@@ -24,7 +24,7 @@ public abstract class DummyEntity {
         User user = User.builder()
                 .username(username)
                 .password(encPassword)
-                .name("유저이름")
+                .name("유저이름"+ username)
                 .phone("010-1234-5678" + username)
                 .nickname("nick" + username)
                 .email(username + "@nate.com")
@@ -60,9 +60,9 @@ public abstract class DummyEntity {
         return user;
     }
 
-    protected GameCode newGameCode(String gamename) {
+    protected GameCode newGameCode(String gamename, String logo) {
         GameCode gameCode = GameCode.builder()
-                .logo(gamename + "사진")
+                .logo(logo)
                 .gameName(gamename)
                 .build();
         return gameCode;

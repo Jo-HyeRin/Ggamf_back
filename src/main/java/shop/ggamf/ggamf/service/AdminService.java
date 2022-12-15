@@ -1,25 +1,26 @@
 package shop.ggamf.ggamf.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import shop.ggamf.ggamf.config.auth.LoginUser;
 import shop.ggamf.ggamf.config.exception.CustomApiException;
 import shop.ggamf.ggamf.domain.gameCode.GameCode;
 import shop.ggamf.ggamf.domain.gameCode.GameCodeRepository;
+import shop.ggamf.ggamf.domain.gameCode.GameCodeRepositoryQuery;
+import shop.ggamf.ggamf.domain.gameCode.GameListRespDto;
 import shop.ggamf.ggamf.domain.report.DetailReportRespDto;
 import shop.ggamf.ggamf.domain.report.ReportRepositoryQuery;
 import shop.ggamf.ggamf.domain.report.ReportRespDto;
+import shop.ggamf.ggamf.domain.room.RoomListRespDto;
+import shop.ggamf.ggamf.domain.room.RoomRepositoryQuery;
 import shop.ggamf.ggamf.domain.statistics.GameMatchingResponseDto;
 import shop.ggamf.ggamf.domain.statistics.StatisticsRepositoryQuery;
-import shop.ggamf.ggamf.domain.user.User;
 import shop.ggamf.ggamf.domain.user.UserRepository;
 import shop.ggamf.ggamf.dto.AdminReqDto.SaveGameReqDto;
 import shop.ggamf.ggamf.dto.AdminReqDto.UpdateGameReqDto;
@@ -31,23 +32,21 @@ import shop.ggamf.ggamf.dto.AdminRespDto.UpdateGameRespDto;
 @Service
 public class AdminService {
 
-    private final Logger log = LoggerFactory.getLogger(getClass());
     private final UserRepository userRepository;
     private final GameCodeRepository gameCodeRepository;
+    private final GameCodeRepositoryQuery gameCodeRepositoryQuery;
     private final ReportRepositoryQuery reportRepositoryQuery;
     private final StatisticsRepositoryQuery statisticsRepositoryQuery;
-    private static LoginUser loginUser;
+    private final RoomRepositoryQuery roomRepositoryQuery;
 
-    public List<ReportRespDto> 신고목록보기(Long id) {
-        Optional<User> userOP = userRepository.findById(id);
-        log.debug("디버그 : username : " + userOP.get().getUsername());
-        log.debug("디버그 : role : " + userOP.get().getRole());
-
-        if (!userOP.isPresent()) {
-            userRepository.findById(id)
-                    .orElseThrow(() -> (new CustomApiException("해당유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST)));
+    public List<ReportRespDto> 신고목록보기() {
+        // List<ReportRespDto> reportRespDto = reportRepositoryQuery.findReportList();
+        // return reportRespDto;
+        List<ReportRespDto> reportRespDto = new ArrayList<>();
+        if (reportRespDto.size() == 0) {
+            reportRespDto = reportRepositoryQuery.findReportList();
+            return reportRespDto;
         }
-        List<ReportRespDto> reportRespDto = reportRepositoryQuery.findReportList();
         return reportRespDto;
     }
 
@@ -89,5 +88,15 @@ public class AdminService {
                     .orElseThrow(() -> (new CustomApiException("해당 게임이 존재하지 않습니다", HttpStatus.BAD_REQUEST)));
         }
         gameCodeRepository.deleteById(id);
+    }
+
+    public List<GameListRespDto> 게임목록보기() {
+        List<GameListRespDto> gameListRespDto = gameCodeRepositoryQuery.findGameCodeList();
+        return gameListRespDto;
+    }
+
+    public List<RoomListRespDto> 방목록보기() {
+        List<RoomListRespDto> roomListRespDto = roomRepositoryQuery.findRoomList();
+        return roomListRespDto;
     }
 }

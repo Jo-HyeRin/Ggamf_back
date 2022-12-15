@@ -1,48 +1,64 @@
-package shop.ggamf.ggamf.domain.enter;
-
-import java.util.ArrayList;
-import java.util.List;
+package shop.ggamf.ggamf.domain.room;
 
 import javax.persistence.EntityManager;
 
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
 import shop.ggamf.ggamf.config.dummy.DummyEntity;
-import shop.ggamf.ggamf.domain.follow.Follow;
-import shop.ggamf.ggamf.domain.follow.FollowRepository;
+import shop.ggamf.ggamf.domain.enter.Enter;
+import shop.ggamf.ggamf.domain.enter.EnterRepository;
 import shop.ggamf.ggamf.domain.gameCode.GameCode;
 import shop.ggamf.ggamf.domain.gameCode.GameCodeRepository;
-import shop.ggamf.ggamf.domain.room.Room;
-import shop.ggamf.ggamf.domain.room.RoomRepository;
 import shop.ggamf.ggamf.domain.user.User;
 import shop.ggamf.ggamf.domain.user.UserRepository;
 
+@Import(RoomRepositoryQuery.class)
 @ActiveProfiles("test")
 @DataJpaTest
-public class EnterRepositoryTest extends DummyEntity {
+public class RoomRepositoryQueryTest extends DummyEntity {
 
     @Autowired
     private EntityManager em;
-    @Autowired
-    private EnterRepository enterRepository;
-    @Autowired
-    private UserRepository userRepository;
+
     @Autowired
     private RoomRepository roomRepository;
+
+    @Autowired
+    private RoomRepositoryQuery roomRepositoryQuery;
+
+    @Autowired
+    private UserRepository userRepository;
+
     @Autowired
     private GameCodeRepository gameCodeRepository;
+
     @Autowired
-    private FollowRepository followRepository;
+    private EnterRepository enterRepository;
 
     @BeforeEach
     public void setUp() {
-        // User : 유저
+        autoincrement_reset();
+        dummy_init();
+    }
+
+    @Test
+    public void findRoomList_test() {
+        // given
+
+        // when
+        RoomListRespDto roomInfoRespDto = roomRepositoryQuery.findRoomList().get(2);
+
+        // then
+        Assertions.assertThat(roomInfoRespDto.getNickname()).isEqualTo("nickcos");
+    }
+
+    private void dummy_init() {
         User ssar = userRepository.save(newUser("ssar"));
         User cos = userRepository.save(newUser("cos"));
         User lala = userRepository.save(newUser("lala"));
@@ -54,18 +70,6 @@ public class EnterRepositoryTest extends DummyEntity {
         User yeye = userRepository.save(newUser("yeye"));
         User gogo = userRepository.save(newUser("gogo"));
         User romio = userRepository.save(newUser("romio"));
-        User jeje = userRepository.save(newUser("jeje"));
-        User money = userRepository.save(newUser("money"));
-        User terry = userRepository.save(newUser("terry"));
-        // Follow : 겜프
-        Follow f1 = followRepository.save(newFollow(ssar, cos, false));
-        Follow f11 = followRepository.save(newFollow(ssar, vovo, false));
-        Follow f2 = followRepository.save(newFollow(lala, ssar, false));
-        Follow f22 = followRepository.save(newFollow(toto, ssar, false));
-        Follow f3 = followRepository.save(newFollow(ssar, dada, true));
-        Follow f33 = followRepository.save(newFollow(ssar, ohoh, true));
-        Follow f4 = followRepository.save(newFollow(kaka, ssar, true));
-        Follow f44 = followRepository.save(newFollow(yeye, ssar, true));
         // GameCode_Logo
         String etc_logo = "data:image/png;base64,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";
         String LoL_logo = "data:image/jpeg;base64,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";
@@ -87,10 +91,6 @@ public class EnterRepositoryTest extends DummyEntity {
         Room endroom4 = roomRepository.save(endRoom("roomname4", lala, etc));
         Room room5 = roomRepository.save(newRoom("roomname5", yeye, starcraft));
         Room room6 = roomRepository.save(newRoom("roomname6", ohoh, battleground));
-        Room room7 = roomRepository.save(newRoom("roomname7", vovo, LoL));
-        Room endroom8 = roomRepository.save(endRoom("roomname8", jeje, LoL));
-        Room room9 = roomRepository.save(newRoom("roomname9", jeje, LoL));
-        Room room10 = roomRepository.save(newRoom("roomname10", jeje, LoL));
         // Enter : 방 참여 정보
         Enter enter1 = enterRepository.save(endEnter(lala, endroom1));
         Enter enter11 = enterRepository.save(endEnter(dada, endroom1));
@@ -105,101 +105,11 @@ public class EnterRepositoryTest extends DummyEntity {
         Enter endEnter44 = enterRepository.save(endEnter(cos, endroom4));
         Enter endEnter444 = enterRepository.save(endEnter(yeye, endroom4));
         Enter endEnter4444 = enterRepository.save(endEnter(romio, endroom4));
-        Enter enter5 = enterRepository.save(newEnter(gogo, room5));
-        Enter enter55 = enterRepository.save(newEnter(cos, room5));
-        Enter enter555 = enterRepository.save(newEnter(dada, room5));
-        Enter enter6 = enterRepository.save(newEnter(ssar, room6));
-        Enter enter66 = enterRepository.save(newEnter(lala, room6));
-        Enter endenter8 = enterRepository.save(endEnter(ssar, endroom8));
-        Enter endenter88 = enterRepository.save(endEnter(kaka, endroom8));
-        Enter endenter888 = enterRepository.save(endEnter(money, endroom8));
     }
 
-    @AfterEach
-    public void tearDown() {
-        // auto-increment 초기화 시키는 쿼리
-        em.createNativeQuery("ALTER TABLE users ALTER COLUMN `id` RESTART WITH 1").executeUpdate();
-        em.createNativeQuery("ALTER TABLE follow ALTER COLUMN `id` RESTART WITH 1").executeUpdate();
-        em.createNativeQuery("ALTER TABLE game_code ALTER COLUMN `id` RESTART WITH 1").executeUpdate();
-        em.createNativeQuery("ALTER TABLE room ALTER COLUMN `id` RESTART WITH 1").executeUpdate();
-        em.createNativeQuery("ALTER TABLE enter ALTER COLUMN `id` RESTART WITH 1").executeUpdate();
+    private void autoincrement_reset() {
+        this.em
+                .createNativeQuery("ALTER TABLE users ALTER COLUMN `id` RESTART WITH 1")
+                .executeUpdate();
     }
-
-    @Test
-    public void findByRoomIdAndUserId_test() throws Exception {
-        // given
-        Long roomId = 3L;
-        Long userId = 1L;
-
-        // when
-        Enter enterPS = enterRepository.findByRoomIdAndUserId(roomId, userId)
-                .orElseThrow();
-
-        // then
-        Assertions.assertThat(enterPS.getId()).isEqualTo(7L);
-    }
-
-    @Test
-    public void findByRoomId_test() throws Exception {
-        // given
-        Long roomId = 2L;
-
-        // when
-        List<Enter> enterListPS = enterRepository.findByRoomId(roomId);
-
-        // then
-        Assertions.assertThat(enterListPS.get(0).getUser().getNickname()).isEqualTo("nickcos");
-    }
-
-    @Test
-    public void findByUserId_test() throws Exception {
-        // given
-        Long userId = 1L;
-
-        // when
-        List<Enter> enterListPS = enterRepository.findByUserId(userId);
-
-        // then
-        Assertions.assertThat(enterListPS.get(0).getRoom().getRoomName()).isEqualTo("roomname3");
-    }
-
-    @Test
-    public void findByRoomIdEnd_test() throws Exception {
-        // given
-        Long roomId = 1L;
-
-        // when
-        List<Enter> enterListPS = enterRepository.findByRoomIdEnd(roomId);
-
-        // then
-        Assertions.assertThat(enterListPS.get(0).getUser().getNickname()).isEqualTo("nicklala");
-    }
-
-    @Test
-    public void findEnterRoom_test() throws Exception {
-        // given
-        Long userId = 1L;
-
-        // when
-        List<Enter> enterListPS = enterRepository.findEnterRoom(userId);
-
-        // then
-        Assertions.assertThat(enterListPS.get(0).getRoom().getRoomName()).isEqualTo("roomname8");
-    }
-
-    @Test
-    public void findTogether_test() throws Exception {
-        // given
-        Long userId = 1L;
-        List<Long> roomIdList = new ArrayList();
-        roomIdList.add(4L);
-        roomIdList.add(8L);
-
-        // when
-        List<Enter> enterListPS = enterRepository.findTogether(userId, roomIdList);
-
-        // then
-        Assertions.assertThat(enterListPS.size()).isEqualTo(5);
-    }
-
 }

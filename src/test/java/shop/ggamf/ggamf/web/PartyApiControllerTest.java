@@ -340,10 +340,10 @@ public class PartyApiControllerTest extends DummyEntity {
         User poll = userRepository.save(newUser("poll"));
         User love = userRepository.save(newUser("love"));
         // GameCode : 게임카테고리
-        GameCode etc = gameCodeRepository.save(newGameCode("etc"));
-        GameCode LoL = gameCodeRepository.save(newGameCode("LoL"));
-        GameCode starcraft = gameCodeRepository.save(newGameCode("starcraft"));
-        GameCode battleground = gameCodeRepository.save(newGameCode("battleground"));
+        GameCode etc = gameCodeRepository.save(newGameCode("etc", "logoetc"));
+        GameCode LoL = gameCodeRepository.save(newGameCode("LoL", "logoLoL"));
+        GameCode starcraft = gameCodeRepository.save(newGameCode("starcraft", "logostarcraft"));
+        GameCode battleground = gameCodeRepository.save(newGameCode("battleground", "logobattleground"));
         // Room : 파티방
         Room endroom1 = roomRepository.save(endRoom("roomname1", ssar, LoL));
         Room room2 = roomRepository.save(newRoom("roomname2", ssar, etc));
