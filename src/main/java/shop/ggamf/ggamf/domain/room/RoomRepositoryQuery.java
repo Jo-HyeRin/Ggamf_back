@@ -17,7 +17,7 @@ public class RoomRepositoryQuery {
     @Autowired
     private EntityManager em;
 
-    public List<RoomListRespDto> findRoomInfo() {
+    public List<RoomListRespDto> findRoomList() {
         StringBuffer sb = new StringBuffer();
         sb.append("select r.id, count(*)+1 count, r.total_people, r.room_name, u.nickname from enter e ")
                 .append("inner join room r on r.id = e.room_id ")

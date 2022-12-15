@@ -11,6 +11,8 @@ import javax.persistence.EntityManager;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -70,6 +72,8 @@ public class AdminApiControllerTest extends DummyEntity {
     @Autowired
     private RoomRepository roomRepository;
 
+    private final Logger log = LoggerFactory.getLogger(getClass());
+
     @BeforeEach
     public void setUp() {
         dummy_init();
@@ -83,12 +87,10 @@ public class AdminApiControllerTest extends DummyEntity {
         // when
         ResultActions resultActions = mvc.perform(get("/s/api/admin/reportList"));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
-        System.out.println("테스트 : " + responseBody);
 
         // then
         resultActions.andExpect(status().isOk());
         resultActions.andExpect(jsonPath("$.data.[0].reason").value("잘못2"));
-
     }
 
     @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
@@ -152,7 +154,7 @@ public class AdminApiControllerTest extends DummyEntity {
         Long id = 3L;
         UpdateGameReqDto updateGameReqDto = new UpdateGameReqDto();
         updateGameReqDto.setLogo("로고입니다");
-        updateGameReqDto.setGameName("파이널판타지14");
+        updateGameReqDto.setGameName("야채부락리");
         String requestBody = om.writeValueAsString(updateGameReqDto);
 
         // when
@@ -163,7 +165,7 @@ public class AdminApiControllerTest extends DummyEntity {
 
         // then
         resultActions.andExpect(status().isOk());
-        resultActions.andExpect(jsonPath("$.data.gameName").value("파이널판타지14"));
+        resultActions.andExpect(jsonPath("$.data.gameName").value("야채부락리"));
     }
 
     @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
@@ -193,6 +195,21 @@ public class AdminApiControllerTest extends DummyEntity {
         // then
         resultActions.andExpect(status().isOk());
         resultActions.andExpect(jsonPath("$.data.[4].gameName").value("파이널판타지14"));
+    }
+
+    @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    public void findRoomList_Test() throws Exception {
+        // given
+
+        // when
+        ResultActions resultActions = mvc.perform(get("/s/api/admin/roomList"));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+        resultActions.andExpect(status().isOk());
+        resultActions.andExpect(jsonPath("$.data.[0].roomName").value("roomname1"));
     }
 
     private void dummy_init() {

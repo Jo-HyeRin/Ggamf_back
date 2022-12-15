@@ -17,6 +17,8 @@ import shop.ggamf.ggamf.domain.gameCode.GameListRespDto;
 import shop.ggamf.ggamf.domain.report.DetailReportRespDto;
 import shop.ggamf.ggamf.domain.report.ReportRepositoryQuery;
 import shop.ggamf.ggamf.domain.report.ReportRespDto;
+import shop.ggamf.ggamf.domain.room.RoomListRespDto;
+import shop.ggamf.ggamf.domain.room.RoomRepositoryQuery;
 import shop.ggamf.ggamf.domain.statistics.GameMatchingResponseDto;
 import shop.ggamf.ggamf.domain.statistics.StatisticsRepositoryQuery;
 import shop.ggamf.ggamf.domain.user.UserRepository;
@@ -35,13 +37,19 @@ public class AdminService {
     private final GameCodeRepositoryQuery gameCodeRepositoryQuery;
     private final ReportRepositoryQuery reportRepositoryQuery;
     private final StatisticsRepositoryQuery statisticsRepositoryQuery;
+    private final RoomRepositoryQuery roomRepositoryQuery;
 
     public List<ReportRespDto> 신고목록보기() {
+        // List<ReportRespDto> reportRespDto = reportRepositoryQuery.findReportList();
+        // return reportRespDto;
         List<ReportRespDto> reportRespDto = new ArrayList<>();
         if (reportRespDto.size() != 0) {
             reportRespDto = reportRepositoryQuery.findReportList();
+            return reportRespDto;
+        } else {
+            return reportRespDto;
         }
-        return reportRespDto;
+
     }
 
     public DetailReportRespDto 리포트상세내용보기(Long id, Long badUserId) {
@@ -89,7 +97,8 @@ public class AdminService {
         return gameListRespDto;
     }
 
-    public void 방목록보기() {
-
+    public List<RoomListRespDto> 방목록보기() {
+        List<RoomListRespDto> roomListRespDto = roomRepositoryQuery.findRoomList();
+        return roomListRespDto;
     }
 }

@@ -43,7 +43,7 @@ public class ReportRepositoryQuery {
     public DetailReportRespDto findDetailReport(Long id, Long badUserId) {
         StringBuffer sb = new StringBuffer();
         sb.append(
-                "select r.id, r.bad_user_id, u.name badUser, r.created_at, rs.reason, r.detail, u.name submitUser, count(select * from report where bad_user_id = :badUserId) count from report r inner join reason_code rs on rs.id = r.reason_code_id inner join users u on u.id = r.submit_user_id where r.id = :id");
+                "select r.id, r.bad_user_id, u.name badUser, r.created_at, rs.reason, r.detail, u.name submitUser, (select count(*) from report where bad_user_id = :badUserId) count from report r inner join reason_code rs on rs.id = r.reason_code_id inner join users u on u.id = r.submit_user_id where r.id = :id");
 
         Query query = em.createNativeQuery(sb.toString())
                 .setParameter("id", id)
