@@ -1,4 +1,4 @@
-package shop.ggamf.ggamf.domain.statistics;
+package shop.ggamf.ggamf.domain.recommendBanuser;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -7,28 +7,35 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import shop.ggamf.ggamf.domain.room.Room;
+import shop.ggamf.ggamf.domain.AuditingTime;
 import shop.ggamf.ggamf.domain.user.User;
 
 @NoArgsConstructor
 @Getter
-@Table(name = "statistics")
+@Table(name = "recommend_banuser")
 @Entity
-public class Statistics {
+public class RecommendBanuser extends AuditingTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "users_id")
+    User users;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "room_id")
-    private Room room;
+    @JoinColumn(name = "banuser_id")
+    User banuser;
+
+    @Builder
+    public RecommendBanuser(Long id, User users, User banuser) {
+        this.id = id;
+        this.users = users;
+        this.banuser = banuser;
+    }
 }

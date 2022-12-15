@@ -130,6 +130,19 @@ public class FollowRepositoryTest extends DummyEntity {
     }
 
     @Test
+    public void isGgamfFollow_test() throws Exception {
+        // given
+        Long userId = 1L;
+        Long friendId = 4L;
+
+        // when
+        Follow followPS = followRepository.isGgamfFollow(userId, friendId).orElse(null);
+
+        // then
+        Assertions.assertThat(followPS.getId()).isEqualTo(5L);
+    }
+
+    @Test
     public void findByFollowerId_test() throws Exception {
         // given
         Long userId = 1L;

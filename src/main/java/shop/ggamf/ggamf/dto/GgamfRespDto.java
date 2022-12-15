@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.Setter;
 import shop.ggamf.ggamf.domain.follow.Follow;
+import shop.ggamf.ggamf.domain.recommendBanuser.RecommendBanuser;
 import shop.ggamf.ggamf.domain.report.Report;
 import shop.ggamf.ggamf.domain.user.User;
 
@@ -14,37 +15,27 @@ public class GgamfRespDto {
     @Setter
     @Getter
     public static class FollowGgamfRespDto {
-        private Long followerId;
-        private Long followingId;
         private Boolean accept;
-        private String followingNick;
-        private String followingPhoto;
+        private String nickname;
+        private String photo;
 
-        public FollowGgamfRespDto(Follow follower, Follow following) {
-            this.followerId = follower.getFollower().getId();
-            this.followingId = follower.getFollowing().getId();
-            this.accept = follower.getAccept();
-            this.followingNick = follower.getFollowing().getNickname();
-            this.followingPhoto = follower.getFollowing().getPhoto();
+        public FollowGgamfRespDto(Follow follow) {
+            this.accept = follow.getAccept();
+            this.nickname = follow.getFollowing().getNickname();
+            this.photo = follow.getFollowing().getPhoto();
         }
     }
 
     @Setter
     @Getter
     public static class AcceptGgamfRespDto {
-        private Long followId;
         private Long userId;
-        private String userNick;
-        private Long friendId;
-        private String friendNick;
+        private String nickname;
         private Boolean accept;
 
         public AcceptGgamfRespDto(Follow follow) {
-            this.followId = follow.getId();
-            this.userId = follow.getFollowing().getId();
-            this.userNick = follow.getFollowing().getNickname();
-            this.friendId = follow.getFollower().getId();
-            this.friendNick = follow.getFollower().getNickname();
+            this.userId = follow.getFollower().getId();
+            this.nickname = follow.getFollower().getNickname();
             this.accept = follow.getAccept();
         }
     }
@@ -52,58 +43,48 @@ public class GgamfRespDto {
     @Setter
     @Getter
     public static class DeleteGgamfRespDto {
-        private Long followId;
-        private Long friendId;
-        private String friendNick;
+        private Long userId;
+        private String nickname;
 
-        public DeleteGgamfRespDto(Long followId, User friend) {
-            this.followId = followId;
-            this.friendId = friend.getId();
-            this.friendNick = friend.getNickname();
+        public DeleteGgamfRespDto(User friend) {
+            this.userId = friend.getId();
+            this.nickname = friend.getNickname();
         }
     }
 
     @Setter
     @Getter
     public static class RejectGgamfRespDto {
-        private Long followId;
-        private Long friendId;
-        private String friendNick;
+        private Long userId;
+        private String nickname;
 
-        public RejectGgamfRespDto(Long followId, User friend) {
-            this.followId = followId;
-            this.friendId = friend.getId();
-            this.friendNick = friend.getNickname();
+        public RejectGgamfRespDto(User friend) {
+            this.userId = friend.getId();
+            this.nickname = friend.getNickname();
         }
     }
 
     @Setter
     @Getter
     public static class CancelGgamfRespDto {
-        private Long followId;
-        private Long friendId;
-        private String friendNick;
+        private Long userId;
+        private String nickname;
 
-        public CancelGgamfRespDto(Long followId, User friend) {
-            this.followId = followId;
-            this.friendId = friend.getId();
-            this.friendNick = friend.getNickname();
+        public CancelGgamfRespDto(User friend) {
+            this.userId = friend.getId();
+            this.nickname = friend.getNickname();
         }
     }
 
     @Setter
     @Getter
     public static class ReportGgamfRespDto {
-        private Long reportId;
-        private String submitUserNick;
-        private String badUserNick;
+        private String nickname;
         private String reason;
         private String detail;
 
         public ReportGgamfRespDto(Report report) {
-            this.reportId = report.getId();
-            this.submitUserNick = report.getSubmitUser().getNickname();
-            this.badUserNick = report.getBadUser().getNickname();
+            this.nickname = report.getBadUser().getNickname();
             this.reason = report.getReasonCode().getReason();
             this.detail = report.getDetail();
         }
@@ -125,15 +106,15 @@ public class GgamfRespDto {
         @Setter
         @Getter
         public class FollowerDto {
-            private Long friendId;
+            private Long userId;
             private String photo;
-            private String nickName;
+            private String nickname;
             private String intro;
 
             public FollowerDto(Follow follow) {
-                this.friendId = follow.getFollowing().getId();
+                this.userId = follow.getFollowing().getId();
                 this.photo = follow.getFollowing().getPhoto();
-                this.nickName = follow.getFollowing().getNickname();
+                this.nickname = follow.getFollowing().getNickname();
                 this.intro = follow.getFollowing().getIntro();
             }
         }
@@ -141,15 +122,15 @@ public class GgamfRespDto {
         @Setter
         @Getter
         public class FollowingDto {
-            private Long friendId;
+            private Long userId;
             private String photo;
-            private String nickName;
+            private String nickname;
             private String intro;
 
             public FollowingDto(Follow follow) {
-                this.friendId = follow.getFollower().getId();
+                this.userId = follow.getFollower().getId();
                 this.photo = follow.getFollower().getPhoto();
-                this.nickName = follow.getFollower().getNickname();
+                this.nickname = follow.getFollower().getNickname();
                 this.intro = follow.getFollower().getIntro();
             }
         }
@@ -169,15 +150,15 @@ public class GgamfRespDto {
         @Setter
         @Getter
         public class FollowingDto {
-            private Long friendId;
+            private Long userId;
             private String photo;
-            private String nickName;
+            private String nickname;
             private String intro;
 
             public FollowingDto(Follow follow) {
-                this.friendId = follow.getFollowing().getId();
+                this.userId = follow.getFollowing().getId();
                 this.photo = follow.getFollowing().getPhoto();
-                this.nickName = follow.getFollowing().getNickname();
+                this.nickname = follow.getFollowing().getNickname();
                 this.intro = follow.getFollowing().getIntro();
             }
         }
@@ -197,15 +178,15 @@ public class GgamfRespDto {
         @Setter
         @Getter
         public class FollowerDto {
-            private Long friendId;
+            private Long userId;
             private String photo;
-            private String nickName;
+            private String nickname;
             private String intro;
 
             public FollowerDto(Follow follow) {
-                this.friendId = follow.getFollower().getId();
+                this.userId = follow.getFollower().getId();
                 this.photo = follow.getFollower().getPhoto();
-                this.nickName = follow.getFollower().getNickname();
+                this.nickname = follow.getFollower().getNickname();
                 this.intro = follow.getFollower().getIntro();
             }
         }
@@ -227,15 +208,25 @@ public class GgamfRespDto {
         public class UserDto {
             private Long userId;
             private String photo;
-            private String nickName;
+            private String nickname;
             private String intro;
 
             public UserDto(User user) {
                 this.userId = user.getId();
                 this.photo = user.getPhoto();
-                this.nickName = user.getNickname();
+                this.nickname = user.getNickname();
                 this.intro = user.getIntro();
             }
+        }
+    }
+
+    @Setter
+    @Getter
+    public static class RecommendBanRespDto {
+        private String nickname;
+
+        public RecommendBanRespDto(RecommendBanuser recommendBanuser) {
+            this.nickname = recommendBanuser.getBanuser().getNickname();
         }
     }
 }
