@@ -194,7 +194,7 @@ public class AdminApiControllerTest extends DummyEntity {
 
         // then
         resultActions.andExpect(status().isOk());
-        resultActions.andExpect(jsonPath("$.data.[4].gameName").value("파이널판타지14"));
+        resultActions.andExpect(jsonPath("$.data.[1].gameName").value("LoL"));
     }
 
     @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
