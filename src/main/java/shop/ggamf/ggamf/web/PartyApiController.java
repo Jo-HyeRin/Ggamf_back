@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import shop.ggamf.ggamf.config.annotations.AuthorizationCheck;
 import shop.ggamf.ggamf.config.auth.LoginUser;
+import shop.ggamf.ggamf.config.exception.CustomApiException;
 import shop.ggamf.ggamf.domain.gameCode.GameCode;
 import shop.ggamf.ggamf.dto.PartyReqDto.CreateRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.JoinRoomReqDto;
