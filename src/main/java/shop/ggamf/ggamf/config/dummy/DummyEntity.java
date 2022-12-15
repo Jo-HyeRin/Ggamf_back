@@ -58,9 +58,9 @@ public abstract class DummyEntity {
         return user;
     }
 
-    protected GameCode newGameCode(String gamename) {
+    protected GameCode newGameCode(String gamename, String logo) {
         GameCode gameCode = GameCode.builder()
-                .logo(gamename + "사진")
+                .logo(logo)
                 .gameName(gamename)
                 .build();
         return gameCode;
