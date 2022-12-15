@@ -16,7 +16,7 @@ public class PartyRespDto {
     public static class CreateRoomRespDto {
         private Long id;
         private Long userId;
-        private String userUid;
+        private String uid;
         private Long gameCodeId;
         private String gameName;
         private String roomName;
@@ -25,7 +25,7 @@ public class PartyRespDto {
         public CreateRoomRespDto(Room room) {
             this.id = room.getId();
             this.userId = room.getUser().getId();
-            this.userUid = room.getUser().getUid();
+            this.uid = room.getUser().getUid();
             this.gameCodeId = room.getGameCode().getId();
             this.gameName = room.getGameName();
             this.roomName = room.getRoomName();
@@ -150,14 +150,14 @@ public class PartyRespDto {
             private Long roomId;
             private String roomName;
             private String roomOwnerNickName;
-            private String roomOwnerUid;
+            private String uid;
             private String gameName;
 
             public RoomDto(Room room) {
                 this.roomId = room.getId();
                 this.roomName = room.getRoomName();
                 this.roomOwnerNickName = room.getUser().getNickname();
-                this.roomOwnerUid = room.getUser().getUid();
+                this.uid = room.getUser().getUid();
                 this.gameName = room.getGameName();
             }
         }
@@ -226,7 +226,7 @@ public class PartyRespDto {
             private Long id;
             private String roomName;
             private String nickName;
-            private String roomOwnerUid;
+            private String uid;
             private Long totalPeople;
             private String gameName;
             private String gameLogo;
@@ -235,7 +235,7 @@ public class PartyRespDto {
                 this.id = enter.getRoom().getId();
                 this.roomName = enter.getRoom().getRoomName();
                 this.nickName = enter.getRoom().getUser().getNickname();
-                this.roomOwnerUid = enter.getRoom().getUser().getUid();
+                this.uid = enter.getRoom().getUser().getUid();
                 this.totalPeople = enter.getRoom().getTotalPeople();
                 this.gameName = enter.getRoom().getGameName();
                 this.gameLogo = enter.getRoom().getGameCode().getLogo();
