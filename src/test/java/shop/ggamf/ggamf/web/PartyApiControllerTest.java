@@ -402,4 +402,5 @@ public class PartyApiControllerTest extends DummyEntity {
         Enter enter6 = enterRepository.save(newEnter(ssar, room6));
         Enter enter66 = enterRepository.save(newEnter(lala, room6));
     }
+
 }
