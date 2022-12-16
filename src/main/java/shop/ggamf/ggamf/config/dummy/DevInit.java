@@ -56,8 +56,8 @@ public class DevInit extends DummyEntity {
             User cash = userRepository.save(newUser("cash"));
             User power = userRepository.save(newUser("power"));
             User house = userRepository.save(newUser("house"));
-            User nero = userRepository.save(newUser("nero"));
-            User poll20 = userRepository.save(newUser("poll20"));
+            User nero20 = userRepository.save(newUser("nero20"));
+            User poll = userRepository.save(newUser("poll"));
             User love = userRepository.save(newUser("love"));
             User judy = userRepository.save(newUser("judy"));
             // Follow : 겜프
@@ -75,7 +75,7 @@ public class DevInit extends DummyEntity {
             Follow f66 = followRepository.save(newFollow(power, ssar, false));
             // RecommendBanUser : 추천겜프목록에서 제외할 유저
             RecommendBanuser banuser1 = recommendBanuserRepository.save(newBanuser(ssar, romio));
-            RecommendBanuser banuser2 = recommendBanuserRepository.save(newBanuser(ssar, nero));
+            RecommendBanuser banuser2 = recommendBanuserRepository.save(newBanuser(ssar, nero20));
             // ReasonCode : 신고카테고리
             ReasonCode reason1 = reasonCodeRepository.save(newReasonCode("욕설"));
             ReasonCode reason2 = reasonCodeRepository.save(newReasonCode("탈주"));
@@ -125,12 +125,12 @@ public class DevInit extends DummyEntity {
             Room room26 = roomRepository.save(newRoom("roomname26", house, LoL));
             Room room27 = roomRepository.save(newRoom("roomname27", house, LoL));
             Room room28 = roomRepository.save(newRoom("roomname28", house, LoL));
-            Room room29 = roomRepository.save(newRoom("roomname29", nero, LoL));
-            Room room30 = roomRepository.save(newRoom("roomname30", nero, LoL));
-            Room room31 = roomRepository.save(newRoom("room222231", nero, LoL));
-            Room room32 = roomRepository.save(newRoom("room222232", poll20, LoL));
-            Room room33 = roomRepository.save(newRoom("room222233", poll20, LoL));
-            Room room34 = roomRepository.save(newRoom("room222234", poll20, LoL));
+            Room room29 = roomRepository.save(newRoom("roomname29", nero20, LoL));
+            Room room30 = roomRepository.save(newRoom("roomname30", nero20, LoL));
+            Room room31 = roomRepository.save(newRoom("room222231", nero20, LoL));
+            Room room32 = roomRepository.save(newRoom("room222232", poll, LoL));
+            Room room33 = roomRepository.save(newRoom("room222233", poll, LoL));
+            Room room34 = roomRepository.save(newRoom("room222234", poll, LoL));
             Room room35 = roomRepository.save(newRoom("room222235", love, LoL));
             Room room36 = roomRepository.save(newRoom("room222236", love, LoL));
             Room room37 = roomRepository.save(newRoom("room222237", ssar, LoL));
@@ -159,7 +159,7 @@ public class DevInit extends DummyEntity {
             Enter enter6666 = enterRepository.save(newEnter(house, room6));
             Enter endenter7 = enterRepository.save(endEnter(ssar, room7));
             Enter endenter77 = enterRepository.save(endEnter(power, room7));
-            Enter endenter777 = enterRepository.save(endEnter(nero, room7));
+            Enter endenter777 = enterRepository.save(endEnter(nero20, room7));
             Enter endenter7777 = enterRepository.save(endEnter(house, room7));
             Enter endenter77777 = enterRepository.save(endEnter(judy, room7));
             Enter enter37 = enterRepository.save(newEnter(love, room37));
@@ -172,7 +172,7 @@ public class DevInit extends DummyEntity {
             Report report5 = reportRepository.save(newReport(house, ssar, reason2));
             Report report6 = reportRepository.save(newReport(house, dada, reason3));
             Report report7 = reportRepository.save(newReport(jeje, love, reason4));
-            Report report8 = reportRepository.save(newReport(nero, judy, reason5));
+            Report report8 = reportRepository.save(newReport(nero20, judy, reason5));
         };
     }
 }

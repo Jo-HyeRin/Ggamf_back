@@ -210,7 +210,7 @@ public class GgamfApiControllerTest extends DummyEntity {
                 // then
                 resultActions.andExpect(MockMvcResultMatchers.status().isOk());
                 resultActions.andExpect(
-                                MockMvcResultMatchers.jsonPath("$.data.followers.[0].nickname").value("nickdada"));
+                                MockMvcResultMatchers.jsonPath("$.data.friendList.[0].nickname").value("nickdada"));
         }
 
         @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)

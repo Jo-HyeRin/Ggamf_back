@@ -185,19 +185,29 @@ public class GgamfService {
     public GgamfListRespDto 겜프목록보기(Long userId) {
         // 내가 요청해서 맺은 친구 목록
         List<Follow> followerListPS = followRepository.findByFollowerId(userId);
+        // 내가 수락해서 맺은 친구 목록
+        List<Follow> followingListPS = followRepository.findByFollowingId(userId);
+        if (followerListPS.size() == 0 && followingListPS.size() == 0) {
+            throw new CustomApiException("겜프가 없습니다", HttpStatus.BAD_REQUEST);
+        }
+
+        // id 리스트로 변경
         List<Long> followerIdList = new ArrayList<>();
         if (followerListPS.size() != 0) {
             for (int i = 0; i < followerListPS.size(); i++) {
                 followerIdList.add(followerListPS.get(i).getFollowing().getId());
             }
+        } else {
+            followerIdList = null;
         }
-        // 내가 수락해서 맺은 친구 목록
-        List<Follow> followingListPS = followRepository.findByFollowingId(userId);
+
         List<Long> followingIdList = new ArrayList<>();
         if (followingListPS.size() != 0) {
             for (int i = 0; i < followingListPS.size(); i++) {
                 followingIdList.add(followingListPS.get(i).getFollower().getId());
             }
+        } else {
+            followingIdList = null;
         }
 
         List<Long> userList = new ArrayList<>();
