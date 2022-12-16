@@ -58,8 +58,10 @@ public class DevInit extends DummyEntity {
             User house = userRepository.save(newUser("house"));
             User nero20 = userRepository.save(newUser("nero20"));
             User poll = userRepository.save(newUser("poll"));
-            User love = userRepository.save(newUser("love"));
-            User judy = userRepository.save(newUser("judy"));
+            User user22 = userRepository.save(newUser("user22"));
+            User user23 = userRepository.save(newUser("user23"));
+            User user24 = userRepository.save(newUser("user24"));
+            User user25 = userRepository.save(newUser("user25"));
             // Follow : 겜프
             Follow f1 = followRepository.save(newFollow(ssar, cos, false));
             Follow f11 = followRepository.save(newFollow(ssar, vovo, false));
@@ -131,8 +133,8 @@ public class DevInit extends DummyEntity {
             Room room32 = roomRepository.save(newRoom("room222232", poll, LoL));
             Room room33 = roomRepository.save(newRoom("room222233", poll, LoL));
             Room room34 = roomRepository.save(newRoom("room222234", poll, LoL));
-            Room room35 = roomRepository.save(newRoom("room222235", love, LoL));
-            Room room36 = roomRepository.save(newRoom("room222236", love, LoL));
+            Room endroom35 = roomRepository.save(endRoom("room222235", user24, LoL));
+            Room endroom36 = roomRepository.save(endRoom("room222236", user22, LoL));
             Room room37 = roomRepository.save(newRoom("room222237", ssar, LoL));
             // Enter : 방 참여 정보
             Enter enter1 = enterRepository.save(endEnter(lala, endroom1));
@@ -143,7 +145,7 @@ public class DevInit extends DummyEntity {
             Enter enter222 = enterRepository.save(newEnter(romio, room2));
             Enter enter3 = enterRepository.save(newEnter(ssar, room3));
             Enter enter33 = enterRepository.save(newEnter(toto, room3));
-            Enter enter333 = enterRepository.save(newEnter(love, room3));
+            Enter enter333 = enterRepository.save(newEnter(user22, room3));
             Enter enter3333 = enterRepository.save(newEnter(money, room3));
             Enter enter33333 = enterRepository.save(newEnter(gogo, room3));
             Enter endEnter4 = enterRepository.save(endEnter(ssar, endroom4));
@@ -161,9 +163,16 @@ public class DevInit extends DummyEntity {
             Enter endenter77 = enterRepository.save(endEnter(power, room7));
             Enter endenter777 = enterRepository.save(endEnter(nero20, room7));
             Enter endenter7777 = enterRepository.save(endEnter(house, room7));
-            Enter endenter77777 = enterRepository.save(endEnter(judy, room7));
-            Enter enter37 = enterRepository.save(newEnter(love, room37));
-            Enter enter38 = enterRepository.save(newEnter(house, room37));
+            Enter endenter77777 = enterRepository.save(endEnter(user23, room7));
+            Enter endenter35 = enterRepository.save(endEnter(toto, endroom35));
+            Enter endenter355 = enterRepository.save(endEnter(power, endroom35));
+            Enter endenter3555 = enterRepository.save(endEnter(money, endroom35));
+            Enter endenter36 = enterRepository.save(endEnter(toto, endroom36));
+            Enter endenter366 = enterRepository.save(endEnter(nero20, endroom36));
+            Enter endenter3666 = enterRepository.save(endEnter(dada, endroom36));
+            Enter enter37 = enterRepository.save(newEnter(user22, room37));
+            Enter enter377 = enterRepository.save(newEnter(house, room37));
+            Enter enter3777 = enterRepository.save(newEnter(toto, room37));
             // Report : 신고
             Report report1 = reportRepository.save(newReport(ssar, house, reason1));
             Report report2 = reportRepository.save(newReport(cos, house, reason1));
@@ -171,8 +180,8 @@ public class DevInit extends DummyEntity {
             Report report4 = reportRepository.save(newReport(kaka, house, reason1));
             Report report5 = reportRepository.save(newReport(house, ssar, reason2));
             Report report6 = reportRepository.save(newReport(house, dada, reason3));
-            Report report7 = reportRepository.save(newReport(jeje, love, reason4));
-            Report report8 = reportRepository.save(newReport(nero20, judy, reason5));
+            Report report7 = reportRepository.save(newReport(jeje, user22, reason4));
+            Report report8 = reportRepository.save(newReport(nero20, user23, reason5));
         };
     }
 }

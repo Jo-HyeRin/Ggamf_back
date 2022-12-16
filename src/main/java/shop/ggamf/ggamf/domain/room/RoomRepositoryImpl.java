@@ -10,37 +10,16 @@ import org.springframework.data.repository.query.Param;
 import lombok.RequiredArgsConstructor;
 
 interface Dao {
-    // 추천 겜프 목록 - 내가 닫은 최근 방
-    List<Room> findByUserIdEnd(@Param("userId") Long userId);
 
     // 전체 파티방 목록 보기 - 검색, 카테고리, 페이징
     List<Room> findAllRoom(@Param("gameCodeId") Long gameCodeId, @Param("keyword") String keyword,
             @Param("page") Integer page);
-
 }
 
 @RequiredArgsConstructor
 public class RoomRepositoryImpl implements Dao {
 
     private final EntityManager em;
-
-    @Override
-    public List<Room> findByUserIdEnd(Long userId) {
-
-        String sql = "";
-        sql += "select r from Room r ";
-        sql += "left join r.user u ";
-        sql += "where r.user.id = :userId ";
-        sql += "and r.active=false ";
-        sql += "order by r.updatedAt DESC";
-
-        // 파라미터 바인딩
-        TypedQuery<Room> query = em.createQuery(sql, Room.class);
-        query = query.setParameter("userId", userId);
-        query = query.setMaxResults(1);
-
-        return query.getResultList();
-    }
 
     @Override
     public List<Room> findAllRoom(Long gameCodeId, String keyword, Integer page) {
