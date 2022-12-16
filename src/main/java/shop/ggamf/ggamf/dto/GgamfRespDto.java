@@ -94,12 +94,7 @@ public class GgamfRespDto {
     @Getter
     public static class GgamfListRespDto {
 
-        private String msg;
         List<UserDto> friendList;
-
-        public GgamfListRespDto() {
-            this.msg = "겜프가 없습니다";
-        }
 
         public GgamfListRespDto(List<User> friendList) {
             this.friendList = friendList.stream().map((user) -> new UserDto(user))

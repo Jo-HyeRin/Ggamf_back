@@ -197,8 +197,6 @@ public class GgamfService {
             for (int i = 0; i < followerListPS.size(); i++) {
                 followerIdList.add(followerListPS.get(i).getFollowing().getId());
             }
-        } else {
-            followerIdList = null;
         }
 
         List<Long> followingIdList = new ArrayList<>();
@@ -206,13 +204,17 @@ public class GgamfService {
             for (int i = 0; i < followingListPS.size(); i++) {
                 followingIdList.add(followingListPS.get(i).getFollower().getId());
             }
-        } else {
-            followingIdList = null;
         }
 
         List<Long> userList = new ArrayList<>();
-        userList.addAll(followerIdList);
-        userList.addAll(followingIdList);
+        if (followerIdList.size() == 0 && followingIdList.size() != 0) {
+            userList.addAll(followingIdList);
+        } else if (followerIdList.size() != 0 && followingIdList.size() == 0) {
+            userList.addAll(followerIdList);
+        } else {
+            userList.addAll(followerIdList);
+            userList.addAll(followingIdList);
+        }
 
         List<User> friendList = userRepository.findByIdFriend(userList);
         return new GgamfListRespDto(friendList);
