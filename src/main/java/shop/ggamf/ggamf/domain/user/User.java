@@ -7,6 +7,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 
 import lombok.Builder;
@@ -45,6 +46,8 @@ public class User extends AuditingTime {
 
     private Boolean phoneChecked;
 
+    @Lob
+    @Column(columnDefinition = "text")
     private String photo;
 
     private String intro;
