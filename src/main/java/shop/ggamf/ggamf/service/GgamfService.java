@@ -185,9 +185,27 @@ public class GgamfService {
     public GgamfListRespDto 겜프목록보기(Long userId) {
         // 내가 요청해서 맺은 친구 목록
         List<Follow> followerListPS = followRepository.findByFollowerId(userId);
+        List<Long> followerIdList = new ArrayList<>();
+        if (followerListPS.size() != 0) {
+            for (int i = 0; i < followerListPS.size(); i++) {
+                followerIdList.add(followerListPS.get(i).getFollowing().getId());
+            }
+        }
         // 내가 수락해서 맺은 친구 목록
         List<Follow> followingListPS = followRepository.findByFollowingId(userId);
-        return new GgamfListRespDto(followerListPS, followingListPS);
+        List<Long> followingIdList = new ArrayList<>();
+        if (followingListPS.size() != 0) {
+            for (int i = 0; i < followingListPS.size(); i++) {
+                followingIdList.add(followingListPS.get(i).getFollower().getId());
+            }
+        }
+
+        List<Long> userList = new ArrayList<>();
+        userList.addAll(followerIdList);
+        userList.addAll(followingIdList);
+
+        List<User> friendList = userRepository.findByIdFriend(userList);
+        return new GgamfListRespDto(friendList);
     }
 
     public SendGgamfRespDto 보낸겜프요청목록보기(Long userId) {
@@ -273,7 +291,7 @@ public class GgamfService {
             }
         }
         // 친구 추천하기
-        List<User> recommendList = userRepository.findByIdRecommend(userList);
+        List<User> recommendList = userRepository.findByIdFriend(userList);
         return new RecommendGgamfListRespDto(recommendList);
     }
 
