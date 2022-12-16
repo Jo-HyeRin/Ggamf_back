@@ -8,11 +8,14 @@ import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 import org.qlrm.mapper.JpaResultMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class RoomRepositoryQuery {
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private EntityManager em;
@@ -29,9 +32,11 @@ public class RoomRepositoryQuery {
         JpaResultMapper result = new JpaResultMapper();
         try {
             List<RoomListRespDto> roomInfoRespDto = result.list(query, RoomListRespDto.class);
+            log.debug("디버그 : " + roomInfoRespDto);
             return roomInfoRespDto;
         } catch (NoResultException e) {
             List<RoomListRespDto> roomInfoRespDto = new ArrayList<>();
+            log.debug("디버그 비었음 : " + roomInfoRespDto);
             return roomInfoRespDto;
         }
 

@@ -96,7 +96,7 @@ public class AdminService {
     }
 
     public List<RoomListRespDto> 방목록보기() {
-        List<RoomListRespDto> roomListRespDto = roomRepositoryQuery.findRoomList();
-        return roomListRespDto;
+
+        return roomRepositoryQuery.findRoomList();
     }
 }
