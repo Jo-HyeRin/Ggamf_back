@@ -181,24 +181,24 @@ public class PartyService {
     }
 
     @Transactional
-    public KickUserRespDto 파티원추방(KickUserReqDto kickUserReqDto) {
+    public KickUserRespDto 파티원추방(KickUserReqDto kickUserReqDto, Long userId, Long roomId) {
         log.debug("디버그 : 파티원 추방 서비스 호출");
         // 유저 검증
-        User userPS = userRepository.findById(kickUserReqDto.getUserId())
+        User userPS = userRepository.findById(userId)
                 .orElseThrow(
                         () -> new CustomApiException("해당 유저가 없습니다", HttpStatus.FORBIDDEN));
         // 방 검증
-        Room roomPS = roomRepository.findById(kickUserReqDto.getRoomId())
+        Room roomPS = roomRepository.findById(roomId)
                 .orElseThrow(
                         () -> new CustomApiException("해당 방을 찾을 수 없습니다", HttpStatus.FORBIDDEN));
         Enter enterPS = enterRepository
-                .findByRoomIdAndUserId(kickUserReqDto.getRoomId(), kickUserReqDto.getKickUserId())
+                .findByRoomIdAndUserId(roomId, kickUserReqDto.getKickUserId())
                 .orElseThrow(
                         () -> new CustomApiException("해당 파티원은 추방할 수 없습니다", HttpStatus.FORBIDDEN));
         if (enterPS.getRoom().getActive() == false) {
             throw new CustomApiException("이미 종료된 방입니다", HttpStatus.BAD_REQUEST);
         }
-        if (enterPS.getRoom().getUser().getId() != kickUserReqDto.getUserId()) {
+        if (enterPS.getRoom().getUser().getId() != userId) {
             throw new CustomApiException("당신은 방장이 아닙니다. 추방 권한이 없습니다", HttpStatus.BAD_REQUEST);
         }
         if (enterPS.getStay() == false) {
@@ -206,14 +206,6 @@ public class PartyService {
         }
         enterPS.notStayRoom();
         return new KickUserRespDto(enterPS);
-    }
-
-    public RoomListByMyIdRespDto 나의모집파티목록(Long userId) {
-        User userPS = userRepository.findById(userId)
-                .orElseThrow(
-                        () -> new CustomApiException("해당 유저가 없습니다", HttpStatus.FORBIDDEN));
-        List<Room> roomListPS = roomRepository.findByUserId(userId);
-        return new RoomListByMyIdRespDto(roomListPS);
     }
 
     public DetailRoomRespDto 파티방상세보기(Long userId, Long roomId) {
@@ -232,15 +224,17 @@ public class PartyService {
         for (int i = 0; i < enterListPS.size(); i++) {
             enterRoomIdList.add(enterListPS.get(i).getRoom().getId());
         }
+        // 방 참여 인원 정보 셀렉
+        List<Enter> enterPeoplePS = enterRepository.findByRoomId(roomId);
         // 내가 방장이거나 입장 중인가
         if (roomPS.getUser().getId() == userId || enterRoomIdList.contains(roomId)) {
-            return new DetailRoomRespDto(roomPS);
+            return new DetailRoomRespDto(roomPS, enterPeoplePS);
         } else {
             throw new CustomApiException("당신은 이 방의 방장도, 이 방 입장 유저도 아닙니다", HttpStatus.BAD_REQUEST);
         }
     }
 
-    public RoomListRespDto 전체파티방목록보기(Long gameCodeId, String keyword, Integer page) {
+    public RoomListRespDto 전체파티방목록(Long gameCodeId, String keyword, Integer page) {
         // 게임 코드가 존재하는 지 확인
         if (gameCodeId != null) {
             GameCode gameCodePS = gameCodeRepository.findById(gameCodeId)
@@ -251,7 +245,7 @@ public class PartyService {
         return new RoomListRespDto(roomListPS);
     }
 
-    public RoomListByIdRespDto 참가중인파티방목록보기(Long userId) {
+    public RoomListByIdRespDto 참가중인파티방목록(Long userId) {
         User userPS = userRepository.findById(userId)
                 .orElseThrow(
                         () -> new CustomApiException("해당 유저가 없습니다", HttpStatus.FORBIDDEN));
@@ -259,5 +253,13 @@ public class PartyService {
         List<Enter> enterListPS = enterRepository.findByUserId(userId);
 
         return new RoomListByIdRespDto(enterListPS);
+    }
+
+    public RoomListByMyIdRespDto 나의모집파티목록(Long userId) {
+        User userPS = userRepository.findById(userId)
+                .orElseThrow(
+                        () -> new CustomApiException("해당 유저가 없습니다", HttpStatus.FORBIDDEN));
+        List<Room> roomListPS = roomRepository.findByUserId(userId);
+        return new RoomListByMyIdRespDto(roomListPS);
     }
 }

@@ -2,6 +2,7 @@ package shop.ggamf.ggamf.web;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -34,7 +35,10 @@ public class UserApiController {
 
     @PostMapping("/join")
     public ResponseEntity<?> join(@RequestBody JoinReqDto joinReqDto) {
+        log.debug("디버그 : " + joinReqDto);
         JoinRespDto joinRespDto = userService.회원가입(joinReqDto);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(joinRespDto.getUid(), "uid");
         return new ResponseEntity<>(new ResponseDto<>("회원가입성공", joinRespDto), HttpStatus.CREATED);
     }
 

@@ -16,6 +16,7 @@ public class PartyRespDto {
     public static class CreateRoomRespDto {
         private Long id;
         private Long userId;
+        private String uid;
         private Long gameCodeId;
         private String gameName;
         private String roomName;
@@ -24,6 +25,7 @@ public class PartyRespDto {
         public CreateRoomRespDto(Room room) {
             this.id = room.getId();
             this.userId = room.getUser().getId();
+            this.uid = room.getUser().getUid();
             this.gameCodeId = room.getGameCode().getId();
             this.gameName = room.getGameName();
             this.roomName = room.getRoomName();
@@ -34,18 +36,16 @@ public class PartyRespDto {
     @Setter
     @Getter
     public static class JoinRoomRespDto {
-        private Long id;
-        private Long userId;
         private Long roomId;
-        private String userNick;
         private String roomName;
+        private String userNick;
+        private String uid;
 
         public JoinRoomRespDto(Enter enter) {
-            this.id = enter.getId();
-            this.userId = enter.getUser().getId();
             this.roomId = enter.getRoom().getId();
-            this.userNick = enter.getUser().getNickname();
             this.roomName = enter.getRoom().getRoomName();
+            this.userNick = enter.getUser().getNickname();
+            this.uid = enter.getUser().getUid();
         }
     }
 
@@ -54,18 +54,18 @@ public class PartyRespDto {
     public static class ExitRoomRespDto {
         private Long id;
         private Long userId;
-        private Long roomId;
         private String userNick;
+        private String uid;
+        private Long roomId;
         private String roomName;
-        private Boolean stay;
 
         public ExitRoomRespDto(Enter enter) {
             this.id = enter.getId();
             this.userId = enter.getUser().getId();
-            this.roomId = enter.getRoom().getId();
             this.userNick = enter.getUser().getNickname();
+            this.uid = enter.getUser().getUid();
+            this.roomId = enter.getRoom().getId();
             this.roomName = enter.getRoom().getRoomName();
-            this.stay = enter.getStay();
         }
     }
 
@@ -87,13 +87,11 @@ public class PartyRespDto {
             private Long id;
             private String gameName;
             private String roomName;
-            private Boolean active;
 
             public RoomDto(Room room) {
                 this.id = room.getId();
                 this.gameName = room.getGameName();
                 this.roomName = room.getRoomName();
-                this.active = room.getActive();
             }
         }
 
@@ -103,19 +101,17 @@ public class PartyRespDto {
             private Long id;
             private Long userId;
             private String userNick;
+            private String uid;
             private Long roomId;
             private String roomName;
-            private Boolean stay;
-            private Boolean stayUntilEnd;
 
             public EnterDto(Enter enter) {
                 this.id = enter.getId();
                 this.userId = enter.getUser().getId();
                 this.userNick = enter.getUser().getNickname();
+                this.uid = enter.getUser().getUid();
                 this.roomId = enter.getRoom().getId();
                 this.roomName = enter.getRoom().getRoomName();
-                this.stay = enter.getStay();
-                this.stayUntilEnd = enter.getStayUntilEnd();
             }
         }
     }
@@ -123,65 +119,61 @@ public class PartyRespDto {
     @Setter
     @Getter
     public static class KickUserRespDto {
-        private Long id;
-        private Long kickUserId;
-        private String kickUsername;
-        private String kickName;
+        private Long userId;
+        private String userNick;
+        private String uid;
         private Long roomId;
-        private Boolean stay;
 
         public KickUserRespDto(Enter enter) {
-            this.id = enter.getId();
-            this.kickUserId = enter.getUser().getId();
-            this.kickUsername = enter.getUser().getUsername();
-            this.kickName = enter.getUser().getName();
+            this.userId = enter.getUser().getId();
+            this.userNick = enter.getUser().getNickname();
+            this.uid = enter.getUser().getUid();
             this.roomId = enter.getRoom().getId();
-            this.stay = enter.getStay();
-        }
-    }
-
-    @Setter
-    @Getter
-    public static class RoomListByMyIdRespDto { // 내가방장인파티방목록보기
-
-        List<RoomDto> rooms;
-
-        public RoomListByMyIdRespDto(List<Room> rooms) {
-            this.rooms = rooms.stream().map((room) -> new RoomDto(room)).collect(Collectors.toList());
-        }
-
-        @Setter
-        @Getter
-        public class RoomDto {
-            private Long id;
-            private String roomName;
-            private String nickName;
-            private Long totalPeople;
-            private String gameLogo;
-
-            public RoomDto(Room room) {
-                this.id = room.getId();
-                this.roomName = room.getRoomName();
-                this.nickName = room.getUser().getNickname();
-                this.totalPeople = room.getTotalPeople();
-                this.gameLogo = room.getGameCode().getLogo();
-            }
         }
     }
 
     @Setter
     @Getter
     public static class DetailRoomRespDto {
-        private Long roomId;
-        private String roomName;
-        private String roomOwnerNickName;
-        private String gameName;
 
-        public DetailRoomRespDto(Room room) {
-            this.roomId = room.getId();
-            this.roomName = room.getRoomName();
-            this.roomOwnerNickName = room.getUser().getNickname();
-            this.gameName = room.getGameName();
+        private RoomDto room;
+        List<EnterDto> enters = new ArrayList<>();
+
+        public DetailRoomRespDto(Room room, List<Enter> enters) {
+            this.room = new RoomDto(room);
+            this.enters = enters.stream().map((enter) -> new EnterDto(enter)).collect(Collectors.toList());
+        }
+
+        @Setter
+        @Getter
+        public class RoomDto {
+            private Long roomId;
+            private String roomName;
+            private String roomOwnerNickName;
+            private String uid;
+            private String gameName;
+
+            public RoomDto(Room room) {
+                this.roomId = room.getId();
+                this.roomName = room.getRoomName();
+                this.roomOwnerNickName = room.getUser().getNickname();
+                this.uid = room.getUser().getUid();
+                this.gameName = room.getGameName();
+            }
+        }
+
+        @Setter
+        @Getter
+        public class EnterDto {
+            private Long userId;
+            private String userNick;
+            private String uid;
+
+            public EnterDto(Enter enter) {
+                this.userId = enter.getUser().getId();
+                this.userNick = enter.getUser().getNickname();
+                this.uid = enter.getUser().getUid();
+            }
         }
     }
 
@@ -201,17 +193,19 @@ public class PartyRespDto {
             private Long id;
             private String roomName;
             private String nickName;
+            private String uid;
+            private Long totalPeople;
             private String gameName;
             private String gameLogo;
-            private Boolean active;
 
             public RoomDto(Room room) {
                 this.id = room.getId();
                 this.roomName = room.getRoomName();
                 this.nickName = room.getUser().getNickname();
+                this.uid = room.getUser().getUid();
+                this.totalPeople = room.getTotalPeople();
                 this.gameName = room.getGameCode().getGameName();
                 this.gameLogo = room.getGameCode().getLogo();
-                this.active = room.getActive();
             }
         }
     }
@@ -232,15 +226,52 @@ public class PartyRespDto {
             private Long id;
             private String roomName;
             private String nickName;
+            private String uid;
             private Long totalPeople;
+            private String gameName;
             private String gameLogo;
 
             public RoomDto(Enter enter) {
                 this.id = enter.getRoom().getId();
                 this.roomName = enter.getRoom().getRoomName();
                 this.nickName = enter.getRoom().getUser().getNickname();
+                this.uid = enter.getRoom().getUser().getUid();
                 this.totalPeople = enter.getRoom().getTotalPeople();
+                this.gameName = enter.getRoom().getGameName();
                 this.gameLogo = enter.getRoom().getGameCode().getLogo();
+            }
+        }
+    }
+
+    @Setter
+    @Getter
+    public static class RoomListByMyIdRespDto { // 내가방장인파티방목록보기
+
+        List<RoomDto> rooms;
+
+        public RoomListByMyIdRespDto(List<Room> rooms) {
+            this.rooms = rooms.stream().map((room) -> new RoomDto(room)).collect(Collectors.toList());
+        }
+
+        @Setter
+        @Getter
+        public class RoomDto {
+            private Long id;
+            private String roomName;
+            private String nickName;
+            private String uid;
+            private Long totalPeople;
+            private String gameName;
+            private String gameLogo;
+
+            public RoomDto(Room room) {
+                this.id = room.getId();
+                this.roomName = room.getRoomName();
+                this.nickName = room.getUser().getNickname();
+                this.uid = room.getUser().getUid();
+                this.totalPeople = room.getTotalPeople();
+                this.gameName = room.getGameName();
+                this.gameLogo = room.getGameCode().getLogo();
             }
         }
     }

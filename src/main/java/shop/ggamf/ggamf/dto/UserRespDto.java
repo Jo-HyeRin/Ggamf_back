@@ -19,14 +19,12 @@ public class UserRespDto {
         private Long id;
         private String username;
         private UserEnum role;
-        private String uid;
         private String createdAt;
 
         public LoginRespDto(User user) {
             this.id = user.getId();
             this.username = user.getUsername();
             this.role = user.getRole();
-            this.uid = user.getUid();
             this.createdAt = user.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         }
 
@@ -38,12 +36,14 @@ public class UserRespDto {
         private Long id;
         private String username;
         private UserStateEnum state;
+        private String uid;
         private UserEnum role;
 
         public JoinRespDto(User user) {
             this.id = user.getId();
             this.username = user.getUsername();
             this.role = user.getRole();
+            this.uid = user.getUid();
             this.state = user.getState();
         }
 

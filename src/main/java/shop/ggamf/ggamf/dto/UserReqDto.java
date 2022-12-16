@@ -1,6 +1,7 @@
 package shop.ggamf.ggamf.dto;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -44,6 +45,8 @@ public class UserReqDto {
         @NotEmpty(message = "이메일은 필수 입력 값입니다.")
         private String email;
         private Boolean agree;
+
+        @NotNull
         private String uid;
 
         public User toEntity() {
