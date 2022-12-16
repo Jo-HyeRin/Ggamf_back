@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 public interface EnterRepository extends JpaRepository<Enter, Long> {
 
     // roomId + userId 로 찾기
-    @Query("select e from Enter e join fetch e.room r join fetch e.user u where e.room.id = :roomId and e.user.id = :userId")
+    @Query("select e from Enter e join fetch e.room r join fetch e.user u where e.room.id = :roomId and e.user.id = :userId and e.stay = true")
     Optional<Enter> findByRoomIdAndUserId(@Param("roomId") Long roomId, @Param("userId") Long userId);
 
     // roomId로 찾기

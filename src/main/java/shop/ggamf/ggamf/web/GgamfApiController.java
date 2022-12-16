@@ -50,8 +50,6 @@ public class GgamfApiController {
             @PathVariable Long userId, @PathVariable Long friendId,
             @AuthenticationPrincipal LoginUser loginUser) {
         log.debug("디버그 : 겜프 요청 컨트롤러 호출");
-        followGgamfReqDto.setUserId(userId);
-        followGgamfReqDto.setFriendId(friendId);
         FollowGgamfRespDto followGgamfRespDto = ggamfService.겜프요청(followGgamfReqDto, userId, friendId);
         return new ResponseEntity<>(new ResponseDto<>("겜프 요청 완료", followGgamfRespDto), HttpStatus.CREATED);
     }
@@ -104,12 +102,7 @@ public class GgamfApiController {
             @PathVariable Long badUserId,
             @AuthenticationPrincipal LoginUser loginUser) {
         log.debug("디버그 : 겜프 신고 컨트롤러 호출");
-        if (userId == badUserId) {
-            throw new CustomApiException("본인을 신고할 수 없습니다.", HttpStatus.BAD_REQUEST);
-        }
-        reportGgamfReqDto.setUserId(userId);
-        reportGgamfReqDto.setBadUserId(badUserId);
-        ReportGgamfRespDto reportGgamfRespDto = ggamfService.겜프신고(reportGgamfReqDto);
+        ReportGgamfRespDto reportGgamfRespDto = ggamfService.겜프신고(reportGgamfReqDto, userId, badUserId);
         return new ResponseEntity<>(new ResponseDto<>("겜프신고 완료", reportGgamfRespDto), HttpStatus.CREATED);
     }
 
@@ -161,9 +154,6 @@ public class GgamfApiController {
             @PathVariable Long banuserId,
             @AuthenticationPrincipal LoginUser loginUser) {
         log.debug("디버그 : 추천 겜프 삭제 컨트롤러 호출");
-        if (userId == banuserId) {
-            throw new CustomApiException("본인을 추천겜프에서 삭제할 수 없습니다", HttpStatus.BAD_REQUEST);
-        }
         RecommendBanRespDto recommendBanRespDto = ggamfService.추천겜프삭제(recommendBanReqDto, userId, banuserId);
         return new ResponseEntity<>(new ResponseDto<>("추천겜프삭제 완료", recommendBanRespDto), HttpStatus.CREATED);
     }

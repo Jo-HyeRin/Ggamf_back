@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import shop.ggamf.ggamf.config.annotations.AuthorizationCheck;
 import shop.ggamf.ggamf.config.auth.LoginUser;
-import shop.ggamf.ggamf.config.exception.CustomApiException;
 import shop.ggamf.ggamf.domain.gameCode.GameCode;
 import shop.ggamf.ggamf.dto.PartyReqDto.CreateRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.JoinRoomReqDto;
@@ -88,7 +87,7 @@ public class PartyApiController {
         return new ResponseEntity<>(new ResponseDto<>("파티방 나가기 완료", exitRoomRespDto), HttpStatus.OK);
     }
 
-    // 파티방 종료(방장)
+    // 파티방 종료 (방장)
     @AuthorizationCheck
     @PutMapping("/party/user/{userId}/end/{roomId}")
     public ResponseEntity<?> endRoom(@PathVariable Long userId, @PathVariable Long roomId,
@@ -98,25 +97,15 @@ public class PartyApiController {
         return new ResponseEntity<>(new ResponseDto<>("파티방 종료 완료", endRoomRespDto), HttpStatus.OK);
     }
 
-    // 파티원 추방(방장)
+    // 파티원 추방 (방장)
     @AuthorizationCheck
     @PutMapping("/party/user/{userId}/kick/{roomId}")
     public ResponseEntity<?> kickUser(@RequestBody KickUserReqDto kickUserReqDto, @PathVariable Long userId,
             @PathVariable Long roomId,
             @AuthenticationPrincipal LoginUser loginUser) {
         log.debug("디버그 : 파티원 추방 컨트롤러 호출");
-        kickUserReqDto.setUserId(userId);
-        kickUserReqDto.setRoomId(roomId);
-        KickUserRespDto kickUserRespDto = partyService.파티원추방(kickUserReqDto);
+        KickUserRespDto kickUserRespDto = partyService.파티원추방(kickUserReqDto, userId, roomId);
         return new ResponseEntity<>(new ResponseDto<>("파티원 추방 완료", kickUserRespDto), HttpStatus.OK);
-    }
-
-    // 나의 모집 파티 목록
-    @AuthorizationCheck
-    @GetMapping("/party/user/{userId}/myrooms")
-    public ResponseEntity<?> findByMyIdRoom(@PathVariable Long userId, @AuthenticationPrincipal LoginUser loginUser) {
-        RoomListByMyIdRespDto roomListByMyIdRespDto = partyService.나의모집파티목록(userId);
-        return new ResponseEntity<>(new ResponseDto<>("나의 모집 파티 목록 보기 완료", roomListByMyIdRespDto), HttpStatus.OK);
     }
 
     // 파티방 상세보기
@@ -124,6 +113,7 @@ public class PartyApiController {
     @GetMapping("/party/user/{userId}/detail/{roomId}")
     public ResponseEntity<?> detailRoom(@PathVariable Long userId, @PathVariable Long roomId,
             @AuthenticationPrincipal LoginUser loginUser) {
+        log.debug("디버그 : 파티방 상세보기 컨트롤러 호출");
         DetailRoomRespDto detailRoomRespDto = partyService.파티방상세보기(userId, roomId);
         return new ResponseEntity<>(new ResponseDto<>("파티방 상세보기 완료", detailRoomRespDto), HttpStatus.OK);
     }
@@ -135,7 +125,8 @@ public class PartyApiController {
             @RequestParam(value = "keyword", defaultValue = "") String keyword,
             @RequestParam(value = "gameCodeId", defaultValue = "") Long gameCodeId,
             @RequestParam(value = "page", defaultValue = "0") Integer page) {
-        RoomListRespDto roomListRespDto = partyService.전체파티방목록보기(gameCodeId, keyword, page);
+        log.debug("디버그 : 전체 파티방 목록 보기 컨트롤러 호출");
+        RoomListRespDto roomListRespDto = partyService.전체파티방목록(gameCodeId, keyword, page);
         return new ResponseEntity<>(new ResponseDto<>("전체 파티방 목록 보기 완료", roomListRespDto), HttpStatus.OK);
     }
 
@@ -143,9 +134,18 @@ public class PartyApiController {
     @AuthorizationCheck
     @GetMapping("/party/user/{userId}/joins")
     public ResponseEntity<?> findJoinRooms(@PathVariable Long userId, @AuthenticationPrincipal LoginUser loginUser) {
-
-        RoomListByIdRespDto roomListByIdRespDto = partyService.참가중인파티방목록보기(userId);
+        log.debug("디버그 : 참가중인 파티방 목록 보기 컨트롤러 호출");
+        RoomListByIdRespDto roomListByIdRespDto = partyService.참가중인파티방목록(userId);
         return new ResponseEntity<>(new ResponseDto<>("참가중인 파티방 목록 보기 완료",
                 roomListByIdRespDto), HttpStatus.OK);
+    }
+
+    // 나의 모집 파티 목록
+    @AuthorizationCheck
+    @GetMapping("/party/user/{userId}/myrooms")
+    public ResponseEntity<?> findByMyIdRoom(@PathVariable Long userId, @AuthenticationPrincipal LoginUser loginUser) {
+        log.debug("디버그 : 나의 모집 파티 목록 보기 컨트롤러 호출");
+        RoomListByMyIdRespDto roomListByMyIdRespDto = partyService.나의모집파티목록(userId);
+        return new ResponseEntity<>(new ResponseDto<>("나의 모집 파티 목록 보기 완료", roomListByMyIdRespDto), HttpStatus.OK);
     }
 }
