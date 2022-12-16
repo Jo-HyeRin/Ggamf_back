@@ -24,7 +24,7 @@ public abstract class DummyEntity {
         User user = User.builder()
                 .username(username)
                 .password(encPassword)
-                .name("유저이름"+ username)
+                .name("유저이름" + username)
                 .phone("010-1234-5678" + username)
                 .nickname("nick" + username)
                 .email(username + "@nate.com")

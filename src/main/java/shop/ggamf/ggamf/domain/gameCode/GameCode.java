@@ -20,7 +20,7 @@ public class GameCode {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false, length = 50)
+    @Column(nullable = false)
     private String logo;
 
     @Column(unique = true, nullable = false, length = 20)
