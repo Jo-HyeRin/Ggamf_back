@@ -61,7 +61,7 @@ public class ReportRepositoryQueryTest extends DummyEntity {
     @Test
     public void findDetailReport_test() {
         // given
-        Long id = 1L;
+        Long id = 2L;
         // when
         DetailReportRespDto detailReportRespDto = reportRepositoryQuery.findDetailReport(id);
         System.out.println("detail : " + detailReportRespDto.getDetail());
