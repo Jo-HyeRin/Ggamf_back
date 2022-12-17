@@ -62,9 +62,9 @@ public class ReportRepositoryQueryTest extends DummyEntity {
     public void findDetailReport_test() {
         // given
         Long id = 2L;
-        Long badUserId = 5L;
         // when
-        DetailReportRespDto detailReportRespDto = reportRepositoryQuery.findDetailReport(id, badUserId);
+        DetailReportRespDto detailReportRespDto = reportRepositoryQuery.findDetailReport(id);
+        System.out.println("detail : " + detailReportRespDto.getDetail());
 
         // then
         Assertions.assertThat(detailReportRespDto.getDetail()).isEqualTo("이러저러한사유");

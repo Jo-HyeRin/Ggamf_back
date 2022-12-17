@@ -23,8 +23,10 @@ public class ReportRepositoryQuery {
 
     public List<ReportRespDto> findReportList() {
         StringBuffer sb = new StringBuffer();
-        sb.append(
-                "select r.id, rs.reason, r.created_at, u.name submitUser, u.name badUser, u.state userState from report r inner join reason_code rs on rs.id = r.reason_code_id inner join users u on u.id = r.submit_user_id");
+        sb.append("select r.id, rs.reason, r.created_at, u2.nickname submitUser, u1.nickname badUser, u1.state userState, ")
+        .append("from report r inner join reason_code rs on rs.id = r.reason_code_id ")
+        .append("inner join users u1 on r.bad_user_id = u1.id ")
+        .append("inner join users u2 on r.submit_user_id = u2.id");
 
         Query query = em.createNativeQuery(sb.toString());
 
@@ -40,14 +42,15 @@ public class ReportRepositoryQuery {
         }
     }
 
-    public DetailReportRespDto findDetailReport(Long id, Long badUserId) {
+    public DetailReportRespDto findDetailReport(Long id) {
         StringBuffer sb = new StringBuffer();
-        sb.append(
-                "select r.id, r.bad_user_id, u.name badUser, r.created_at, rs.reason, r.detail, u.name submitUser, (select count(*) from report where bad_user_id = :badUserId) count from report r inner join reason_code rs on rs.id = r.reason_code_id inner join users u on u.id = r.submit_user_id where r.id = :id");
+        sb.append("select r.id, (select u.nickname from report r inner join users u on r.bad_user_id = u.id where r.id = :id) badUser, ")
+        .append("r.created_at, rc.reason, r.detail, (select u.nickname from report r inner join users u on r.submit_user_id = u.id where r.id = :id) submitUser, ")
+        .append("(select count(*) from report r inner join users u on r.bad_user_id = u.id where r.bad_user_id = (select bad_user_id from report where id = :id) group by bad_user_id) count ")
+        .append("from report r inner join reason_code rc on rc.id = r.reason_code_id where r.id = :id");
 
         Query query = em.createNativeQuery(sb.toString())
-                .setParameter("id", id)
-                .setParameter("badUserId", badUserId);
+                .setParameter("id", id);
 
         JpaResultMapper result = new JpaResultMapper();
         try {
