@@ -50,8 +50,8 @@ public class AdminService {
         return reportRespDto;
     }
 
-    public DetailReportRespDto 리포트상세내용보기(Long id, Long badUserId) {
-        DetailReportRespDto detailReportRespDto = reportRepositoryQuery.findDetailReport(id, badUserId);
+    public DetailReportRespDto 리포트상세내용보기(Long id) {
+        DetailReportRespDto detailReportRespDto = reportRepositoryQuery.findDetailReport(id);
         return detailReportRespDto;
     }
 

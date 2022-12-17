@@ -40,14 +40,12 @@ public class AdminApiController {
         return new ResponseEntity<>(new ResponseDto<>("신고목록 보기 성공", adminService.신고목록보기()), HttpStatus.OK);
     }
 
-    @GetMapping("/admin/{reportId}/detailReport/{badUserId}")
-    public ResponseEntity<?> findDetailReport(@PathVariable Long reportId, @PathVariable Long badUserId,
-            @AuthenticationPrincipal LoginUser loginUser) {
+    @GetMapping("/admin/{reportId}/detailReport")
+    public ResponseEntity<?> findDetailReport(@PathVariable Long reportId, @AuthenticationPrincipal LoginUser loginUser) {
         if (!loginUser.getUser().getRole().equals(UserEnum.ADMIN)) {
             return new ResponseEntity<>(new ResponseDto<>("권한이 없습니다", null), HttpStatus.FORBIDDEN);
         }
-        log.debug("디버그 badUserId: " + badUserId);
-        return new ResponseEntity<>(new ResponseDto<>("신고 상세내용 보기 성공", adminService.리포트상세내용보기(reportId, badUserId)),
+        return new ResponseEntity<>(new ResponseDto<>("신고 상세내용 보기 성공", adminService.리포트상세내용보기(reportId)),
                 HttpStatus.OK);
     }
 
