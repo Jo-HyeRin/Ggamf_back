@@ -16,7 +16,6 @@ import shop.ggamf.ggamf.domain.enter.Enter;
 import shop.ggamf.ggamf.domain.enter.EnterRepository;
 import shop.ggamf.ggamf.domain.gameCode.GameCode;
 import shop.ggamf.ggamf.domain.gameCode.GameCodeRepository;
-import shop.ggamf.ggamf.domain.room.PeopleDto;
 import shop.ggamf.ggamf.domain.room.Room;
 import shop.ggamf.ggamf.domain.room.RoomRepository;
 import shop.ggamf.ggamf.domain.room.RoomRepositoryQuery;
@@ -32,6 +31,7 @@ import shop.ggamf.ggamf.dto.PartyRespDto.EndRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.ExitRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.JoinRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.KickUserRespDto;
+import shop.ggamf.ggamf.dto.PartyRespDto.PeopleDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.RoomListByIdRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.RoomListByMyIdRespDto;
 
@@ -237,6 +237,23 @@ public class PartyService {
         } else {
             throw new CustomApiException("당신은 이 방의 방장도, 이 방 입장 유저도 아닙니다", HttpStatus.BAD_REQUEST);
         }
+    }
+
+    public List<AllRoomDto> 전체파티방목록페이징미적용(Long gameCodeId, String keyword) {
+        // 게임 코드가 존재하는 지 확인
+        if (gameCodeId != null) {
+            GameCode gameCodePS = gameCodeRepository.findById(gameCodeId)
+                    .orElseThrow(
+                            () -> new CustomApiException("존재하지 않는 게임코드입니다", HttpStatus.FORBIDDEN));
+        }
+        List<Room> roomListPS = roomRepository.findAllRoomNotPaging(gameCodeId, keyword);
+        List<AllRoomDto> allRoomList = new ArrayList<>();
+        for (int i = 0; i < roomListPS.size(); i++) {
+            PeopleDto enterPeople = roomRepositoryQuery.enterPeople(roomListPS.get(i).getId());
+            AllRoomDto allRoomDto = new AllRoomDto(roomListPS.get(i), enterPeople);
+            allRoomList.add(allRoomDto);
+        }
+        return allRoomList;
     }
 
     public List<AllRoomDto> 전체파티방목록(Long gameCodeId, String keyword, Integer page) {

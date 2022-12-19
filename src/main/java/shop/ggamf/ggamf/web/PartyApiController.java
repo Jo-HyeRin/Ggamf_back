@@ -117,6 +117,18 @@ public class PartyApiController {
         return new ResponseEntity<>(new ResponseDto<>("파티방 상세보기 완료", detailRoomRespDto), HttpStatus.OK);
     }
 
+    // 전체 파티방 목록 보기 -> 카테고리별, 검색
+    @AuthorizationCheck
+    @GetMapping("/party/user/{userId}/notpaginglist")
+    public ResponseEntity<?> findAllRoomNotPaging(@PathVariable Long userId,
+            @AuthenticationPrincipal LoginUser loginUser,
+            @RequestParam(value = "keyword", defaultValue = "") String keyword,
+            @RequestParam(value = "gameCodeId", defaultValue = "") Long gameCodeId) {
+        log.debug("디버그 : 전체 파티방 목록 보기 컨트롤러 호출");
+        return new ResponseEntity<>(
+                new ResponseDto<>("전체 파티방 목록 보기 완료", partyService.전체파티방목록페이징미적용(gameCodeId, keyword)), HttpStatus.OK);
+    }
+
     // 전체 파티방 목록 보기 -> 카테고리별, 페이징, 검색
     @AuthorizationCheck
     @GetMapping("/party/user/{userId}/list")

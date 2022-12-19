@@ -432,12 +432,12 @@ public class GgamfApiControllerTest extends DummyEntity {
                 Enter enter666 = enterRepository.save(newEnter(romio, room6));
                 Enter enter6666 = enterRepository.save(newEnter(house, room6));
                 Enter enter66666 = enterRepository.save(newEnter(ohoh, room6));
-                Enter endenter7 = enterRepository.save(endEnter(ssar, room7));
+                Enter enter7 = enterRepository.save(newEnter(ssar, room7));
                 Enter endenter77 = enterRepository.save(endEnter(power, room7));
                 Enter endenter777 = enterRepository.save(endEnter(nero20, room7));
                 Enter endenter7777 = enterRepository.save(endEnter(house, room7));
                 Enter endenter77777 = enterRepository.save(endEnter(user23, room7));
-                Enter endenter777777 = enterRepository.save(endEnter(vovo, room7));
+                Enter enter777777 = enterRepository.save(newEnter(vovo, room7));
                 Enter enter8 = enterRepository.save(newEnter(terry, room8));
                 Enter enter9 = enterRepository.save(newEnter(jeje, room9));
                 Enter enter10 = enterRepository.save(newEnter(jeje, room10));

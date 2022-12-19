@@ -190,24 +190,6 @@ public class PartyApiControllerTest extends DummyEntity {
 
         @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
         @Test
-        public void findByMyIdRoom_test() throws Exception {
-                // given
-                Long userId = 2L;
-
-                // when
-                ResultActions resultActions = mvc
-                                .perform(MockMvcRequestBuilders.get("/s/api/party/user/" + userId + "/myrooms"));
-                String responseBody = resultActions.andReturn().getResponse().getContentAsString();
-                System.out.println("테스트 : " + responseBody);
-
-                // then
-                resultActions.andExpect(MockMvcResultMatchers.status().isOk());
-                resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.rooms.[0].roomName")
-                                .value("배그한겜고고 누구나 참여가능 오셈"));
-        }
-
-        @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
-        @Test
         public void detailRoom_test() throws Exception {
                 // given
                 Long userId = 2L;
@@ -224,6 +206,24 @@ public class PartyApiControllerTest extends DummyEntity {
                 resultActions.andExpect(MockMvcResultMatchers.status().isOk());
                 resultActions.andExpect(
                                 MockMvcResultMatchers.jsonPath("$.data.room.roomName").value("칼바람전사들 대환영 선착순!"));
+        }
+
+        @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+        @Test
+        public void findAllRoomNotPaging_test() throws Exception {
+                // given
+                Long userId = 2L;
+
+                // when
+                ResultActions resultActions = mvc
+                                .perform(MockMvcRequestBuilders.get("/s/api/party/user/" + userId + "/notpaginglist"));
+                String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+                System.out.println("테스트 : " + responseBody);
+
+                // then
+                resultActions.andExpect(MockMvcResultMatchers.status().isOk());
+                resultActions.andExpect(
+                                MockMvcResultMatchers.jsonPath("$.data.[0].roomName").value("배그한겜고고 누구나 참여가능 오셈"));
         }
 
         @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
@@ -260,6 +260,24 @@ public class PartyApiControllerTest extends DummyEntity {
                 resultActions.andExpect(MockMvcResultMatchers.status().isOk());
                 resultActions.andExpect(
                                 MockMvcResultMatchers.jsonPath("$.data.rooms.[0].roomName").value("칼바람전사들 대환영 선착순!"));
+        }
+
+        @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+        @Test
+        public void findByMyIdRoom_test() throws Exception {
+                // given
+                Long userId = 2L;
+
+                // when
+                ResultActions resultActions = mvc
+                                .perform(MockMvcRequestBuilders.get("/s/api/party/user/" + userId + "/myrooms"));
+                String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+                System.out.println("테스트 : " + responseBody);
+
+                // then
+                resultActions.andExpect(MockMvcResultMatchers.status().isOk());
+                resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.rooms.[0].roomName")
+                                .value("배그한겜고고 누구나 참여가능 오셈"));
         }
 
         private void dummy_init() {
@@ -377,12 +395,12 @@ public class PartyApiControllerTest extends DummyEntity {
                 Enter enter666 = enterRepository.save(newEnter(romio, room6));
                 Enter enter6666 = enterRepository.save(newEnter(house, room6));
                 Enter enter66666 = enterRepository.save(newEnter(ohoh, room6));
-                Enter endenter7 = enterRepository.save(endEnter(ssar, room7));
+                Enter enter7 = enterRepository.save(newEnter(ssar, room7));
                 Enter endenter77 = enterRepository.save(endEnter(power, room7));
                 Enter endenter777 = enterRepository.save(endEnter(nero20, room7));
                 Enter endenter7777 = enterRepository.save(endEnter(house, room7));
                 Enter endenter77777 = enterRepository.save(endEnter(user23, room7));
-                Enter endenter777777 = enterRepository.save(endEnter(vovo, room7));
+                Enter enter777777 = enterRepository.save(newEnter(vovo, room7));
                 Enter enter8 = enterRepository.save(newEnter(terry, room8));
                 Enter enter9 = enterRepository.save(newEnter(jeje, room9));
                 Enter enter10 = enterRepository.save(newEnter(jeje, room10));

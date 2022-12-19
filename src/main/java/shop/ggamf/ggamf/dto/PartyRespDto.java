@@ -9,8 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import shop.ggamf.ggamf.domain.enter.Enter;
-import shop.ggamf.ggamf.domain.room.PeopleDto;
 import shop.ggamf.ggamf.domain.room.Room;
 
 public class PartyRespDto {
@@ -179,6 +179,16 @@ public class PartyRespDto {
                 this.uid = enter.getUser().getUid();
             }
         }
+    }
+
+    @ToString
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Setter
+    @Getter
+    public static class PeopleDto {
+        private BigInteger roomId;
+        private BigInteger count;
     }
 
     @Setter
