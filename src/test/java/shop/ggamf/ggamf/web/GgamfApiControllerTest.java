@@ -26,6 +26,8 @@ import shop.ggamf.ggamf.domain.gameCode.GameCode;
 import shop.ggamf.ggamf.domain.gameCode.GameCodeRepository;
 import shop.ggamf.ggamf.domain.reasonCode.ReasonCode;
 import shop.ggamf.ggamf.domain.reasonCode.ReasonCodeRepository;
+import shop.ggamf.ggamf.domain.recommendBanuser.RecommendBanuser;
+import shop.ggamf.ggamf.domain.recommendBanuser.RecommendBanuserRepository;
 import shop.ggamf.ggamf.domain.room.Room;
 import shop.ggamf.ggamf.domain.room.RoomRepository;
 import shop.ggamf.ggamf.domain.user.User;
@@ -60,6 +62,8 @@ public class GgamfApiControllerTest extends DummyEntity {
         private GameCodeRepository gameCodeRepository;
         @Autowired
         private EnterRepository enterRepository;
+        @Autowired
+        private RecommendBanuserRepository recommendBanuserRepository;
 
         @BeforeEach
         public void setUp() {
@@ -70,8 +74,8 @@ public class GgamfApiControllerTest extends DummyEntity {
         @Test
         public void followGgamf_test() throws Exception {
                 // given
-                Long userId = 1L;
-                Long friendId = 10L;
+                Long userId = 2L;
+                Long friendId = 21L;
                 FollowGgamfReqDto followGgamfReqDto = new FollowGgamfReqDto();
                 String requestBody = om.writeValueAsString(followGgamfReqDto);
                 System.out.println("테스트 : " + requestBody);
@@ -93,8 +97,8 @@ public class GgamfApiControllerTest extends DummyEntity {
         @Test
         public void acceptGgamf_test() throws Exception {
                 // given
-                Long userId = 1L;
-                Long friendId = 3L;
+                Long userId = 2L;
+                Long friendId = 4L;
 
                 // when
                 ResultActions resultActions = mvc
@@ -113,8 +117,8 @@ public class GgamfApiControllerTest extends DummyEntity {
         @Test
         public void deleteGgamf_test() throws Exception {
                 // given
-                Long userId = 1L;
-                Long friendId = 8L;
+                Long userId = 2L;
+                Long friendId = 6L;
 
                 // when
                 ResultActions resultActions = mvc
@@ -126,15 +130,15 @@ public class GgamfApiControllerTest extends DummyEntity {
 
                 // then
                 resultActions.andExpect(MockMvcResultMatchers.status().isOk());
-                resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.nickname").value("nickohoh"));
+                resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.nickname").value("nickkaka"));
         }
 
         @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
         @Test
         public void rejectGgamf_test() throws Exception {
                 // given
-                Long friendId = 3L;
-                Long userId = 1L;
+                Long userId = 2L;
+                Long friendId = 8L;
 
                 // when
                 ResultActions resultActions = mvc
@@ -146,15 +150,15 @@ public class GgamfApiControllerTest extends DummyEntity {
 
                 // then
                 resultActions.andExpect(MockMvcResultMatchers.status().isOk());
-                resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.nickname").value("nicklala"));
+                resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.nickname").value("nicktoto"));
         }
 
         @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
         @Test
         public void cancelGgamf_test() throws Exception {
                 // given
-                Long userId = 1L;
-                Long friendId = 6L;
+                Long userId = 2L;
+                Long friendId = 7L;
 
                 // when
                 ResultActions resultActions = mvc
@@ -173,8 +177,8 @@ public class GgamfApiControllerTest extends DummyEntity {
         @Test
         public void reportGgamf_test() throws Exception {
                 // given
-                Long userId = 1L;
-                Long badUserId = 2L;
+                Long userId = 2L;
+                Long badUserId = 3L;
                 ReportGgamfReqDto reportGgamfReqDto = new ReportGgamfReqDto();
                 reportGgamfReqDto.setReasonCodeId(1L);
                 reportGgamfReqDto.setDetail("욕설이 너무 심하네요");
@@ -199,7 +203,7 @@ public class GgamfApiControllerTest extends DummyEntity {
         @Test
         public void findGgamfList_test() throws Exception {
                 // given
-                Long userId = 1L;
+                Long userId = 2L;
 
                 // when
                 ResultActions resultActions = mvc
@@ -217,7 +221,7 @@ public class GgamfApiControllerTest extends DummyEntity {
         @Test
         public void sendGgamfList_test() throws Exception {
                 // given
-                Long userId = 1L;
+                Long userId = 2L;
 
                 // when
                 ResultActions resultActions = mvc
@@ -235,7 +239,7 @@ public class GgamfApiControllerTest extends DummyEntity {
         @Test
         public void receiveGgamfList_test() throws Exception {
                 // given
-                Long userId = 1L;
+                Long userId = 2L;
 
                 // when
                 ResultActions resultActions = mvc
@@ -253,7 +257,7 @@ public class GgamfApiControllerTest extends DummyEntity {
         @Test
         public void recommendGgamfList_test() throws Exception {
                 // given
-                Long userId = 1L;
+                Long userId = 2L;
 
                 // when
                 ResultActions resultActions = mvc
@@ -272,7 +276,7 @@ public class GgamfApiControllerTest extends DummyEntity {
         @Test
         public void recommendBan_test() throws Exception {
                 // given
-                Long userId = 1L;
+                Long userId = 2L;
                 Long banuserId = 10L;
                 RecommendBanReqDto recommendBanReqDto = new RecommendBanReqDto();
                 String requestBody = om.writeValueAsString(recommendBanReqDto);
@@ -288,11 +292,12 @@ public class GgamfApiControllerTest extends DummyEntity {
 
                 // then
                 resultActions.andExpect(MockMvcResultMatchers.status().isCreated());
-                resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.nickname").value("nickgogo"));
+                resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.nickname").value("nickyeye"));
         }
 
         private void dummy_init() {
                 // User : 유저
+                User admin = userRepository.save(newAdmin("admin"));
                 User ssar = userRepository.save(newUser("ssar"));
                 User cos = userRepository.save(newUser("cos"));
                 User lala = userRepository.save(newUser("lala"));
@@ -304,6 +309,27 @@ public class GgamfApiControllerTest extends DummyEntity {
                 User yeye = userRepository.save(newUser("yeye"));
                 User gogo = userRepository.save(newUser("gogo"));
                 User romio = userRepository.save(newUser("romio"));
+                User jeje = userRepository.save(newUser("jeje"));
+                User money = userRepository.save(newUser("money"));
+                User terry = userRepository.save(newUser("terry"));
+                User wow = userRepository.save(newUser("wow"));
+                User cash = userRepository.save(newUser("cash"));
+                User power = userRepository.save(newUser("power"));
+                User house = userRepository.save(newUser("house"));
+                User nero20 = userRepository.save(newUser("nero20"));
+                User poll = userRepository.save(newUser("poll"));
+                User user22 = userRepository.save(newUser("user22"));
+                User user23 = userRepository.save(newUser("user23"));
+                User 탑솔러그자체 = userRepository.save(newUser("탑솔러그자체"));
+                User user25 = userRepository.save(newUser("user25"));
+                User 아기사자 = userRepository.save(newUser("아기사자"));
+                User 둘리 = userRepository.save(newUser("둘리"));
+                User 키보드부순당 = userRepository.save(newUser("키보드부순당"));
+                User 임요환짱 = userRepository.save(newUser("임요환짱"));
+                User 페이커팬 = userRepository.save(newUser("페이커팬"));
+                User 뜨뜨뜨뜨 = userRepository.save(newUser("뜨뜨뜨뜨"));
+                User 딜찍누 = userRepository.save(newUser("딜찍누"));
+                User 스피드레이서 = userRepository.save(newUser("스피드레이서"));
                 // Follow : 겜프
                 Follow f1 = followRepository.save(newFollow(ssar, cos, false));
                 Follow f11 = followRepository.save(newFollow(ssar, vovo, false));
@@ -313,10 +339,19 @@ public class GgamfApiControllerTest extends DummyEntity {
                 Follow f33 = followRepository.save(newFollow(ssar, ohoh, true));
                 Follow f4 = followRepository.save(newFollow(kaka, ssar, true));
                 Follow f44 = followRepository.save(newFollow(yeye, ssar, true));
+                Follow f5 = followRepository.save(newFollow(ssar, terry, true));
+                Follow f55 = followRepository.save(newFollow(ssar, wow, true));
+                Follow f6 = followRepository.save(newFollow(cash, ssar, false));
+                Follow f66 = followRepository.save(newFollow(power, ssar, false));
+                // RecommendBanUser : 추천겜프목록에서 제외할 유저
+                RecommendBanuser banuser1 = recommendBanuserRepository.save(newBanuser(ssar, romio));
+                RecommendBanuser banuser2 = recommendBanuserRepository.save(newBanuser(ssar, nero20));
                 // ReasonCode : 신고카테고리
                 ReasonCode reason1 = reasonCodeRepository.save(newReasonCode("욕설"));
                 ReasonCode reason2 = reasonCodeRepository.save(newReasonCode("탈주"));
-                ReasonCode reason3 = reasonCodeRepository.save(newReasonCode("기타"));
+                ReasonCode reason3 = reasonCodeRepository.save(newReasonCode("대리기사"));
+                ReasonCode reason4 = reasonCodeRepository.save(newReasonCode("비매너 행위"));
+                ReasonCode reason5 = reasonCodeRepository.save(newReasonCode("기타"));
                 // GameCode_Logo
                 String etc_logo = "data:image/png;base64,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";
                 String LoL_logo = "data:image/jpeg;base64,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";
@@ -326,38 +361,119 @@ public class GgamfApiControllerTest extends DummyEntity {
                 String lostark_logo = "data:image/jpeg;base64,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";
                 // GameCode : 게임카테고리
                 GameCode etc = gameCodeRepository.save(newGameCode("etc", etc_logo));
-                GameCode LoL = gameCodeRepository.save(newGameCode("LoL", LoL_logo));
+                GameCode LoL = gameCodeRepository.save(newGameCode("LeagueOfLegend", LoL_logo));
                 GameCode starcraft = gameCodeRepository.save(newGameCode("starcraft", starcraft_logo));
                 GameCode battleground = gameCodeRepository.save(newGameCode("battleground", battleground_logo));
                 GameCode overwatch = gameCodeRepository.save(newGameCode("overwatch", overwatch_logo));
                 GameCode lostark = gameCodeRepository.save(newGameCode("lostark", lostark_logo));
                 // Room : 파티방
-                Room endroom1 = roomRepository.save(endRoom("roomname1", ssar, LoL));
-                Room room2 = roomRepository.save(newRoom("roomname2", ssar, etc));
-                Room room3 = roomRepository.save(newRoom("roomname3", cos, LoL));
-                Room endroom4 = roomRepository.save(endRoom("roomname4", lala, etc));
-                Room room5 = roomRepository.save(newRoom("roomname5", yeye, starcraft));
-                Room room6 = roomRepository.save(newRoom("roomname6", ohoh, battleground));
+                Room endroom1 = roomRepository.save(endRoom("솔랭듀오가실분~", ssar, LoL, 2L));
+                Room room2 = roomRepository.save(newRoom("배그한겜고고 누구나 참여가능 오셈", ssar, battleground, 4L));
+                Room room3 = roomRepository.save(newRoom("칼바람전사들 대환영 선착순!", cos, LoL, 5L));
+                Room endroom4 = roomRepository.save(endRoom("최고의 명장면 주인공은 나야나 ~", lala, overwatch, 5L));
+                Room room5 = roomRepository.save(newRoom("3:3 빨무 팀 사다리탈거임 아재환영", yeye, starcraft, 6L));
+                Room room6 = roomRepository.save(newRoom("오늘 치킨 마려움 빨리오셈 ㄱㄱㄱ", ohoh, battleground, 4L));
+                Room room7 = roomRepository.save(newRoom("골플 자랭 구함 대기 가능", vovo, LoL, 8L));
+                Room room8 = roomRepository.save(newRoom("내전 우리팀 멤버 구함 상대 플다", terry, LoL, 5L));
+                Room room9 = roomRepository.save(newRoom("일겜에서 신챔 연습하실? 내가 남는데 감", jeje, LoL, 5L));
+                Room room10 = roomRepository.save(newRoom("원랜디 하실분 구해요~~~", jeje, starcraft, 5L));
+                Room room11 = roomRepository.save(newRoom("파티구함", money, lostark, 4L));
+                Room room12 = roomRepository.save(newRoom("요들 5인팟 가실분 오세용~", money, LoL, 5L));
+                Room room13 = roomRepository.save(newRoom("저 정글 가르쳐주실분 참고로 브론즈임", money, LoL, 4L));
+                Room room14 = roomRepository.save(newRoom("메르시 출동 다 모이셈", terry, battleground, 5L));
+                Room room15 = roomRepository.save(newRoom("오버워치 꿀챔 꿀팁 알려주세요~", jeje, overwatch, 6L));
+                Room room16 = roomRepository.save(newRoom("4:4 테란vs토스 하실분", terry, starcraft, 8L));
+                Room room17 = roomRepository.save(newRoom("실골 듀오 구해요", wow, LoL, 2L));
+                Room room18 = roomRepository.save(newRoom("실골 칼바람 내전 우리팀 멤버 미리 구해요", wow, LoL, 5L));
+                Room room19 = roomRepository.save(newRoom("로아 꿀팁주실 선생님들 모십니다!", wow, lostark, 8L));
+                Room room20 = roomRepository.save(newRoom("다이아 승격전 도와주실 정글러 구해여", cash, LoL, 2L));
+                Room room21 = roomRepository.save(newRoom("니달리 연습 도와줄 실골 친구들 구해용", 아기사자, LoL, 5L));
+                Room room22 = roomRepository.save(newRoom("미드 아우솔 원챔입니다 캐리가능 함께하실 플레 유저들 오셈", 둘리, LoL, 5L));
+                Room room23 = roomRepository.save(newRoom("2:2 파이썬 같이해요", 키보드부순당, starcraft, 4L));
+                Room room24 = roomRepository.save(newRoom("입구막기 알려드림 시키는대로 하셈 고고", power, starcraft, 7L));
+                Room room25 = roomRepository.save(newRoom("3:3 빨무 중수이상 도장깨기하러가자~", 임요환짱, starcraft, 3L));
+                Room room26 = roomRepository.save(newRoom("자랭하실분 너만오면고 ~", 페이커팬, LoL, 5L));
+                Room room27 = roomRepository.save(newRoom("롤체 일반 덱 연습하자 ㄱㄱ", house, LoL, 8L));
+                Room room28 = roomRepository.save(newRoom("탑 칼리스타 출동 ~ 내가 캐리해줌 오셈", 뜨뜨뜨뜨, LoL, 5L));
+                Room room29 = roomRepository.save(newRoom("아이언 세계 탐험하실 용사들 구함", nero20, LoL, 5L));
+                Room room30 = roomRepository.save(newRoom("봇듀 하실분~ 딜은 내가 함 탱서폿 구해요", 딜찍누, LoL, 2L));
+                Room room31 = roomRepository.save(newRoom("레이드 뛰실 파티원 구해요 !", nero20, lostark, 4L));
+                Room room32 = roomRepository.save(newRoom("제대로 작전 짜서 이길 용자들 오셈", poll, battleground, 4L));
+                Room room33 = roomRepository.save(newRoom("이기는 법을 까먹은 동지들 이제 이길 때 됐음", 스피드레이서, LoL, 5L));
+                Room room34 = roomRepository.save(newRoom("골드 자랭 5인팟 구함", poll, LoL, 5L));
+                Room endroom35 = roomRepository.save(endRoom("듀오하실 다이아 정글러 모십니다", 탑솔러그자체, LoL, 2L));
+                Room endroom36 = roomRepository.save(endRoom("연승 이어가는 실버 자랭팟 ~~ ", user22, LoL, 5L));
+                Room room37 = roomRepository.save(newRoom("로아 입문합니다 팁 공유 부탁드려요 ~~~ ", ssar, lostark, 8L));
                 // Enter : 방 참여 정보
+                Enter enter1111 = enterRepository.save(endEnter(ssar, endroom1));
                 Enter enter1 = enterRepository.save(endEnter(lala, endroom1));
                 Enter enter11 = enterRepository.save(endEnter(dada, endroom1));
                 Enter enter111 = enterRepository.save(endEnter(gogo, endroom1));
                 Enter enter2 = enterRepository.save(newEnter(cos, room2));
                 Enter enter22 = enterRepository.save(newEnter(kaka, room2));
                 Enter enter222 = enterRepository.save(newEnter(romio, room2));
+                Enter enter2222 = enterRepository.save(newEnter(ssar, room2));
                 Enter enter3 = enterRepository.save(newEnter(ssar, room3));
                 Enter enter33 = enterRepository.save(newEnter(toto, room3));
-                Enter enter333 = enterRepository.save(newEnter(gogo, room3));
+                Enter enter3333 = enterRepository.save(newEnter(money, room3));
+                Enter enter33333 = enterRepository.save(newEnter(gogo, room3));
+                Enter enter333333 = enterRepository.save(newEnter(cos, room3));
                 Enter endEnter4 = enterRepository.save(endEnter(ssar, endroom4));
                 Enter endEnter44 = enterRepository.save(endEnter(cos, endroom4));
                 Enter endEnter444 = enterRepository.save(endEnter(yeye, endroom4));
                 Enter endEnter4444 = enterRepository.save(endEnter(romio, endroom4));
+                Enter endEnter44444 = enterRepository.save(endEnter(lala, endroom4));
                 Enter enter5 = enterRepository.save(newEnter(gogo, room5));
                 Enter enter55 = enterRepository.save(newEnter(cos, room5));
                 Enter enter555 = enterRepository.save(newEnter(dada, room5));
+                Enter enter5555 = enterRepository.save(newEnter(yeye, room5));
                 Enter enter6 = enterRepository.save(newEnter(ssar, room6));
                 Enter enter66 = enterRepository.save(newEnter(lala, room6));
                 Enter enter666 = enterRepository.save(newEnter(romio, room6));
-                Enter enter6666 = enterRepository.save(newEnter(gogo, room6));
+                Enter enter6666 = enterRepository.save(newEnter(house, room6));
+                Enter enter66666 = enterRepository.save(newEnter(ohoh, room6));
+                Enter enter7 = enterRepository.save(newEnter(ssar, room7));
+                Enter endenter77 = enterRepository.save(endEnter(power, room7));
+                Enter endenter777 = enterRepository.save(endEnter(nero20, room7));
+                Enter endenter7777 = enterRepository.save(endEnter(house, room7));
+                Enter endenter77777 = enterRepository.save(endEnter(user23, room7));
+                Enter enter777777 = enterRepository.save(newEnter(vovo, room7));
+                Enter enter8 = enterRepository.save(newEnter(terry, room8));
+                Enter enter9 = enterRepository.save(newEnter(jeje, room9));
+                Enter enter10 = enterRepository.save(newEnter(jeje, room10));
+                Enter enters11 = enterRepository.save(newEnter(money, room11));
+                Enter enters12 = enterRepository.save(newEnter(money, room12));
+                Enter enters13 = enterRepository.save(newEnter(money, room13));
+                Enter enters14 = enterRepository.save(newEnter(terry, room14));
+                Enter enters15 = enterRepository.save(newEnter(jeje, room15));
+                Enter enters16 = enterRepository.save(newEnter(terry, room16));
+                Enter enters17 = enterRepository.save(newEnter(wow, room17));
+                Enter enters18 = enterRepository.save(newEnter(wow, room18));
+                Enter enters19 = enterRepository.save(newEnter(wow, room19));
+                Enter enters20 = enterRepository.save(newEnter(cash, room20));
+                Enter enters21 = enterRepository.save(newEnter(아기사자, room21));
+                Enter enters22 = enterRepository.save(newEnter(둘리, room22));
+                Enter enters23 = enterRepository.save(newEnter(키보드부순당, room23));
+                Enter enters24 = enterRepository.save(newEnter(power, room24));
+                Enter enters25 = enterRepository.save(newEnter(임요환짱, room25));
+                Enter enters26 = enterRepository.save(newEnter(페이커팬, room26));
+                Enter enters27 = enterRepository.save(newEnter(house, room27));
+                Enter enters28 = enterRepository.save(newEnter(뜨뜨뜨뜨, room28));
+                Enter enters29 = enterRepository.save(newEnter(nero20, room29));
+                Enter enters30 = enterRepository.save(newEnter(딜찍누, room30));
+                Enter enters31 = enterRepository.save(newEnter(nero20, room31));
+                Enter enters32 = enterRepository.save(newEnter(poll, room32));
+                Enter enters33 = enterRepository.save(newEnter(스피드레이서, room33));
+                Enter enters34 = enterRepository.save(newEnter(poll, room34));
+                Enter endenter35 = enterRepository.save(endEnter(탑솔러그자체, endroom35));
+                Enter endenter355 = enterRepository.save(endEnter(money, endroom35));
+                Enter endenter36 = enterRepository.save(endEnter(user22, endroom36));
+                Enter endenter366 = enterRepository.save(endEnter(toto, endroom36));
+                Enter endenter3666 = enterRepository.save(endEnter(nero20, endroom36));
+                Enter endenter36666 = enterRepository.save(endEnter(dada, endroom36));
+                Enter enter37 = enterRepository.save(newEnter(ssar, room37));
+                Enter enter377 = enterRepository.save(newEnter(user22, room37));
+                Enter enter3777 = enterRepository.save(newEnter(house, room37));
+                Enter enter37777 = enterRepository.save(newEnter(toto, room37));
         }
 }

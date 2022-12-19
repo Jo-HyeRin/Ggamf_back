@@ -1,11 +1,15 @@
 package shop.ggamf.ggamf.dto;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import shop.ggamf.ggamf.domain.enter.Enter;
 import shop.ggamf.ggamf.domain.room.Room;
 
@@ -177,36 +181,38 @@ public class PartyRespDto {
         }
     }
 
+    @ToString
+    @AllArgsConstructor
+    @NoArgsConstructor
     @Setter
     @Getter
-    public static class RoomListRespDto { // 전체 파티방 목록 보기
+    public static class PeopleDto { // 파티방 현재 입장 인원수 count
+        private BigInteger roomId;
+        private BigInteger count;
+    }
 
-        List<RoomDto> rooms;
+    @NoArgsConstructor
+    @Setter
+    @Getter
+    public static class AllRoomDto { // 전체 파티방 목록 보기
+        private Long id;
+        private String roomName;
+        private String nickName;
+        private String uid;
+        private Long totalPeople;
+        private BigInteger count;
+        private String gameName;
+        private String gameLogo;
 
-        public RoomListRespDto(List<Room> rooms) {
-            this.rooms = rooms.stream().map((room) -> new RoomDto(room)).collect(Collectors.toList());
-        }
-
-        @Setter
-        @Getter
-        public class RoomDto {
-            private Long id;
-            private String roomName;
-            private String nickName;
-            private String uid;
-            private Long totalPeople;
-            private String gameName;
-            private String gameLogo;
-
-            public RoomDto(Room room) {
-                this.id = room.getId();
-                this.roomName = room.getRoomName();
-                this.nickName = room.getUser().getNickname();
-                this.uid = room.getUser().getUid();
-                this.totalPeople = room.getTotalPeople();
-                this.gameName = room.getGameCode().getGameName();
-                this.gameLogo = room.getGameCode().getLogo();
-            }
+        public AllRoomDto(Room room, PeopleDto peopleDto) {
+            this.id = room.getId();
+            this.roomName = room.getRoomName();
+            this.nickName = room.getUser().getNickname();
+            this.uid = room.getUser().getUid();
+            this.totalPeople = room.getTotalPeople();
+            this.count = peopleDto.getCount();
+            this.gameName = room.getGameName();
+            this.gameLogo = room.getGameCode().getLogo();
         }
     }
 
@@ -275,5 +281,4 @@ public class PartyRespDto {
             }
         }
     }
-
 }

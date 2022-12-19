@@ -40,6 +40,15 @@ public class PartyReqDto {
                     .gameCode(gameCode)
                     .build();
         }
+
+        public Enter toEntity(User user, Room room) {
+            return Enter.builder()
+                    .user(user)
+                    .room(room)
+                    .stay(true)
+                    .stayUntilEnd(false)
+                    .build();
+        }
     }
 
     @Setter

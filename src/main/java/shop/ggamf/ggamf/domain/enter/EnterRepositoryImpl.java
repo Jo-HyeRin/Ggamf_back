@@ -29,7 +29,7 @@ public class EnterRepositoryImpl implements Dao {
             List<Enter> nullList = new ArrayList<>();
             return nullList;
         } else {
-            sql += "select e from Enter e join fetch e.user u join fetch e.room ";
+            sql += "select e from Enter e join fetch e.user u join fetch e.room r ";
             sql += "where e.user.id != :userId and e.room.id in :roomIdList";
             // 파라미터 바인딩
             TypedQuery<Enter> query = em.createQuery(sql, Enter.class);

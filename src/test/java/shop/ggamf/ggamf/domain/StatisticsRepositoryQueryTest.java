@@ -90,12 +90,12 @@ public class StatisticsRepositoryQueryTest extends DummyEntity {
         GameCode overwatch = gameCodeRepository.save(newGameCode("overwatch", overwatch_logo));
         GameCode lostark = gameCodeRepository.save(newGameCode("lostark", lostark_logo));
 
-        Room endroom1 = roomRepository.save(endRoom("roomname1", ssar, LoL));
-        Room room2 = roomRepository.save(newRoom("roomname2", ssar, etc));
-        Room room3 = roomRepository.save(newRoom("roomname3", cos, LoL));
-        Room endroom4 = roomRepository.save(endRoom("roomname4", lala, etc));
-        Room room5 = roomRepository.save(newRoom("roomname5", yeye, starcraft));
-        Room room6 = roomRepository.save(newRoom("roomname6", ohoh, battleground));
+        Room endroom1 = roomRepository.save(endRoom("솔랭듀오가실분~", ssar, LoL, 2L));
+        Room room2 = roomRepository.save(newRoom("배그한겜고고 누구나 참여가능 오셈", ssar, battleground, 4L));
+        Room room3 = roomRepository.save(newRoom("칼바람전사들 대환영 선착순!", cos, LoL, 5L));
+        Room endroom4 = roomRepository.save(endRoom("최고의 명장면 주인공은 나야나 ~", lala, overwatch, 5L));
+        Room room5 = roomRepository.save(newRoom("3:3 빨무 팀 사다리탈거임 아재환영", yeye, starcraft, 6L));
+        Room room6 = roomRepository.save(newRoom("오늘 치킨 마려움 빨리오셈 ㄱㄱㄱ", ohoh, battleground, 4L));
     }
 
     private void autoincrement_reset() {
