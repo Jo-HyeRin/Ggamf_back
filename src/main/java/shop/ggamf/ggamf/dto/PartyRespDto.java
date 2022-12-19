@@ -186,7 +186,7 @@ public class PartyRespDto {
     @NoArgsConstructor
     @Setter
     @Getter
-    public static class PeopleDto {
+    public static class PeopleDto { // 파티방 현재 입장 인원수 count
         private BigInteger roomId;
         private BigInteger count;
     }
@@ -202,11 +202,6 @@ public class PartyRespDto {
         private BigInteger count;
         private String gameName;
         private String gameLogo;
-
-        public AllRoomDto setAllRoom(Room room, PeopleDto peopleDto) {
-            AllRoomDto roomDto = new AllRoomDto(room, peopleDto);
-            return roomDto;
-        }
 
         public AllRoomDto(Room room, PeopleDto peopleDto) {
             this.id = room.getId();
