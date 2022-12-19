@@ -16,13 +16,16 @@ import shop.ggamf.ggamf.domain.enter.Enter;
 import shop.ggamf.ggamf.domain.enter.EnterRepository;
 import shop.ggamf.ggamf.domain.gameCode.GameCode;
 import shop.ggamf.ggamf.domain.gameCode.GameCodeRepository;
+import shop.ggamf.ggamf.domain.room.PeopleDto;
 import shop.ggamf.ggamf.domain.room.Room;
 import shop.ggamf.ggamf.domain.room.RoomRepository;
+import shop.ggamf.ggamf.domain.room.RoomRepositoryQuery;
 import shop.ggamf.ggamf.domain.user.User;
 import shop.ggamf.ggamf.domain.user.UserRepository;
 import shop.ggamf.ggamf.dto.PartyReqDto.CreateRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.JoinRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.KickUserReqDto;
+import shop.ggamf.ggamf.dto.PartyRespDto.AllRoomDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.CreateRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.DetailRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.EndRoomRespDto;
@@ -31,7 +34,6 @@ import shop.ggamf.ggamf.dto.PartyRespDto.JoinRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.KickUserRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.RoomListByIdRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.RoomListByMyIdRespDto;
-import shop.ggamf.ggamf.dto.PartyRespDto.RoomListRespDto;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -43,6 +45,7 @@ public class PartyService {
     private final UserRepository userRepository;
     private final GameCodeRepository gameCodeRepository;
     private final EnterRepository enterRepository;
+    private final RoomRepositoryQuery roomRepositoryQuery;
 
     public List<GameCode> 파티방생성화면게임코드전달() {
         List<GameCode> gameCodeList = gameCodeRepository.findAll();
@@ -71,6 +74,8 @@ public class PartyService {
         // 실행
         Room room = createRoomReqDto.toEntity(userPS, gameCodePS);
         Room roomPS = roomRepository.save(room);
+        Enter enter = createRoomReqDto.toEntity(userPS, roomPS);
+        Enter enterPS = enterRepository.save(enter);
         // 응답
         return new CreateRoomRespDto(roomPS);
     }
@@ -234,7 +239,7 @@ public class PartyService {
         }
     }
 
-    public RoomListRespDto 전체파티방목록(Long gameCodeId, String keyword, Integer page) {
+    public List<AllRoomDto> 전체파티방목록(Long gameCodeId, String keyword, Integer page) {
         // 게임 코드가 존재하는 지 확인
         if (gameCodeId != null) {
             GameCode gameCodePS = gameCodeRepository.findById(gameCodeId)
@@ -242,7 +247,13 @@ public class PartyService {
                             () -> new CustomApiException("존재하지 않는 게임코드입니다", HttpStatus.FORBIDDEN));
         }
         List<Room> roomListPS = roomRepository.findAllRoom(gameCodeId, keyword, page);
-        return new RoomListRespDto(roomListPS);
+        List<AllRoomDto> allRoomList = new ArrayList<>();
+        for (int i = 0; i < roomListPS.size(); i++) {
+            PeopleDto enterPeople = roomRepositoryQuery.enterPeople(roomListPS.get(i).getId());
+            AllRoomDto allRoomDto = new AllRoomDto(roomListPS.get(i), enterPeople);
+            allRoomList.add(allRoomDto);
+        }
+        return allRoomList;
     }
 
     public RoomListByIdRespDto 참가중인파티방목록(Long userId) {

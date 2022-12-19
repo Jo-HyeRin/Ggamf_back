@@ -31,7 +31,6 @@ import shop.ggamf.ggamf.dto.PartyRespDto.JoinRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.KickUserRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.RoomListByIdRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.RoomListByMyIdRespDto;
-import shop.ggamf.ggamf.dto.PartyRespDto.RoomListRespDto;
 import shop.ggamf.ggamf.dto.ResponseDto;
 import shop.ggamf.ggamf.service.PartyService;
 
@@ -126,8 +125,8 @@ public class PartyApiController {
             @RequestParam(value = "gameCodeId", defaultValue = "") Long gameCodeId,
             @RequestParam(value = "page", defaultValue = "0") Integer page) {
         log.debug("디버그 : 전체 파티방 목록 보기 컨트롤러 호출");
-        RoomListRespDto roomListRespDto = partyService.전체파티방목록(gameCodeId, keyword, page);
-        return new ResponseEntity<>(new ResponseDto<>("전체 파티방 목록 보기 완료", roomListRespDto), HttpStatus.OK);
+        return new ResponseEntity<>(
+                new ResponseDto<>("전체 파티방 목록 보기 완료", partyService.전체파티방목록(gameCodeId, keyword, page)), HttpStatus.OK);
     }
 
     // 참가중인 파티방 목록 보기

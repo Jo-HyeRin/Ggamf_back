@@ -41,4 +41,30 @@ public class RoomRepositoryQuery {
         }
 
     }
+
+    public PeopleDto enterPeople(Long roomId) {
+        StringBuffer sb = new StringBuffer();
+        sb.append(
+                "select r.id, count(e.id) count from enter e ")
+                .append("left join room r on r.id = e.room_id ")
+                .append("where r.active = true ")
+                .append("and r.id = :roomId ")
+                .append("group by r.id");
+
+        Query query = em.createNativeQuery(sb.toString());
+        query.setParameter("roomId", roomId);
+
+        JpaResultMapper result = new JpaResultMapper();
+        try {
+            PeopleDto peopleDto = result.uniqueResult(query, PeopleDto.class);
+            log.debug("디버그 : " + peopleDto);
+            return peopleDto;
+        } catch (NoResultException e) {
+            PeopleDto peopleDto = new PeopleDto();
+            log.debug("디버그 비었음 : " + peopleDto);
+            return peopleDto;
+        }
+
+    }
+
 }
