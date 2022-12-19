@@ -1,5 +1,6 @@
 package shop.ggamf.ggamf.domain.follow;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -24,38 +25,47 @@ public class FollowRepositoryImpl implements Dao {
 
     @Override
     public List<Follow> findByRecommendFollowing(Long userId, List<Long> enters) {
-
         String sql = "";
-        sql += "select f from Follow f ";
-        sql += "left join f.follower e ";
-        sql += "left join f.following i ";
-        sql += "where f.follower.id = :userId ";
-        sql += "and f.following.id in :enters";
-
-        // 파라미터 바인딩
-        TypedQuery<Follow> query = em.createQuery(sql, Follow.class);
-        query = query.setParameter("userId", userId);
-        query = query.setParameter("enters", enters);
-
-        return query.getResultList();
+        if (enters == null || enters.isEmpty()) {
+            List<Follow> nullList = new ArrayList<>();
+            return nullList;
+        } else {
+            sql += "select f from Follow f ";
+            sql += "left join f.follower e ";
+            sql += "left join f.following i ";
+            sql += "where f.follower.id = :userId ";
+            sql += "and f.following.id in :enters";
+            // 파라미터 바인딩
+            TypedQuery<Follow> query = em.createQuery(sql, Follow.class);
+            if (enters != null) {
+                query = query.setParameter("userId", userId);
+                query = query.setParameter("enters", enters);
+            }
+            return query.getResultList();
+        }
     }
 
     @Override
     public List<Follow> findByRecommendFollower(Long userId, List<Long> enters) {
 
         String sql = "";
-        sql += "select f from Follow f ";
-        sql += "left join f.follower e ";
-        sql += "left join f.following i ";
-        sql += "where f.following.id = :userId ";
-        sql += "and f.follower.id in :enters";
-
-        // 파라미터 바인딩
-        TypedQuery<Follow> query = em.createQuery(sql, Follow.class);
-        query = query.setParameter("userId", userId);
-        query = query.setParameter("enters", enters);
-
-        return query.getResultList();
+        if (enters == null || enters.isEmpty()) {
+            List<Follow> nullList = new ArrayList<>();
+            return nullList;
+        } else {
+            sql += "select f from Follow f ";
+            sql += "left join f.follower e ";
+            sql += "left join f.following i ";
+            sql += "where f.following.id = :userId ";
+            sql += "and f.follower.id in :enters";
+            // 파라미터 바인딩
+            TypedQuery<Follow> query = em.createQuery(sql, Follow.class);
+            if (enters != null) {
+                query = query.setParameter("userId", userId);
+                query = query.setParameter("enters", enters);
+            }
+            return query.getResultList();
+        }
     }
 
 }

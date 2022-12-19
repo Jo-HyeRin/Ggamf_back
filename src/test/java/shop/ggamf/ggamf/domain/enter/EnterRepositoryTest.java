@@ -18,9 +18,6 @@ import shop.ggamf.ggamf.domain.follow.Follow;
 import shop.ggamf.ggamf.domain.follow.FollowRepository;
 import shop.ggamf.ggamf.domain.gameCode.GameCode;
 import shop.ggamf.ggamf.domain.gameCode.GameCodeRepository;
-import shop.ggamf.ggamf.domain.reasonCode.ReasonCode;
-import shop.ggamf.ggamf.domain.recommendBanuser.RecommendBanuser;
-import shop.ggamf.ggamf.domain.recommendBanuser.RecommendBanuserRepository;
 import shop.ggamf.ggamf.domain.room.Room;
 import shop.ggamf.ggamf.domain.room.RoomRepository;
 import shop.ggamf.ggamf.domain.user.User;
@@ -62,14 +59,14 @@ public class EnterRepositoryTest extends DummyEntity {
     public void findByRoomIdAndUserId_test() throws Exception {
         // given
         Long roomId = 3L;
-        Long userId = 1L;
+        Long userId = 2L;
 
         // when
         Enter enterPS = enterRepository.findByRoomIdAndUserId(roomId, userId)
                 .orElseThrow();
 
         // then
-        Assertions.assertThat(enterPS.getId()).isEqualTo(7L);
+        Assertions.assertThat(enterPS.getId()).isEqualTo(9L);
     }
 
     @Test
@@ -87,37 +84,25 @@ public class EnterRepositoryTest extends DummyEntity {
     @Test
     public void findByUserId_test() throws Exception {
         // given
-        Long userId = 1L;
+        Long userId = 2L;
 
         // when
         List<Enter> enterListPS = enterRepository.findByUserId(userId);
 
         // then
-        Assertions.assertThat(enterListPS.get(0).getRoom().getRoomName()).isEqualTo("roomname3");
+        Assertions.assertThat(enterListPS.get(0).getRoom().getRoomName()).isEqualTo("칼바람전사들 대환영 선착순!");
     }
 
     @Test
-    public void findByRoomIdEnd_test() throws Exception {
+    public void findEnterRoom_test() throws Exception { // 내가 참여했던 방 목록 역순
         // given
-        Long roomId = 1L;
-
-        // when
-        List<Enter> enterListPS = enterRepository.findByRoomIdEnd(roomId);
-
-        // then
-        Assertions.assertThat(enterListPS.get(0).getUser().getNickname()).isEqualTo("nicklala");
-    }
-
-    @Test
-    public void findEnterRoom_test() throws Exception {
-        // given
-        Long userId = 1L;
+        Long userId = 2L;
 
         // when
         List<Enter> enterListPS = enterRepository.findEnterRoom(userId);
 
         // then
-        Assertions.assertThat(enterListPS.get(0).getRoom().getRoomName()).isEqualTo("roomname8");
+        Assertions.assertThat(enterListPS.get(0).getRoom().getRoomName()).isEqualTo("골플 자랭 구함 대기 가능");
     }
 
     @Test
@@ -132,7 +117,7 @@ public class EnterRepositoryTest extends DummyEntity {
         List<Enter> enterListPS = enterRepository.findTogether(userId, roomIdList);
 
         // then
-        Assertions.assertThat(enterListPS.size()).isEqualTo(5);
+        Assertions.assertThat(enterListPS.size()).isEqualTo(6);
     }
 
     private void dummy_init() {

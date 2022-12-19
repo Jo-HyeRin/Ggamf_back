@@ -1,5 +1,6 @@
 package shop.ggamf.ggamf.domain.follow;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -55,24 +56,24 @@ public class FollowRepositoryTest extends DummyEntity {
     }
 
     @Test
-    public void findByBothId_test() throws Exception {
+    public void findByBothId_test() throws Exception { // 내가 상대에게 신청한 내역
         // given
-        Long userId = 1L;
-        Long friendId = 6L;
+        Long userId = 2L;
+        Long friendId = 3L;
 
         // when
         Follow followPS = followRepository.findByBothId(userId, friendId)
                 .orElseThrow();
 
         // then
-        Assertions.assertThat(followPS.getId()).isEqualTo(2L);
+        Assertions.assertThat(followPS.getId()).isEqualTo(1L);
     }
 
     @Test
-    public void isGgamfFollow_test() throws Exception {
+    public void isGgamfFollow_test() throws Exception { // 겜프사이인가 확인
         // given
-        Long userId = 1L;
-        Long friendId = 4L;
+        Long userId = 2L;
+        Long friendId = 5L;
 
         // when
         Follow followPS = followRepository.isGgamfFollow(userId, friendId).orElse(null);
@@ -84,7 +85,7 @@ public class FollowRepositoryTest extends DummyEntity {
     @Test
     public void findByFollowerId_test() throws Exception {
         // given
-        Long userId = 1L;
+        Long userId = 2L;
 
         // when
         List<Follow> followListPS = followRepository.findByFollowerId(userId);
@@ -96,7 +97,7 @@ public class FollowRepositoryTest extends DummyEntity {
     @Test
     public void findByFollowingId_test() throws Exception {
         // given
-        Long userId = 1L;
+        Long userId = 2L;
 
         // when
         List<Follow> followListPS = followRepository.findByFollowingId(userId);
@@ -108,7 +109,7 @@ public class FollowRepositoryTest extends DummyEntity {
     @Test
     public void findByUserIdFollower_test() throws Exception {
         // given
-        Long userId = 1L;
+        Long userId = 2L;
 
         // when
         List<Follow> followListPS = followRepository.findByUserIdFollower(userId);
@@ -120,13 +121,47 @@ public class FollowRepositoryTest extends DummyEntity {
     @Test
     public void findByUserIdFollowing_test() throws Exception {
         // given
-        Long userId = 1L;
+        Long userId = 2L;
 
         // when
         List<Follow> followListPS = followRepository.findByUserIdFollowing(userId);
 
         // then
         Assertions.assertThat(followListPS.get(0).getId()).isEqualTo(3L);
+    }
+
+    @Test
+    public void findByRecommendFollowing_test() throws Exception {
+        // given
+        Long userId = 2L;
+        List<Long> enters = new ArrayList<>();
+        enters.add(2L);
+        enters.add(9L);
+        enters.add(11L);
+
+        // when
+        List<Follow> followListPS = followRepository.findByRecommendFollowing(userId, enters);
+
+        // then
+        Assertions.assertThat(followListPS.get(0).getId()).isEqualTo(6L);
+    }
+
+    @Test
+    public void findByRecommendFollower_test() throws Exception {
+        // given
+        Long userId = 2L;
+        List<Long> enters = new ArrayList<>();
+        enters.add(2L);
+        enters.add(9L);
+        enters.add(11L);
+        enters.add(18L);
+        enters.add(19L);
+
+        // when
+        List<Follow> followListPS = followRepository.findByRecommendFollower(userId, enters);
+
+        // then
+        Assertions.assertThat(followListPS.get(0).getId()).isEqualTo(12L);
     }
 
     private void dummy_init() {

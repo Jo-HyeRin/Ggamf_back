@@ -191,6 +191,7 @@ public class PartyRespDto {
         private BigInteger count;
     }
 
+    @NoArgsConstructor
     @Setter
     @Getter
     public static class AllRoomDto { // 전체 파티방 목록 보기

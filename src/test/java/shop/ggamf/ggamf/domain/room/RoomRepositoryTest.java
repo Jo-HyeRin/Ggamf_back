@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
 import shop.ggamf.ggamf.config.dummy.DummyEntity;
@@ -21,7 +22,9 @@ import shop.ggamf.ggamf.domain.gameCode.GameCode;
 import shop.ggamf.ggamf.domain.gameCode.GameCodeRepository;
 import shop.ggamf.ggamf.domain.user.User;
 import shop.ggamf.ggamf.domain.user.UserRepository;
+import shop.ggamf.ggamf.dto.PartyRespDto.PeopleDto;
 
+@Import(RoomRepositoryQuery.class)
 @ActiveProfiles("test")
 @DataJpaTest
 public class RoomRepositoryTest extends DummyEntity {
@@ -38,6 +41,8 @@ public class RoomRepositoryTest extends DummyEntity {
     private GameCodeRepository gameCodeRepository;
     @Autowired
     private FollowRepository followRepository;
+    @Autowired
+    private RoomRepositoryQuery roomRepositoryQuery;
 
     @BeforeEach
     public void setUp() {
@@ -57,13 +62,128 @@ public class RoomRepositoryTest extends DummyEntity {
     @Test
     public void findByUserId_test() throws Exception {
         // given
-        Long userId = 1L;
+        Long userId = 2L;
 
         // when
         List<Room> roomListPS = roomRepository.findByUserId(userId);
 
         // then
         Assertions.assertThat(roomListPS.get(0).getId()).isEqualTo(2L);
+    }
+
+    @Test
+    public void findByUserIdEnd_test() throws Exception {
+        // given
+        Long userId = 2L;
+
+        // when
+        List<Room> roomListPS = roomRepository.findByUserIdEnd(userId);
+
+        // then
+        Assertions.assertThat(roomListPS.get(0).getId()).isEqualTo(1L);
+    }
+
+    @Test
+    public void findAllRoom_test() throws Exception {
+        // given
+        Long gameCodeId = null;
+        String keyword = null;
+        Integer page = 0;
+
+        // when
+        List<Room> roomListPS = roomRepository.findAllRoom(gameCodeId, keyword,
+                page);
+
+        // then
+        Assertions.assertThat(roomListPS.size()).isEqualTo(10);
+        Assertions.assertThat(roomListPS.get(0).getId()).isEqualTo(2L);
+    }
+
+    @Test
+    public void findAllRoomPaging_test() throws Exception {
+        // given
+        Long gameCodeId = null;
+        String keyword = null;
+        Integer page = 1;
+
+        // when
+        List<Room> roomListPS = roomRepository.findAllRoom(gameCodeId, keyword,
+                page);
+
+        // then
+        Assertions.assertThat(roomListPS.size()).isEqualTo(10);
+    }
+
+    @Test
+    public void findAllRoomkeyword_test() throws Exception {
+        // given
+        Long gameCodeId = null;
+        String keyword = "3";
+        Integer page = 0;
+
+        // when
+        List<Room> roomListPS = roomRepository.findAllRoom(gameCodeId, keyword,
+                page);
+
+        // then
+        Assertions.assertThat(roomListPS.size()).isEqualTo(2);
+    }
+
+    @Test
+    public void findAllRoomGameCodeId_test() throws Exception {
+        // given
+        Long gameCodeId = 3L;
+        String keyword = "";
+        Integer page = 0;
+
+        // when
+        List<Room> roomListPS = roomRepository.findAllRoom(gameCodeId, keyword,
+                page);
+
+        // then
+        Assertions.assertThat(roomListPS.size()).isEqualTo(6);
+    }
+
+    @Test
+    public void findAllRoomGameCodeIdKeyword_test() throws Exception {
+        // given
+        Long gameCodeId = 2L;
+        String keyword = "구";
+        Integer page = 0;
+
+        // when
+        List<Room> roomListPS = roomRepository.findAllRoom(gameCodeId, keyword,
+                page);
+
+        // then
+        Assertions.assertThat(roomListPS.size()).isEqualTo(9);
+    }
+
+    @Test
+    public void findAllRoomPagingGameCodeIdKeyword_test() throws Exception {
+        // given
+        Long gameCodeId = 2L;
+        String keyword = "하";
+        Integer page = 0;
+
+        // when
+        List<Room> roomListPS = roomRepository.findAllRoom(gameCodeId, keyword,
+                page);
+
+        // then
+        Assertions.assertThat(roomListPS.size()).isEqualTo(6);
+    }
+
+    @Test
+    public void enterPeople_test() {
+        // given
+        Long roomId = 2L;
+
+        // when
+        PeopleDto peopleDto = roomRepositoryQuery.enterPeople(roomId);
+
+        // then
+        Assertions.assertThat(peopleDto.getCount()).isEqualTo(4);
     }
 
     private void dummy_init() {

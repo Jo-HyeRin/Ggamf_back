@@ -122,7 +122,7 @@ public class AdminApiControllerTest extends DummyEntity {
 
         // then
         resultActions.andExpect(status().isOk());
-        resultActions.andExpect(jsonPath("$.data.[0].gameName").value("etc"));
+        resultActions.andExpect(jsonPath("$.data.[0].gameName").value("LoL"));
 
     }
 
