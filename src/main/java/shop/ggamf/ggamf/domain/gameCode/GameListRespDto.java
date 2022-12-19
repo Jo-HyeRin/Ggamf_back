@@ -1,5 +1,7 @@
 package shop.ggamf.ggamf.domain.gameCode;
 
+import java.sql.Clob;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

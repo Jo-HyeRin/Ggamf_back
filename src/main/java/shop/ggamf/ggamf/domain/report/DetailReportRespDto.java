@@ -14,7 +14,6 @@ import lombok.Setter;
 @Getter
 public class DetailReportRespDto {
     private BigInteger id;
-    private BigInteger badUserId;
     private String badUser;
     private Timestamp createdAt;
     private String reason;

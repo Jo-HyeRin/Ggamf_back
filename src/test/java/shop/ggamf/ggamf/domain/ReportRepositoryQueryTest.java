@@ -48,6 +48,18 @@ public class ReportRepositoryQueryTest extends DummyEntity {
     }
 
     @Test
+    public void findDetailReport_test() {
+        // given
+        Long id = 2L;
+        // when
+        DetailReportRespDto detailReportRespDto = reportRepositoryQuery.findDetailReport(id);
+        System.out.println("detail : " + detailReportRespDto.getDetail());
+
+        // then
+        // Assertions.assertThat(detailReportRespDto.getDetail()).isEqualTo("이러저러한사유");
+    }
+
+    @Test
     public void findReportList_test4() {
         // given
 
@@ -56,18 +68,6 @@ public class ReportRepositoryQueryTest extends DummyEntity {
 
         // then
         Assertions.assertThat(reportRespDto.getReason()).isEqualTo("잘못1");
-    }
-
-    @Test
-    public void findDetailReport_test() {
-        // given
-        Long id = 1L;
-        Long badUserId = 3L;
-        // when
-        DetailReportRespDto detailReportRespDto = reportRepositoryQuery.findDetailReport(id, badUserId);
-
-        // then
-        Assertions.assertThat(detailReportRespDto.getDetail()).isEqualTo("이러저러한사유");
     }
 
     private void dummy_init() {

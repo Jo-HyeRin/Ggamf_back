@@ -70,6 +70,7 @@ public class UserApiControllerTest extends DummyEntity {
         joinReqDto.setPhone("01012345678");
         joinReqDto.setNickname("asdf");
         joinReqDto.setEmail("asdf@nate.com");
+        joinReqDto.setUid("ㅇㅇ");
         String requestBody = om.writeValueAsString(joinReqDto);
         System.out.println("테스트 : " + requestBody);
 

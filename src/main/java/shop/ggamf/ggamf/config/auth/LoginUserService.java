@@ -24,6 +24,7 @@ public class LoginUserService implements UserDetailsService {
         log.debug("디버그 : loadUserByUsername 실행됨");
         Optional<User> userOP = userRepository.findByUsername(username);
         if (userOP.isPresent()) {
+            log.debug("디버그 : uid" + userOP.get().getUid());
             return new LoginUser(userOP.get());
         } else {
             return null;

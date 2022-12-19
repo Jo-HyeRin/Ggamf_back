@@ -94,44 +94,26 @@ public class GgamfRespDto {
     @Getter
     public static class GgamfListRespDto {
 
-        List<FollowerDto> followers; // 내가 요청해서 맺은 친구 목록
-        List<FollowingDto> followings; // 내가 수락해서 맺은 친구 목록
+        List<UserDto> friendList;
 
-        public GgamfListRespDto(List<Follow> followers, List<Follow> followings) {
-            this.followers = followers.stream().map((follow) -> new FollowerDto(follow)).collect(Collectors.toList());
-            this.followings = followings.stream().map((follow) -> new FollowingDto(follow))
+        public GgamfListRespDto(List<User> friendList) {
+            this.friendList = friendList.stream().map((user) -> new UserDto(user))
                     .collect(Collectors.toList());
         }
 
         @Setter
         @Getter
-        public class FollowerDto {
+        public class UserDto {
             private Long userId;
             private String photo;
             private String nickname;
             private String intro;
 
-            public FollowerDto(Follow follow) {
-                this.userId = follow.getFollowing().getId();
-                this.photo = follow.getFollowing().getPhoto();
-                this.nickname = follow.getFollowing().getNickname();
-                this.intro = follow.getFollowing().getIntro();
-            }
-        }
-
-        @Setter
-        @Getter
-        public class FollowingDto {
-            private Long userId;
-            private String photo;
-            private String nickname;
-            private String intro;
-
-            public FollowingDto(Follow follow) {
-                this.userId = follow.getFollower().getId();
-                this.photo = follow.getFollower().getPhoto();
-                this.nickname = follow.getFollower().getNickname();
-                this.intro = follow.getFollower().getIntro();
+            public UserDto(User user) {
+                this.userId = user.getId();
+                this.photo = user.getPhoto();
+                this.nickname = user.getNickname();
+                this.intro = user.getIntro();
             }
         }
     }

@@ -42,6 +42,52 @@ public class FollowRepositoryImplTest extends DummyEntity {
 
     @BeforeEach
     public void setUp() {
+        dummy_init();
+    }
+
+    @AfterEach
+    public void tearDown() {
+        // auto-increment 초기화 시키는 쿼리
+        em.createNativeQuery("ALTER TABLE users ALTER COLUMN `id` RESTART WITH 1").executeUpdate();
+        em.createNativeQuery("ALTER TABLE follow ALTER COLUMN `id` RESTART WITH 1").executeUpdate();
+        em.createNativeQuery("ALTER TABLE game_code ALTER COLUMN `id` RESTART WITH 1").executeUpdate();
+        em.createNativeQuery("ALTER TABLE room ALTER COLUMN `id` RESTART WITH 1").executeUpdate();
+        em.createNativeQuery("ALTER TABLE enter ALTER COLUMN `id` RESTART WITH 1").executeUpdate();
+    }
+
+    @Test
+    public void findByRecommendFollowing_test() throws Exception {
+        // given
+        Long userId = 1L;
+        List<Long> enters = new ArrayList<>();
+        enters.add(2L);
+        enters.add(9L);
+        enters.add(11L);
+
+        // when
+        List<Follow> followListPS = followRepository.findByRecommendFollowing(userId, enters);
+
+        // then
+        Assertions.assertThat(followListPS.get(0).getId()).isEqualTo(1L);
+    }
+
+    @Test
+    public void findByRecommendFollower_test() throws Exception {
+        // given
+        Long userId = 1L;
+        List<Long> enters = new ArrayList<>();
+        enters.add(2L);
+        enters.add(9L);
+        enters.add(11L);
+
+        // when
+        List<Follow> followListPS = followRepository.findByRecommendFollower(userId, enters);
+
+        // then
+        Assertions.assertThat(followListPS.get(0).getId()).isEqualTo(8L);
+    }
+
+    private void dummy_init() {
         // User : 유저
         User ssar = userRepository.save(newUser("ssar"));
         User cos = userRepository.save(newUser("cos"));
@@ -114,47 +160,4 @@ public class FollowRepositoryImplTest extends DummyEntity {
         Enter endenter88 = enterRepository.save(endEnter(kaka, endroom8));
         Enter endenter888 = enterRepository.save(endEnter(money, endroom8));
     }
-
-    @AfterEach
-    public void tearDown() {
-        // auto-increment 초기화 시키는 쿼리
-        em.createNativeQuery("ALTER TABLE users ALTER COLUMN `id` RESTART WITH 1").executeUpdate();
-        em.createNativeQuery("ALTER TABLE follow ALTER COLUMN `id` RESTART WITH 1").executeUpdate();
-        em.createNativeQuery("ALTER TABLE game_code ALTER COLUMN `id` RESTART WITH 1").executeUpdate();
-        em.createNativeQuery("ALTER TABLE room ALTER COLUMN `id` RESTART WITH 1").executeUpdate();
-        em.createNativeQuery("ALTER TABLE enter ALTER COLUMN `id` RESTART WITH 1").executeUpdate();
-    }
-
-    @Test
-    public void findByRecommendFollowing_test() throws Exception {
-        // given
-        Long userId = 1L;
-        List<Long> enters = new ArrayList<>();
-        enters.add(2L);
-        enters.add(9L);
-        enters.add(11L);
-
-        // when
-        List<Follow> followListPS = followRepository.findByRecommendFollowing(userId, enters);
-
-        // then
-        Assertions.assertThat(followListPS.get(0).getId()).isEqualTo(1L);
-    }
-
-    @Test
-    public void findByRecommendFollower_test() throws Exception {
-        // given
-        Long userId = 1L;
-        List<Long> enters = new ArrayList<>();
-        enters.add(2L);
-        enters.add(9L);
-        enters.add(11L);
-
-        // when
-        List<Follow> followListPS = followRepository.findByRecommendFollower(userId, enters);
-
-        // then
-        Assertions.assertThat(followListPS.get(0).getId()).isEqualTo(8L);
-    }
-
 }

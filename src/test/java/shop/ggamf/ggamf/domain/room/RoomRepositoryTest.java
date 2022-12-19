@@ -41,6 +41,32 @@ public class RoomRepositoryTest extends DummyEntity {
 
     @BeforeEach
     public void setUp() {
+        dummy_init();
+    }
+
+    @AfterEach
+    public void tearDown() {
+        // auto-increment 초기화 시키는 쿼리
+        em.createNativeQuery("ALTER TABLE users ALTER COLUMN `id` RESTART WITH 1").executeUpdate();
+        em.createNativeQuery("ALTER TABLE follow ALTER COLUMN `id` RESTART WITH 1").executeUpdate();
+        em.createNativeQuery("ALTER TABLE game_code ALTER COLUMN `id` RESTART WITH 1").executeUpdate();
+        em.createNativeQuery("ALTER TABLE room ALTER COLUMN `id` RESTART WITH 1").executeUpdate();
+        em.createNativeQuery("ALTER TABLE enter ALTER COLUMN `id` RESTART WITH 1").executeUpdate();
+    }
+
+    @Test
+    public void findByUserId_test() throws Exception {
+        // given
+        Long userId = 1L;
+
+        // when
+        List<Room> roomListPS = roomRepository.findByUserId(userId);
+
+        // then
+        Assertions.assertThat(roomListPS.get(0).getId()).isEqualTo(2L);
+    }
+
+    private void dummy_init() {
         // User : 유저
         User ssar = userRepository.save(newUser("ssar"));
         User cos = userRepository.save(newUser("cos"));
@@ -97,27 +123,5 @@ public class RoomRepositoryTest extends DummyEntity {
         Enter endEnter44 = enterRepository.save(endEnter(cos, endroom4));
         Enter endEnter444 = enterRepository.save(endEnter(yeye, endroom4));
         Enter endEnter4444 = enterRepository.save(endEnter(romio, endroom4));
-    }
-
-    @AfterEach
-    public void tearDown() {
-        // auto-increment 초기화 시키는 쿼리
-        em.createNativeQuery("ALTER TABLE users ALTER COLUMN `id` RESTART WITH 1").executeUpdate();
-        em.createNativeQuery("ALTER TABLE follow ALTER COLUMN `id` RESTART WITH 1").executeUpdate();
-        em.createNativeQuery("ALTER TABLE game_code ALTER COLUMN `id` RESTART WITH 1").executeUpdate();
-        em.createNativeQuery("ALTER TABLE room ALTER COLUMN `id` RESTART WITH 1").executeUpdate();
-        em.createNativeQuery("ALTER TABLE enter ALTER COLUMN `id` RESTART WITH 1").executeUpdate();
-    }
-
-    @Test
-    public void findByUserId_test() throws Exception {
-        // given
-        Long userId = 1L;
-
-        // when
-        List<Room> roomListPS = roomRepository.findByUserId(userId);
-
-        // then
-        Assertions.assertThat(roomListPS.get(0).getId()).isEqualTo(2L);
     }
 }
