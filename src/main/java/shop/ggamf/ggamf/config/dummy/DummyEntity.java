@@ -70,25 +70,25 @@ public abstract class DummyEntity {
         return gameCode;
     }
 
-    protected Room newRoom(String roomname, User user, GameCode gameCode) {
+    protected Room newRoom(String roomname, User user, GameCode gameCode, Long totalPeople) {
         Room room = Room.builder()
                 .user(user)
                 .gameCode(gameCode)
-                .gameName("게임이름")
+                .gameName("카트라이더")
                 .roomName(roomname)
-                .totalPeople(6L)
+                .totalPeople(totalPeople)
                 .active(true)
                 .build();
         return room;
     }
 
-    protected Room endRoom(String roomname, User user, GameCode gameCode) {
+    protected Room endRoom(String roomname, User user, GameCode gameCode, Long totalPeople) {
         Room room = Room.builder()
                 .user(user)
                 .gameCode(gameCode)
-                .gameName("게임이름" + roomname)
+                .gameName("카트라이더")
                 .roomName(roomname)
-                .totalPeople(6L)
+                .totalPeople(totalPeople)
                 .active(false)
                 .build();
         return room;

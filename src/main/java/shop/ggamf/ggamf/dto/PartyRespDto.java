@@ -181,8 +181,6 @@ public class PartyRespDto {
         }
     }
 
-    @AllArgsConstructor
-    @NoArgsConstructor
     @Setter
     @Getter
     public static class AllRoomDto { // 전체 파티방 목록 보기
@@ -196,15 +194,7 @@ public class PartyRespDto {
         private String gameLogo;
 
         public AllRoomDto setAllRoom(Room room, PeopleDto peopleDto) {
-            AllRoomDto roomDto = new AllRoomDto();
-            roomDto.id = room.getId();
-            roomDto.roomName = room.getRoomName();
-            roomDto.nickName = room.getUser().getNickname();
-            roomDto.uid = room.getUser().getUid();
-            roomDto.totalPeople = room.getTotalPeople();
-            roomDto.count = peopleDto.getCount();
-            roomDto.gameName = room.getGameName();
-            roomDto.gameLogo = room.getGameCode().getLogo();
+            AllRoomDto roomDto = new AllRoomDto(room, peopleDto);
             return roomDto;
         }
 

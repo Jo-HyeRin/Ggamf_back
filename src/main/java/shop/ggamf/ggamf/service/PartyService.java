@@ -262,7 +262,6 @@ public class PartyService {
                         () -> new CustomApiException("해당 유저가 없습니다", HttpStatus.FORBIDDEN));
         // Enter.userId == loginUser.id
         List<Enter> enterListPS = enterRepository.findByUserId(userId);
-
         return new RoomListByIdRespDto(enterListPS);
     }
 
@@ -271,7 +270,6 @@ public class PartyService {
                 .orElseThrow(
                         () -> new CustomApiException("해당 유저가 없습니다", HttpStatus.FORBIDDEN));
         List<Room> roomListPS = roomRepository.findByUserId(userId);
-
         return new RoomListByMyIdRespDto(roomListPS);
     }
 }

@@ -18,7 +18,7 @@ public interface EnterRepository extends JpaRepository<Enter, Long>, Dao {
     List<Enter> findByRoomId(@Param("roomId") Long roomId);
 
     // userId로 찾기
-    @Query("select e from Enter e join fetch e.user u where e.user.id = :userId and e.stay = true")
+    @Query("select e from Enter e join fetch e.user u join fetch e.room r where e.user.id = :userId and e.stay = true and r.user.id <> :userId")
     List<Enter> findByUserId(@Param("userId") Long userId);
 
     // 추천친구목록 - 방장일 때 방 종료까지 함께한 인원

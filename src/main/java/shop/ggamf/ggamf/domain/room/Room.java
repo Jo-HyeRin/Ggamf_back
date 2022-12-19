@@ -29,7 +29,7 @@ public class Room extends AuditingTime {
     @Column(nullable = true, length = 20)
     private String gameName;
 
-    @Column(nullable = false, length = 30)
+    @Column(nullable = false, length = 100)
     private String roomName;
 
     @Column(nullable = false)
