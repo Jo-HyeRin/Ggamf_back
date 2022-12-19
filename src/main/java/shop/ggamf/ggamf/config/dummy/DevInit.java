@@ -208,13 +208,15 @@ public class DevInit extends DummyEntity {
             Enter endenter35 = enterRepository.save(endEnter(탑솔러그자체, endroom35));
             Enter endenter355 = enterRepository.save(endEnter(money, endroom35));
             Enter endenter36 = enterRepository.save(endEnter(user22, endroom36));
-            Enter endenter366 = enterRepository.save(endEnter(toto, endroom36));
+            Enter endenter366 = enterRepository.save(endEnter(키보드부순당, endroom36));
             Enter endenter3666 = enterRepository.save(endEnter(nero20, endroom36));
-            Enter endenter36666 = enterRepository.save(endEnter(dada, endroom36));
+            Enter endenter36666 = enterRepository.save(endEnter(뜨뜨뜨뜨, endroom36));
+            Enter endenter366666 = enterRepository.save(endEnter(ssar, endroom36));
             Enter enter37 = enterRepository.save(newEnter(ssar, room37));
             Enter enter377 = enterRepository.save(newEnter(user22, room37));
             Enter enter3777 = enterRepository.save(newEnter(house, room37));
             Enter enter37777 = enterRepository.save(newEnter(toto, room37));
+            Enter endenter377777 = enterRepository.save(endEnter(스피드레이서, room37));
             // Report : 신고
             Report report1 = reportRepository.save(newReport(ssar, house, reason1));
             Report report2 = reportRepository.save(newReport(cos, house, reason1));
