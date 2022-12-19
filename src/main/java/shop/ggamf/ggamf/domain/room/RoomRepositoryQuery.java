@@ -22,7 +22,7 @@ public class RoomRepositoryQuery {
 
     public List<RoomListRespDto> findRoomList() { // 쿼리 확인하기
         StringBuffer sb = new StringBuffer();
-        sb.append("select r.id, count(*)+1 count, r.total_people, r.room_name, u.nickname from enter e ")
+        sb.append("select r.id, count(e.*)+1 count, r.total_people, r.room_name, u.nickname from enter e ")
                 .append("right outer join room r on r.id = e.room_id ")
                 .append("inner join users u on u.id = r.user_id ")
                 .append("group by r.id");
