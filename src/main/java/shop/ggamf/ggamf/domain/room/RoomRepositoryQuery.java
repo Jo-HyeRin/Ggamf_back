@@ -22,7 +22,7 @@ public class RoomRepositoryQuery {
 
     public List<RoomListRespDto> findRoomList() {
         StringBuffer sb = new StringBuffer();
-        sb.append("select r.id, count(*)+1 count, r.total_people, r.room_name, u.nickname from enter e ")
+        sb.append("select r.id, count(*) count, r.total_people, r.room_name, u.nickname from enter e ")
                 .append("inner join room r on r.id = e.room_id ")
                 .append("inner join users u on u.id = r.user_id ")
                 .append("group by r.id");
@@ -49,6 +49,7 @@ public class RoomRepositoryQuery {
                 .append("left join room r on r.id = e.room_id ")
                 .append("where r.active = true ")
                 .append("and r.id = :roomId ")
+                .append("and e.stay=true ")
                 .append("group by r.id");
 
         Query query = em.createNativeQuery(sb.toString());

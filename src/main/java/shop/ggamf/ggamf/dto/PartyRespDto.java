@@ -9,9 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import shop.ggamf.ggamf.domain.enter.Enter;
-import shop.ggamf.ggamf.domain.room.AllRoomDto;
 import shop.ggamf.ggamf.domain.room.PeopleDto;
 import shop.ggamf.ggamf.domain.room.Room;
 
