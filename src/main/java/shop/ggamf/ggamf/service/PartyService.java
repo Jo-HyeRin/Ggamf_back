@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,7 +38,6 @@ import shop.ggamf.ggamf.dto.PartyRespDto.RoomListByMyIdRespDto;
 @Service
 public class PartyService {
 
-    private final Logger log = LoggerFactory.getLogger(getClass());
     private final RoomRepository roomRepository;
     private final UserRepository userRepository;
     private final GameCodeRepository gameCodeRepository;
@@ -54,7 +51,6 @@ public class PartyService {
 
     @Transactional
     public CreateRoomRespDto 파티방생성(CreateRoomReqDto createRoomReqDto) {
-        log.debug("디버그 : 파티방생성 서비스 호출");
         // 검증
         User userPS = userRepository.findById(createRoomReqDto.getUserId())
                 .orElseThrow(
@@ -82,7 +78,6 @@ public class PartyService {
 
     @Transactional
     public JoinRoomRespDto 파티방참가(JoinRoomReqDto joinRoomReqDto) {
-        log.debug("디버그 : 파티방 참가 서비스 호출");
         // 검증
         User userPS = userRepository.findById(joinRoomReqDto.getUserId())
                 .orElseThrow(
@@ -121,7 +116,6 @@ public class PartyService {
 
     @Transactional
     public ExitRoomRespDto 파티방나가기(Long userId, Long roomId) { // 나의 enter.stay = false 변경하기
-        log.debug("디버그 : 파티방 나가기 서비스 호출");
         // 검증
         User userPS = userRepository.findById(userId)
                 .orElseThrow(
@@ -149,7 +143,6 @@ public class PartyService {
 
     @Transactional
     public EndRoomRespDto 파티방종료(Long userId, Long roomId) {
-        log.debug("디버그 : 파티방 종료 서비스 호출");
         // Room active = false로 변경
         // Enter roomId = endRoomReqDto.getRoomId(), stay=true 찾아서 stay = false 변경
         // 유저 검증
@@ -187,7 +180,6 @@ public class PartyService {
 
     @Transactional
     public KickUserRespDto 파티원추방(KickUserReqDto kickUserReqDto, Long userId, Long roomId) {
-        log.debug("디버그 : 파티원 추방 서비스 호출");
         // 유저 검증
         User userPS = userRepository.findById(userId)
                 .orElseThrow(

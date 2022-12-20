@@ -27,13 +27,15 @@ import shop.ggamf.ggamf.domain.user.UserRepository;
 @Configuration
 public class DevInit extends DummyEntity {
 
-    @Profile("dev")
-    @Bean
-    public CommandLineRunner dataSetting(UserRepository userRepository,
-            RoomRepository roomRepository,
-            GameCodeRepository gameCodeRepository, EnterRepository enterRepository, FollowRepository followRepository,
-            ReasonCodeRepository reasonCodeRepository, RecommendBanuserRepository recommendBanuserRepository,
-            ReportRepository reportRepository) {
+        @Profile("dev")
+        @Bean
+        public CommandLineRunner dataSetting(UserRepository userRepository,
+                        RoomRepository roomRepository,
+                        GameCodeRepository gameCodeRepository, EnterRepository enterRepository,
+                        FollowRepository followRepository,
+                        ReasonCodeRepository reasonCodeRepository,
+                        RecommendBanuserRepository recommendBanuserRepository,
+                        ReportRepository reportRepository) {
 
         return (args) -> {
             //photo

@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,7 +44,6 @@ import shop.ggamf.ggamf.dto.GgamfRespDto.SendGgamfRespDto;
 @Service
 public class GgamfService {
 
-    private final Logger log = LoggerFactory.getLogger(getClass());
     private final FollowRepository followRepository;
     private final UserRepository userRepository;
     private final ReportRepository reportRepository;
@@ -57,7 +54,6 @@ public class GgamfService {
 
     @Transactional
     public FollowGgamfRespDto 겜프요청(FollowGgamfReqDto followGgamfReqDto, Long userId, Long friendId) {
-        log.debug("디버그 : 겜프요청 서비스 호출");
         // 나
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomApiException("내 유저 정보가 없습니다", HttpStatus.FORBIDDEN));
@@ -83,7 +79,6 @@ public class GgamfService {
 
     @Transactional
     public AcceptGgamfRespDto 겜프수락(Long userId, Long friendId) {
-        log.debug("디버그 : 겜프수락 서비스 호출");
         Follow followPS = followRepository.findByBothId(friendId, userId)
                 .orElseThrow(() -> new CustomApiException("요청이 오간 사이도, 겜프 사이도 아닙니다", HttpStatus.FORBIDDEN));
         if (followPS.getFollowing().getId() != userId) {
@@ -99,7 +94,6 @@ public class GgamfService {
 
     @Transactional
     public DeleteGgamfRespDto 겜프삭제(Long userId, Long friendId) {
-        log.debug("디버그 : 겜프삭제 서비스 호출");
         Follow followerPS = followRepository.isGgamfFollow(userId, friendId).orElse(null);
         Follow followingPS = followRepository.isGgamfFollow(friendId, userId).orElse(null);
         if (followerPS == null && followingPS == null) {
@@ -130,7 +124,6 @@ public class GgamfService {
 
     @Transactional
     public RejectGgamfRespDto 겜프거절(Long userId, Long friendId) {
-        log.debug("디버그 : 겜프거절 서비스 호출");
         Follow followPS = followRepository.findByBothId(friendId, userId)
                 .orElseThrow(() -> new CustomApiException("요청이 오간 사이도, 겜프 사이도 아닙니다", HttpStatus.FORBIDDEN));
         if (followPS.getFollowing().getId() != userId) {
@@ -145,7 +138,6 @@ public class GgamfService {
 
     @Transactional
     public CancelGgamfRespDto 겜프요청취소(Long userId, Long friendId) {
-        log.debug("디버그 : 겜프요청취소 서비스 호출");
         Follow followPS = followRepository.findByBothId(userId, friendId)
                 .orElseThrow(() -> new CustomApiException("요청이 오간 사이도, 겜프 사이도 아닙니다", HttpStatus.FORBIDDEN));
         if (!(followPS.getFollower().getId() == userId)) {
@@ -163,7 +155,6 @@ public class GgamfService {
 
     @Transactional
     public ReportGgamfRespDto 겜프신고(ReportGgamfReqDto reportGgamfReqDto, Long userId, Long badUserId) {
-        log.debug("디버그 : 겜프신고 서비스 호출");
         if (userId == badUserId) {
             throw new CustomApiException("본인을 신고할 수 없습니다.", HttpStatus.BAD_REQUEST);
         }
