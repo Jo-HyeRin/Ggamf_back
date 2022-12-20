@@ -139,9 +139,9 @@ public abstract class DummyEntity {
         return reasonCode;
     }
 
-    protected Report newReport(String detail, User submitUser, User badUser, ReasonCode reasonCode) {
+    protected Report newReport(User submitUser, User badUser, ReasonCode reasonCode) {
         Report report = Report.builder()
-                .detail(detail)
+                .detail("이러저러한사유")
                 .submitUser(submitUser)
                 .badUser(badUser)
                 .reasonCode(reasonCode)

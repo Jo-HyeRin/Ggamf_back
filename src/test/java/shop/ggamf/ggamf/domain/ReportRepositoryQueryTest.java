@@ -128,8 +128,8 @@ public class ReportRepositoryQueryTest extends DummyEntity {
                 ReasonCode reason1 = reasonCodeRepository.save(newReason("잘못1"));
                 ReasonCode reason2 = reasonCodeRepository.save(newReason("잘못2"));
 
-                Report report1 = reportRepository.save(newReport("욕설", dada, kaka, reason1));
-                Report report2 = reportRepository.save(newReport("탈주", cos, kaka, reason2));
+                Report report1 = reportRepository.save(newReport(dada, kaka, reason1));
+                Report report2 = reportRepository.save(newReport(cos, kaka, reason2));
         }
 
         private void autoincrement_reset() {

@@ -306,8 +306,8 @@ public class AdminApiControllerTest extends DummyEntity {
         ReasonCode reason2 = reasonCodeRepository.save(newReason("잘못2"));
 
         // 리포트
-        Report report1 = reportRepository.save(newReport("탈주", kaka, dada, reason2));
-        Report report2 = reportRepository.save(newReport("욕설", kaka, cos, reason1));
-        Report report3 = reportRepository.save(newReport("악의적인 비방", dada, kaka, reason1));
+        Report report1 = reportRepository.save(newReport(kaka, dada, reason2));
+        Report report2 = reportRepository.save(newReport(kaka, cos, reason1));
+        Report report3 = reportRepository.save(newReport(dada, kaka, reason1));
     }
 }

@@ -249,14 +249,14 @@ public class DevInit extends DummyEntity {
                         Enter enter37777 = enterRepository.save(newEnter(toto, room37));
                         Enter endenter377777 = enterRepository.save(endEnter(스피드레이서, room37));
                         // Report : 신고
-                        Report report1 = reportRepository.save(newReport("욕설", ssar, house, reason1));
-                        Report report2 = reportRepository.save(newReport("심한 말", cos, house, reason1));
-                        Report report3 = reportRepository.save(newReport("게임 진행 방해", lala, house, reason4));
-                        Report report4 = reportRepository.save(newReport("욕설", kaka, house, reason1));
-                        Report report5 = reportRepository.save(newReport("탈주", house, ssar, reason2));
-                        Report report6 = reportRepository.save(newReport("랭겜 대리", house, dada, reason3));
-                        Report report7 = reportRepository.save(newReport("던짐", jeje, user22, reason4));
-                        Report report8 = reportRepository.save(newReport("의도적인 트롤링 행위", nero20, user23, reason5));
+                        Report report1 = reportRepository.save(newReport(ssar, house, reason1));
+                        Report report2 = reportRepository.save(newReport(cos, house, reason1));
+                        Report report3 = reportRepository.save(newReport(lala, house, reason4));
+                        Report report4 = reportRepository.save(newReport(kaka, house, reason1));
+                        Report report5 = reportRepository.save(newReport(house, ssar, reason2));
+                        Report report6 = reportRepository.save(newReport(house, dada, reason3));
+                        Report report7 = reportRepository.save(newReport(jeje, user22, reason4));
+                        Report report8 = reportRepository.save(newReport(nero20, user23, reason5));
                 };
         }
 }
