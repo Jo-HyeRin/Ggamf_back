@@ -17,7 +17,6 @@ public class GameCodeRepositoryQuery {
     @Autowired
     private EntityManager em;
 
-    // private final Logger log = LoggerFactory.getLogger(getClass());
 
     public List<GameListRespDto> findGameCodeList() {
         StringBuffer sb = new StringBuffer();

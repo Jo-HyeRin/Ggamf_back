@@ -2,16 +2,12 @@ package shop.ggamf.ggamf.util;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import shop.ggamf.ggamf.dto.ResponseDto;
 
 public class CustomRespUtil {
     
-    private static final Logger log = LoggerFactory.getLogger(CustomRespUtil.class);
 
     public static void success(HttpServletResponse response, Object dto) {
         try {
@@ -22,7 +18,6 @@ public class CustomRespUtil {
             response.setStatus(200);
             response.getWriter().println(responseBody);
         } catch (Exception e) {
-            log.error("서버 파싱 에러");
         }
 
     }
@@ -36,7 +31,6 @@ public class CustomRespUtil {
             response.setStatus(400);
             response.getWriter().println(responseBody);
         } catch (Exception e) {
-            log.error("서버 파싱 에러");
         }
 
     }
@@ -50,7 +44,6 @@ public class CustomRespUtil {
             response.setStatus(403);
             response.getWriter().println(responseBody);
         } catch (Exception e) {
-            log.error("서버 파싱 에러");
         }
 
     }

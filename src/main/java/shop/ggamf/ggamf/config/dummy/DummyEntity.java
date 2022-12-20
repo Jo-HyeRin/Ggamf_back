@@ -15,7 +15,6 @@ import shop.ggamf.ggamf.domain.report.Report;
 import shop.ggamf.ggamf.domain.room.Room;
 import shop.ggamf.ggamf.domain.starRate.StarRate;
 import shop.ggamf.ggamf.domain.user.User;
-import shop.ggamf.ggamf.domain.user.User.UserBuilder;
 
 public abstract class DummyEntity {
 
@@ -35,6 +34,7 @@ public abstract class DummyEntity {
                 .state(UserStateEnum.NORMAL)
                 .role(UserEnum.USER)
                 .agree(true)
+                .uid("uid"+username)
                 .build();
         return user;
     }

@@ -7,8 +7,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,7 +16,6 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 import shop.ggamf.ggamf.config.auth.LoginUser;
 
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
-    private final Logger log = LoggerFactory.getLogger(getClass());
 
     public JwtAuthorizationFilter(AuthenticationManager authenticationManager) {
         super(authenticationManager);
@@ -40,11 +37,9 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             Authentication authentication = new UsernamePasswordAuthenticationToken(loginUser,
                     null, loginUser.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            log.debug("디버그 : 토큰 검증 완료, 필터탐");
         }
 
         // 2. 세션이 있는 경우와 없는 경우로 나뉘어서 컨트롤러로 진입함
-        log.debug("디버그 : 필터탐");
         chain.doFilter(request, response);
     }
 

@@ -32,9 +32,9 @@ public class JwtProcess {
     public static LoginUser verify(String token) {
         DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(token);
         Date expiration = decodedJWT.getExpiresAt();
-        if (expiration.before(new Date())) {
-            new CustomApiException("해당토큰은 만료되었습니다.", HttpStatus.BAD_REQUEST);
-        }
+        // if (expiration.before(new Date())) {
+        //     new CustomApiException("해당토큰은 만료되었습니다.", HttpStatus.BAD_REQUEST);
+        // }
         Long id = decodedJWT.getClaim("id").asLong();
         String username = decodedJWT.getClaim("username").asString();
         String role = decodedJWT.getClaim("role").asString();
