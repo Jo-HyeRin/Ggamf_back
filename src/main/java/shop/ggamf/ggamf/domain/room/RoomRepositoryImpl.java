@@ -14,6 +14,9 @@ interface Dao {
     // 전체 파티방 목록 보기 - 검색, 카테고리, 페이징
     List<Room> findAllRoom(@Param("gameCodeId") Long gameCodeId, @Param("keyword") String keyword,
             @Param("page") Integer page);
+
+    // 전체 파티방 목록 보기 - 검색, 카테고리
+    List<Room> findAllRoomNotPaging(@Param("gameCodeId") Long gameCodeId, @Param("keyword") String keyword);
 }
 
 @RequiredArgsConstructor
@@ -63,6 +66,49 @@ public class RoomRepositoryImpl implements Dao {
         }
         query.setFirstResult(page * 10);
         query.setMaxResults(10);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<Room> findAllRoomNotPaging(Long gameCodeId, String keyword) {
+        String sql = "";
+        if (gameCodeId == null) {
+            if (keyword == null || keyword.isEmpty()) {
+                sql += "select r from Room r where r.active = true";
+            } else {
+                sql += "select r from Room r ";
+                sql += "where r.active = true ";
+                sql += "and r.roomName LIKE CONCAT('%', :keyword, '%')";
+            }
+        } else {
+            if (keyword == null || keyword.isEmpty()) {
+                sql += "select r from Room r left join r.gameCode g ";
+                sql += "where r.active = true ";
+                sql += "and g.id = :gameCodeId";
+            } else {
+                sql += "select r from Room r left join r.gameCode g ";
+                sql += "where r.active = true ";
+                sql += "and g.id = :gameCodeId ";
+                sql += "and r.roomName LIKE CONCAT('%', :keyword, '%')";
+            }
+        }
+
+        // 파라미터 바인딩
+        TypedQuery<Room> query = em.createQuery(sql, Room.class);
+        if (gameCodeId == null) {
+            if (keyword == null || keyword.isEmpty()) {
+
+            } else {
+                query = query.setParameter("keyword", keyword);
+            }
+        } else {
+            if (keyword == null || keyword.isEmpty()) {
+                query = query.setParameter("gameCodeId", gameCodeId);
+            } else {
+                query = query.setParameter("gameCodeId", gameCodeId);
+                query = query.setParameter("keyword", keyword);
+            }
+        }
         return query.getResultList();
     }
 
