@@ -80,75 +80,14 @@ public class RoomRepositoryTest extends DummyEntity {
                 List<Room> roomListPS = roomRepository.findByUserIdEnd(userId);
 
                 // then
-                Assertions.assertThat(roomListPS.get(0).getId()).isEqualTo(1L);
+                Assertions.assertThat(roomListPS.size()).isEqualTo(1);
         }
 
         @Test
         public void findAllRoom_test() throws Exception {
                 // given
-                Long gameCodeId = null;
-                String keyword = null;
-                Integer page = 0;
-
-                // when
-                List<Room> roomListPS = roomRepository.findAllRoom(gameCodeId, keyword,
-                                page);
-
-                // then
-                Assertions.assertThat(roomListPS.size()).isEqualTo(10);
-                Assertions.assertThat(roomListPS.get(0).getId()).isEqualTo(2L);
-        }
-
-        @Test
-        public void findAllRoomPaging_test() throws Exception {
-                // given
-                Long gameCodeId = null;
-                String keyword = null;
-                Integer page = 1;
-
-                // when
-                List<Room> roomListPS = roomRepository.findAllRoom(gameCodeId, keyword,
-                                page);
-
-                // then
-                Assertions.assertThat(roomListPS.size()).isEqualTo(10);
-        }
-
-        @Test
-        public void findAllRoomkeyword_test() throws Exception {
-                // given
-                Long gameCodeId = null;
-                String keyword = "3";
-                Integer page = 0;
-
-                // when
-                List<Room> roomListPS = roomRepository.findAllRoom(gameCodeId, keyword,
-                                page);
-
-                // then
-                Assertions.assertThat(roomListPS.size()).isEqualTo(2);
-        }
-
-        @Test
-        public void findAllRoomGameCodeId_test() throws Exception {
-                // given
-                Long gameCodeId = 3L;
-                String keyword = "";
-                Integer page = 0;
-
-                // when
-                List<Room> roomListPS = roomRepository.findAllRoom(gameCodeId, keyword,
-                                page);
-
-                // then
-                Assertions.assertThat(roomListPS.size()).isEqualTo(6);
-        }
-
-        @Test
-        public void findAllRoomGameCodeIdKeyword_test() throws Exception {
-                // given
                 Long gameCodeId = 2L;
-                String keyword = "ㄱ";
+                String keyword = "구";
                 Integer page = 0;
 
                 // when
@@ -156,22 +95,8 @@ public class RoomRepositoryTest extends DummyEntity {
                                 page);
 
                 // then
-                Assertions.assertThat(roomListPS.size()).isEqualTo(1);
-        }
-
-        @Test
-        public void findAllRoomPagingGameCodeIdKeyword_test() throws Exception {
-                // given
-                Long gameCodeId = 2L;
-                String keyword = "~";
-                Integer page = 0;
-
-                // when
-                List<Room> roomListPS = roomRepository.findAllRoom(gameCodeId, keyword,
-                                page);
-
-                // then
-                Assertions.assertThat(roomListPS.size()).isEqualTo(4);
+                Assertions.assertThat(roomListPS.size()).isEqualTo(9);
+                Assertions.assertThat(roomListPS.get(0).getId()).isEqualTo(7L);
         }
 
         @Test
