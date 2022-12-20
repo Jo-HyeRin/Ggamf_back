@@ -176,6 +176,7 @@ public class EnterRepositoryTest extends DummyEntity {
         User 뜨뜨뜨뜨 = userRepository.save(newUser("뜨뜨뜨뜨", "이또또", "뜨뜨뜨뜨", "01077777866", "ㄸㄸㄸㄸ", photo));
         User 딜찍누 = userRepository.save(newUser("딜찍누", "김딜찍", "딜찍누", "01098897889", "공대원구합니다", photo));
         User 스피드레이서 = userRepository.save(newUser("스피드레이서", "김속도", "스피드레이서", "01015883061", "이길때됐음", photo));
+
         // Follow : 겜프
         Follow f1 = followRepository.save(newFollow(ssar, cos, false));
         Follow f11 = followRepository.save(newFollow(ssar, vovo, false));
