@@ -81,7 +81,7 @@ public class EnterRepositoryTest extends DummyEntity {
         List<Enter> enterListPS = enterRepository.findByRoomId(roomId);
 
         // then
-        Assertions.assertThat(enterListPS.get(0).getUser().getNickname()).isEqualTo("nickcos");
+        Assertions.assertThat(enterListPS.get(0).getUser().getNickname()).isEqualTo("티모밴하면던짐");
     }
 
     @Test
