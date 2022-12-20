@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,31 +16,33 @@ import shop.ggamf.ggamf.domain.gameCode.GameCode;
 import shop.ggamf.ggamf.domain.gameCode.GameCodeRepository;
 import shop.ggamf.ggamf.domain.room.Room;
 import shop.ggamf.ggamf.domain.room.RoomRepository;
+import shop.ggamf.ggamf.domain.room.RoomRepositoryQuery;
 import shop.ggamf.ggamf.domain.user.User;
 import shop.ggamf.ggamf.domain.user.UserRepository;
 import shop.ggamf.ggamf.dto.PartyReqDto.CreateRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.JoinRoomReqDto;
 import shop.ggamf.ggamf.dto.PartyReqDto.KickUserReqDto;
+import shop.ggamf.ggamf.dto.PartyRespDto.AllRoomDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.CreateRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.DetailRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.EndRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.ExitRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.JoinRoomRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.KickUserRespDto;
+import shop.ggamf.ggamf.dto.PartyRespDto.PeopleDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.RoomListByIdRespDto;
 import shop.ggamf.ggamf.dto.PartyRespDto.RoomListByMyIdRespDto;
-import shop.ggamf.ggamf.dto.PartyRespDto.RoomListRespDto;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
 public class PartyService {
 
-    private final Logger log = LoggerFactory.getLogger(getClass());
     private final RoomRepository roomRepository;
     private final UserRepository userRepository;
     private final GameCodeRepository gameCodeRepository;
     private final EnterRepository enterRepository;
+    private final RoomRepositoryQuery roomRepositoryQuery;
 
     public List<GameCode> 파티방생성화면게임코드전달() {
         List<GameCode> gameCodeList = gameCodeRepository.findAll();
@@ -51,7 +51,6 @@ public class PartyService {
 
     @Transactional
     public CreateRoomRespDto 파티방생성(CreateRoomReqDto createRoomReqDto) {
-        log.debug("디버그 : 파티방생성 서비스 호출");
         // 검증
         User userPS = userRepository.findById(createRoomReqDto.getUserId())
                 .orElseThrow(
@@ -71,13 +70,14 @@ public class PartyService {
         // 실행
         Room room = createRoomReqDto.toEntity(userPS, gameCodePS);
         Room roomPS = roomRepository.save(room);
+        Enter enter = createRoomReqDto.toEntity(userPS, roomPS);
+        Enter enterPS = enterRepository.save(enter);
         // 응답
         return new CreateRoomRespDto(roomPS);
     }
 
     @Transactional
     public JoinRoomRespDto 파티방참가(JoinRoomReqDto joinRoomReqDto) {
-        log.debug("디버그 : 파티방 참가 서비스 호출");
         // 검증
         User userPS = userRepository.findById(joinRoomReqDto.getUserId())
                 .orElseThrow(
@@ -116,7 +116,6 @@ public class PartyService {
 
     @Transactional
     public ExitRoomRespDto 파티방나가기(Long userId, Long roomId) { // 나의 enter.stay = false 변경하기
-        log.debug("디버그 : 파티방 나가기 서비스 호출");
         // 검증
         User userPS = userRepository.findById(userId)
                 .orElseThrow(
@@ -144,7 +143,6 @@ public class PartyService {
 
     @Transactional
     public EndRoomRespDto 파티방종료(Long userId, Long roomId) {
-        log.debug("디버그 : 파티방 종료 서비스 호출");
         // Room active = false로 변경
         // Enter roomId = endRoomReqDto.getRoomId(), stay=true 찾아서 stay = false 변경
         // 유저 검증
@@ -182,7 +180,6 @@ public class PartyService {
 
     @Transactional
     public KickUserRespDto 파티원추방(KickUserReqDto kickUserReqDto, Long userId, Long roomId) {
-        log.debug("디버그 : 파티원 추방 서비스 호출");
         // 유저 검증
         User userPS = userRepository.findById(userId)
                 .orElseThrow(
@@ -234,7 +231,24 @@ public class PartyService {
         }
     }
 
-    public RoomListRespDto 전체파티방목록(Long gameCodeId, String keyword, Integer page) {
+    public List<AllRoomDto> 전체파티방목록페이징미적용(Long gameCodeId, String keyword) {
+        // 게임 코드가 존재하는 지 확인
+        if (gameCodeId != null) {
+            GameCode gameCodePS = gameCodeRepository.findById(gameCodeId)
+                    .orElseThrow(
+                            () -> new CustomApiException("존재하지 않는 게임코드입니다", HttpStatus.FORBIDDEN));
+        }
+        List<Room> roomListPS = roomRepository.findAllRoomNotPaging(gameCodeId, keyword);
+        List<AllRoomDto> allRoomList = new ArrayList<>();
+        for (int i = 0; i < roomListPS.size(); i++) {
+            PeopleDto enterPeople = roomRepositoryQuery.enterPeople(roomListPS.get(i).getId());
+            AllRoomDto allRoomDto = new AllRoomDto(roomListPS.get(i), enterPeople);
+            allRoomList.add(allRoomDto);
+        }
+        return allRoomList;
+    }
+
+    public List<AllRoomDto> 전체파티방목록(Long gameCodeId, String keyword, Integer page) {
         // 게임 코드가 존재하는 지 확인
         if (gameCodeId != null) {
             GameCode gameCodePS = gameCodeRepository.findById(gameCodeId)
@@ -242,7 +256,13 @@ public class PartyService {
                             () -> new CustomApiException("존재하지 않는 게임코드입니다", HttpStatus.FORBIDDEN));
         }
         List<Room> roomListPS = roomRepository.findAllRoom(gameCodeId, keyword, page);
-        return new RoomListRespDto(roomListPS);
+        List<AllRoomDto> allRoomList = new ArrayList<>();
+        for (int i = 0; i < roomListPS.size(); i++) {
+            PeopleDto enterPeople = roomRepositoryQuery.enterPeople(roomListPS.get(i).getId());
+            AllRoomDto allRoomDto = new AllRoomDto(roomListPS.get(i), enterPeople);
+            allRoomList.add(allRoomDto);
+        }
+        return allRoomList;
     }
 
     public RoomListByIdRespDto 참가중인파티방목록(Long userId) {
@@ -251,7 +271,6 @@ public class PartyService {
                         () -> new CustomApiException("해당 유저가 없습니다", HttpStatus.FORBIDDEN));
         // Enter.userId == loginUser.id
         List<Enter> enterListPS = enterRepository.findByUserId(userId);
-
         return new RoomListByIdRespDto(enterListPS);
     }
 

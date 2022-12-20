@@ -7,8 +7,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,7 +22,6 @@ import shop.ggamf.ggamf.dto.UserRespDto.LoginRespDto;
 import shop.ggamf.ggamf.util.CustomRespUtil;
 
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-    private final Logger log = LoggerFactory.getLogger(getClass());
     private final AuthenticationManager authenticationManager;
 
     public JwtAuthenticationFilter(AuthenticationManager authenticationManager) {
@@ -36,8 +33,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException {
-
-        log.debug("디버그 : attemptAuthentication 요청됨");
 
         try {
             ObjectMapper om = new ObjectMapper();
@@ -57,7 +52,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
             Authentication authResult) throws IOException, ServletException {
-        log.debug("디버그 : successfulAuthentication 요청됨");
         // 1. 세션에 있는 UserDetails 가져오기
         LoginUser loginUser = (LoginUser) authResult.getPrincipal();
 
@@ -75,7 +69,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
             AuthenticationException failed) throws IOException, ServletException {
-        log.debug("디버그 : unsuccessfulAuthentication 요청됨");
         CustomRespUtil.fail(response, "로그인 실패");
     }
 }

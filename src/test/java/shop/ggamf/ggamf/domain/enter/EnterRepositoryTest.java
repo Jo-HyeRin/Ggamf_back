@@ -1,5 +1,6 @@
-package shop.ggamf.ggamf.domain.room;
+package shop.ggamf.ggamf.domain.enter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -10,24 +11,21 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
 import shop.ggamf.ggamf.config.dummy.DummyEntity;
-import shop.ggamf.ggamf.domain.enter.Enter;
-import shop.ggamf.ggamf.domain.enter.EnterRepository;
 import shop.ggamf.ggamf.domain.follow.Follow;
 import shop.ggamf.ggamf.domain.follow.FollowRepository;
 import shop.ggamf.ggamf.domain.gameCode.GameCode;
 import shop.ggamf.ggamf.domain.gameCode.GameCodeRepository;
+import shop.ggamf.ggamf.domain.room.Room;
+import shop.ggamf.ggamf.domain.room.RoomRepository;
 import shop.ggamf.ggamf.domain.user.User;
 import shop.ggamf.ggamf.domain.user.UserRepository;
-import shop.ggamf.ggamf.dto.PartyRespDto.PeopleDto;
 
-@Import(RoomRepositoryQuery.class)
 @ActiveProfiles("test")
 @DataJpaTest
-public class RoomRepositoryTest extends DummyEntity {
+public class EnterRepositoryTest extends DummyEntity {
 
         @Autowired
         private EntityManager em;
@@ -41,8 +39,6 @@ public class RoomRepositoryTest extends DummyEntity {
         private GameCodeRepository gameCodeRepository;
         @Autowired
         private FollowRepository followRepository;
-        @Autowired
-        private RoomRepositoryQuery roomRepositoryQuery;
 
         @BeforeEach
         public void setUp() {
@@ -60,55 +56,69 @@ public class RoomRepositoryTest extends DummyEntity {
         }
 
         @Test
+        public void findByRoomIdAndUserId_test() throws Exception {
+                // given
+                Long roomId = 3L;
+                Long userId = 2L;
+
+                // when
+                Enter enterPS = enterRepository.findByRoomIdAndUserId(roomId, userId)
+                                .orElseThrow();
+
+                // then
+                Assertions.assertThat(enterPS.getId()).isEqualTo(9L);
+        }
+
+        @Test
+        public void findByRoomId_test() throws Exception {
+                // given
+                Long roomId = 2L;
+
+                // when
+                List<Enter> enterListPS = enterRepository.findByRoomId(roomId);
+
+                // then
+                Assertions.assertThat(enterListPS.get(0).getUser().getNickname()).isEqualTo("티모밴하면던짐");
+        }
+
+        @Test
         public void findByUserId_test() throws Exception {
                 // given
                 Long userId = 2L;
 
                 // when
-                List<Room> roomListPS = roomRepository.findByUserId(userId);
+                List<Enter> enterListPS = enterRepository.findByUserId(userId);
 
                 // then
-                Assertions.assertThat(roomListPS.get(0).getId()).isEqualTo(2L);
+                Assertions.assertThat(enterListPS.get(0).getRoom().getRoomName()).isEqualTo("칼바람전사들 대환영 선착순!");
         }
 
         @Test
-        public void findByUserIdEnd_test() throws Exception {
+        public void findEnterRoom_test() throws Exception { // 내가 참여했던 방 목록 역순
                 // given
                 Long userId = 2L;
 
                 // when
-                List<Room> roomListPS = roomRepository.findByUserIdEnd(userId);
+                List<Enter> enterListPS = enterRepository.findEnterRoom(userId);
 
                 // then
-                Assertions.assertThat(roomListPS.size()).isEqualTo(1);
+                Assertions.assertThat(enterListPS.get(0).getRoom().getRoomName()).isEqualTo("골플 자랭 구함 대기 가능");
         }
 
         @Test
-        public void findAllRoom_test() throws Exception {
+        public void findTogether_test() throws Exception {
                 // given
-                Long gameCodeId = 2L;
-                String keyword = "구";
-                Integer page = 0;
+                Long userId = 1L;
+                List<Long> roomIdList = new ArrayList();
+                roomIdList.add(4L);
+                roomIdList.add(8L);
 
                 // when
-                List<Room> roomListPS = roomRepository.findAllRoom(gameCodeId, keyword,
-                                page);
+                List<Enter> enterListPS = enterRepository.findTogether(userId, roomIdList);
 
                 // then
-                Assertions.assertThat(roomListPS.size()).isEqualTo(9);
-                Assertions.assertThat(roomListPS.get(0).getId()).isEqualTo(7L);
-        }
-
-        @Test
-        public void enterPeople_test() {
-                // given
-                Long roomId = 2L;
-
-                // when
-                PeopleDto peopleDto = roomRepositoryQuery.enterPeople(roomId);
-
-                // then
-                Assertions.assertThat(peopleDto.getCount()).isEqualTo(4);
+                Assertions.assertThat(enterListPS.size()).isEqualTo(6);
+                Assertions.assertThat(enterListPS.size()).isEqualTo(6);
         }
 
         private void dummy_init() {
@@ -165,6 +175,7 @@ public class RoomRepositoryTest extends DummyEntity {
                 User 뜨뜨뜨뜨 = userRepository.save(newUser("뜨뜨뜨뜨", "이또또", "뜨뜨뜨뜨", "01077777866", "ㄸㄸㄸㄸ", photo));
                 User 딜찍누 = userRepository.save(newUser("딜찍누", "김딜찍", "딜찍누", "01098897889", "공대원구합니다", photo));
                 User 스피드레이서 = userRepository.save(newUser("스피드레이서", "김속도", "스피드레이서", "01015883061", "이길때됐음", photo));
+
                 // Follow : 겜프
                 Follow f1 = followRepository.save(newFollow(ssar, cos, false));
                 Follow f11 = followRepository.save(newFollow(ssar, vovo, false));

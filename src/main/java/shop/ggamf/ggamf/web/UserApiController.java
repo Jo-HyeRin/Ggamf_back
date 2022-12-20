@@ -1,7 +1,5 @@
 package shop.ggamf.ggamf.web;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,12 +28,10 @@ import shop.ggamf.ggamf.service.UserService;
 @RestController
 public class UserApiController {
 
-    private final Logger log = LoggerFactory.getLogger(getClass());
     private final UserService userService;
 
     @PostMapping("/join")
     public ResponseEntity<?> join(@RequestBody JoinReqDto joinReqDto) {
-        log.debug("디버그 : " + joinReqDto);
         JoinRespDto joinRespDto = userService.회원가입(joinReqDto);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(joinRespDto.getUid(), "uid");

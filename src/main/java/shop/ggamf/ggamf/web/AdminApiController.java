@@ -1,7 +1,5 @@
 package shop.ggamf.ggamf.web;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -29,7 +27,6 @@ import shop.ggamf.ggamf.service.AdminService;
 @RestController
 public class AdminApiController {
 
-    private final Logger log = LoggerFactory.getLogger(getClass());
     private final AdminService adminService;
 
     @GetMapping("/admin/reportList")
