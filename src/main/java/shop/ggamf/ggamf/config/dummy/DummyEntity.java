@@ -31,6 +31,7 @@ public abstract class DummyEntity {
                 .nickname(nickname)
                 .email(username + "@nate.com")
                 .phoneChecked(true)
+                .photo(photo)
                 .intro(intro)
                 .state(UserStateEnum.NORMAL)
                 .role(UserEnum.USER)
