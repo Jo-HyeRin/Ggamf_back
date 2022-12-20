@@ -22,7 +22,7 @@ public class RoomRepositoryQuery {
     @Autowired
     private EntityManager em;
 
-    public List<RoomListRespDto> findRoomList() {
+    public List<RoomListRespDto> findRoomList() { // 쿼리 확인하기
         StringBuffer sb = new StringBuffer();
         sb.append("select r.id, count(*) count, r.total_people, r.room_name, u.nickname from enter e ")
                 .append("inner join room r on r.id = e.room_id ")

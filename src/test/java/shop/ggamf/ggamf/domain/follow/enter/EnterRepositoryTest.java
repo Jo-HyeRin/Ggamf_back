@@ -1,5 +1,6 @@
 package shop.ggamf.ggamf.domain.enter;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import shop.ggamf.ggamf.config.dummy.DummyEntity;
+import shop.ggamf.ggamf.domain.enter.Enter;
+import shop.ggamf.ggamf.domain.enter.EnterRepository;
 import shop.ggamf.ggamf.domain.follow.Follow;
 import shop.ggamf.ggamf.domain.follow.FollowRepository;
 import shop.ggamf.ggamf.domain.gameCode.GameCode;
@@ -293,3 +296,4 @@ public class EnterRepositoryTest extends DummyEntity {
         Enter enter37777 = enterRepository.save(newEnter(toto, room37));
     }
 }
+    
